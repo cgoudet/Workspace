@@ -10,7 +10,7 @@
 PACKAGE              = Workspace
 
 # the libraries to link with this one:
-PACKAGE_PRELOAD      = RooFitCore RooFit Hist Physics RooStats
+PACKAGE_PRELOAD      = RooFitCore RooFit Hist Physics RooStats HistFactory
 
 # additional compilation flags to pass (not propagated to dependent packages):
 PACKAGE_CXXFLAGS     = 

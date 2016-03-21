@@ -21,6 +21,7 @@ using std::endl;
 #include "TTree.h"
 #include "RooBifurGauss.h"
 
+
 using namespace RooStats;
 using namespace RooFit;
 
@@ -288,14 +289,14 @@ void Category::ReadNuisanceParameters() {
     vals_down.push_back(1/(1-(sigma_value_down/100.))); 
     RooRealVar* nui = GetNuisanceParameter(name, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
 
-    RooArgSet fix;  
+    RooArgList fix;  
     fix.add(*nui);
     HistFactory::FlexibleInterpVar *special_value = new HistFactory::FlexibleInterpVar("asymParam_"+suffix,"asymParam_"+suffix,fix,pdf_mean,vals_down,vals_up); // value that will be asymmetric
     // special_value->Print();
     // see http://www.usatlas.bnl.gov/~fisyak/star/root/roofit/histfactory/src/FlexibleInterpVar.cxx
     //  special_value->setAllInterpCodes(1);
     //  special_value->setAllInterpCodes(1);
-       special_value->setAllInterpCodes(4);
+    //       special_value->setAllInterpCodes(4);
     RooRealVar *one = new RooRealVar("one_"+suffix, "one_"+suffix, 1);
     RooProduct *systematic = new RooProduct("systematic_"+suffix, "systematic_"+suffix, RooArgSet(*one, *special_value)); // "1+" contained in vals_up and vals_down !
     //  systematic->Print();
