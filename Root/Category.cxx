@@ -31,20 +31,13 @@ Category::Category() : m_name( "inclusive" ), m_debug(0)
   m_dataset = 0;
   m_processes = 0;
 
-  m_mapSet["parametersOfInterest"] = new RooArgSet("parametersOfInterest");
   m_mapVar["lumi"] = new RooRealVar( "lumi", "lumi", 10 );
   m_mapVar["invMass"] = new RooRealVar ("invariant_mass","invariant_mass",126.5, 110.,160.); 
   m_mapVar["mHcomb"] = new RooRealVar("mHcomb","mHcomb",125, 110, 160); // reference is mH = 125 GeV
   m_mapFormula["mHRen"] = new RooFormulaVar("mHRen","mHRen","(@0-100)/100.", RooArgList(*m_mapVar["mHcomb"])); 
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1 );
   m_mapVar["mu_BR_yy"] = new RooRealVar( "mu_BR_yy", "mu_BR_yy", 1 );
-  m_correlatedVar == "mHcomb,mHRen,mu,mu_BR_yy";
-  for ( auto vProc = m_processes->begin(); vProc != m_processes->end(); vProc++ ) {
-    string muName = "mu_XS_"+ *vProc;
-    m_mapVar[muName] = new RooRealVar( muName.c_str(), muName.c_str(), 1 );
-    m_mapSet["parametersOfInterest"]->add( *m_mapVar[muName] );
-    m_correlatedVar += "," + muName;
-  }
+  m_correlatedVar = "mHcomb,mHRen,mu,mu_BR_yy";
 
   m_coef = { "a", "b", "c", "d" };
   m_form = { "CB", "GA", "Var" };
@@ -57,19 +50,23 @@ Category::Category() : m_name( "inclusive" ), m_debug(0)
   m_mapSet["observables"] = new RooArgSet("observables");
   m_mapSet["observables"]->add( *m_mapVar["invMass"] );
 
+  m_mapSet["parametersOfInterest"] = new RooArgSet("parametersOfInterest");
   m_mapSet["parametersOfInterest"]->add( *m_mapVar["mu"] );
   m_mapSet["parametersOfInterest"]->add( *m_mapVar["mu_BR_yy"] );
   m_mapSet["parametersOfInterest"]->add( *m_mapVar["mHcomb"] );
 
-
+  m_workspace = 0;
 }
 
 Category::Category( string name ) : Category()
 {
   m_name = name;
+  m_mapSet["parametersOfInterest"]->Print();
+
 }
 
 Category::~Category() {
+
   for ( auto vVar = m_mapVar.begin(); vVar != m_mapVar.end(); vVar++ )
     if ( vVar->second ) delete vVar->second;
   for ( auto vVar = m_mapFormula.begin(); vVar != m_mapFormula.end(); vVar++ )
@@ -86,41 +83,67 @@ void Category::LoadParameters( string configFileName ) {
 
   boost::property_tree::ptree pt;
   boost::property_tree::ini_parser::read_ini(configFileName, pt);
-
-  for ( auto vCoef = m_coef.begin(); vCoef != m_coef.end(); vCoef++ ) {
+  TFile *inFile = 0;
+  RooWorkspace *ws=0;
+  vector<string> inputParamInfo( 2, "" );
+  for ( auto vProc = m_processes->begin(); vProc != m_processes->end(); vProc++ ) {
     for ( auto vForm = m_form.begin(); vForm != m_form.end(); vForm++ ) {
       for ( auto vParam = m_param.begin(); vParam != m_param.end(); vParam++ ) {
-	string name = string( TString::Format("%s_%s%s", vCoef->c_str(), vParam->c_str(), vForm->c_str() ) );
-	m_mapVar[name] = new RooRealVar( name.c_str(), name.c_str(), pt.get<double>( m_name + "." + name ) );
+	for ( auto vCoef = m_coef.begin(); vCoef != m_coef.end(); vCoef++ ) {
+	  string name = string( TString::Format("%s_%s%s_%s", vCoef->c_str(), vParam->c_str(), vForm->c_str(), vProc->c_str() ) );
+	  string inputLine = pt.get<string>( m_name + "." + name, "" );
+	  if ( inputLine == "" )  continue;
+	  ParseVector( inputLine, inputParamInfo );
+	  if ( !inFile || inputParamInfo.front() != inFile->GetName() ) {
+	    delete inFile; 
+	    delete ws;
+	    inFile = new TFile( inputParamInfo.front().c_str() );
+	    //	    cout << inFile->GetName() << endl;
+	    if ( !inFile ) {
+	      cout << inputParamInfo.front() << " does not exists" << endl;
+	      exit(0);
+	    }
+	    ws = (RooWorkspace*) inFile->Get( FindDefaultTree( inFile, "RooWorkspace" ).c_str() );
+	    //	    cout << ws->GetName() << endl;
+	  }
+	  if ( !ws->var( inputParamInfo.back().c_str() ) ) {
+	    //	    cout << inputParamInfo.back() << " does not exists in " << inFile->GetName() << endl;
+	    continue;
+	  }
+	  m_mapVar[name] = new RooRealVar( name.c_str(), name.c_str(), ws->var( inputParamInfo.back().c_str() )->getVal() );
+	  //	  m_mapVar[name]->Print();
+	}
       }
     }
-  }
+  }//end process
 
-  m_dataFileName = pt.get<double>( m_name + ".dataFileName" );
+  m_dataFileName = pt.get<string>( m_name + ".dataFileName" );
+  m_dataCut = pt.get<string>( m_name + ".dataCut" );
   for ( auto vVar = m_mapVar.begin(); vVar != m_mapVar.end(); vVar++ )
     if ( vVar->second ) vVar->second->setConstant(1);
-
+  cout << "end LoadingParameters" << endl;
 }
 
 
 //=========================================
 void Category::ReadNuisanceParameters() {
-
+  cout << "ReadNuisanceParameter" << endl;
   m_mapSet["systematicValues"] = new RooArgSet();
   for( auto iter = m_sDef->begin(); iter != m_sDef->end(); iter++) {
     string name = iter->first;
     //    cout << iter->first << " " << iter->second << endl;                                         
     m_mapVar[name] = new RooRealVar(name.c_str(),name.c_str(),0); // initialize to 0                  
+    m_mapVar[name]->Print();
     m_mapSet["systematicValues"]->add(*m_mapVar[name]);
   }
-  
-  m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,"Common");
+  cout << m_systFileName << endl;
+  m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,"Common_2015");
   //  m_mapSet["systematicValues"]->readFromFile(m_systFileName,0, TString::Format( "Common_%s", Year.Data() )); // read the common block                     
-  m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,m_name.c_str()); // read values corresponding to channelname section only.                     
+  m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,string("Channel_" + m_name).c_str()); // read values corresponding to channelname section only.                     
 
   vector<string> processes( *m_processes );
   processes.push_back( "common" );
-  for ( auto vProc = m_processes->begin(); vProc != m_processes->end(); vProc++ ) {
+  for ( auto vProc = processes.begin(); vProc != processes.end(); vProc++ ) {
     m_mapSet["systematicYield_"+*vProc] = new RooArgSet();
     m_mapSet["systematicPeak_"+*vProc] = new RooArgSet();
     m_mapSet["systematicResolution_"+*vProc] = new RooArgSet();
@@ -129,7 +152,7 @@ void Category::ReadNuisanceParameters() {
 
   m_mapVar["spurious"] = 0;
   m_mapSet["nuisanceParameters"] = new RooArgSet();
-  m_mapSet["globalObservable"] = new RooArgSet();
+  m_mapSet["globalObservables"] = new RooArgSet();
   m_mapSet["constraintPdf"] = new RooArgSet();
   m_mapSet["allConstraint"] = new RooArgSet();
   
@@ -140,7 +163,7 @@ void Category::ReadNuisanceParameters() {
     TObjArray* Strings = fullName.Tokenize( "_" );
     bool containsTYPE = false;
     TString type =  ((TObjString*) Strings->First())->GetString();
-    cout << "type : " << type << endl;
+    //    cout << "type : " << type << endl;
     if (type == "YIELD" || type ==  "PES" || type == "PER" || type ==  "ESS" || type == "MRES" ) containsTYPE = true;
     else type = "YIELD";
 
@@ -160,19 +183,18 @@ void Category::ReadNuisanceParameters() {
     if (containsTYPE) cout  << endl;// NPname.Replace(0, NPname.Index(type)+type.Length()+1,""); // remove also the underscore after the type name
 
     double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
-
     // do not add systematics at 0 (surcharge the workspace without valid reason)
     if (current_value==0) continue; 
 
     //This int is the functional form of the constraint
     int current_constraint = iter->second;  
-    RooRealVar *current_syst;
+    RooRealVar *current_syst=0;
 
     switch ( current_constraint ) {
     case GAUSS_CONSTRAINT :
       current_syst  = defineSystematic_Gauss(NPname, current_value,
  					     m_mapSet["nuisanceParameters"],
- 					     m_mapSet["globalObservable"],
+ 					     m_mapSet["globalObservables"],
  					     m_mapSet["constraintPdf"],
  					     m_correlatedVar,
  					     m_mapSet["allConstraint"],
@@ -181,7 +203,7 @@ void Category::ReadNuisanceParameters() {
     case LOGNORM_CONSTRAINT :
       current_syst  = defineSystematic_LogNorm(NPname, current_value,
  					     m_mapSet["nuisanceParameters"],
- 					     m_mapSet["globalObservable"],
+ 					     m_mapSet["globalObservables"],
  					     m_mapSet["constraintPdf"],
  					     m_correlatedVar,
  					     m_mapSet["allConstraint"],
@@ -197,7 +219,7 @@ void Category::ReadNuisanceParameters() {
       }
       current_syst  = defineSystematic_asymmetric(NPname, current_err_hi, current_err_lo,
 						  m_mapSet["nuisanceParameters"],
-						  m_mapSet["globalObservable"],
+						  m_mapSet["globalObservables"],
 						  m_mapSet["constraintPdf"],
 						  m_correlatedVar,
 						  m_mapSet["allConstraint"],
@@ -214,8 +236,6 @@ void Category::ReadNuisanceParameters() {
     else { // means that type == YIELD
       m_mapSet[string("systematicYield_"+process)]->add(*current_syst);    
     }
-    cout << "current syst" << endl;
-    current_syst->Print();  
   } // end loop on systematics 
 
 
@@ -324,7 +344,7 @@ void Category::CreateBackgroundModel() {
     RooArgSet *coefficients = new RooArgSet(*p1,*p2);
     m_mapSet["nuisanceParameters"]->add(*coefficients);
     //      RooFormulaVar *x = new RooFormulaVar("x","x", "(@0-100.)/100.", invMass);
-    RooGenericPdf *exp_pol2 = new RooGenericPdf("bkgExpPol2", "bkgExpPol2", "exp(@1*@0+@3*@0*@0)", RooArgList(*m_mapVar["mHRen"], *p1, *p2)); // quite long, WHY???
+    RooGenericPdf *exp_pol2 = new RooGenericPdf("bkgExpPol2", "bkgExpPol2", "exp(@1*@0+@2*@0*@0)", RooArgList( *m_mapFormula["mHRen"], *p1, *p2 ) ); // quite long, WHY???
     m_mapPdf["bkg"] = exp_pol2;
     break;
   }
@@ -479,21 +499,31 @@ void Category::CreateWS() {
   CreateBackgroundModel();
 
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
-  RooArgSet prodPdf;
-  prodPdf.add( *m_mapPdf["modelSB"] );
-  prodPdf.add( *m_mapSet["constraintPdf"] );
-  m_mapPdf["model"] = new RooProdPdf( "model", "model", prodPdf );
 
-  GetData();
+  string constraintName = "constraintPdf_" + m_name;
+  m_mapPdf["constraintPdf"] = new RooProdPdf( constraintName.c_str(), constraintName.c_str(), *m_mapSet["constraintPdf"] );
+  //  GetData();
 
   cout << "Correlated NP : " << m_correlatedVar << endl;
   string dumName = "ws_" + m_name;
-  RooWorkspace *ws = new RooWorkspace( dumName.c_str(), dumName.c_str() );
-  //  ws->import( m_mapPdf["model"], RecycleConflictNodes(), RenameAllVarExcept(m_correlatedVar), ReNameAllVar( m_name ) );
-  ws->import( *m_dataset );
+  m_workspace = new RooWorkspace( dumName.c_str(), dumName.c_str() );
+  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()) );
+  m_workspace->import( *m_mapPdf["constraintPdf"],  RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RecycleConflictNodes() );
+  //  m_workspace->Print();
 
-  vector<string> sets = { "obserables" };
+  RooArgSet prodPdf;
+  prodPdf.add( *m_workspace->pdf( string( string(m_mapPdf["modelSB"]->GetName()) + "_" + m_name ).c_str() ) );
+  prodPdf.add( *m_workspace->pdf( m_mapPdf["constraintPdf"]->GetName() ) );
+
+  string modelName = "model_" + m_name;
+  m_mapPdf["model"] = new RooProdPdf( modelName.c_str(), modelName.c_str(), prodPdf );
+  m_workspace->import( *m_mapPdf["model"], RecycleConflictNodes() );
+  //   m_workspace->import( *m_dataset );
+
+  cout << "seting sets" << endl;
+  vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest" };
   for ( auto set = sets.begin(); set != sets.end(); set++ ) DefineSet( *set );
+  cout << "end CreateWS" << endl;
 }
 
 //=========================================
@@ -560,7 +590,8 @@ void Category::CreateWS() {
 
  //================
  void Category::DefineSet( string set ) {
-
+   cout << set << endl;
+   cout << m_mapSet[set] << endl;
    RooArgSet dumSet( *m_mapSet[set] );
    delete m_mapSet[set];
    m_mapSet[set] = new RooArgSet( set.c_str() );
@@ -602,9 +633,21 @@ RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_par
       if (! allConstraints->find(constraint->GetName())) { // if constraint not yet considered, should be the case since the NP does not exist yet
 	constraints_pdf_list->add(*constraint); // add it to the list of constraints to be applied to this channel
 	allConstraints->add(*constraint); // add it to the list of all constraints (for all channels)not to apply it twice
-
       }
+      m_correlatedVar += "," + string(constraint->GetName());
     }
 
     return nui;
   }
+
+
+//=========================================
+void Category::SetProcesses( vector<string> *processes ) {
+  m_processes = processes;
+  for ( auto vProc = m_processes->begin(); vProc != m_processes->end(); vProc++ ) {
+    string muName = "mu_XS_"+ *vProc;
+    m_mapVar[muName] = new RooRealVar( muName.c_str(), muName.c_str(), 1 );
+    m_mapSet["parametersOfInterest"]->add( *m_mapVar[muName] );
+    m_correlatedVar += "," + muName;
+  }
+}

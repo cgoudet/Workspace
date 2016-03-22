@@ -14,7 +14,8 @@ using std::stringstream;
 #include "RooPlot.h"
 #include "TAxis.h"
 #include "TLatex.h"
-
+#include "PlotFunctions/SideFunctions.h"
+using std::ifstream;
 
 Workspace::Workspace() : m_debug(0)
 {
@@ -46,8 +47,13 @@ void Workspace::Configure( string configFileName ) {
 
   boost::property_tree::ptree pt;
   boost::property_tree::ini_parser::read_ini(configFileName, pt);
-  std::cout << pt.get<std::string>("Section1.Value1") << std::endl;
-  std::cout << pt.get<std::string>("Section1.Value2") << std::endl;
+  string dum = pt.get<string>("General.catNames");
+  ParseVector( dum  , m_categoriesNames );
+
+  dum = pt.get<string>("General.process");
+  ParseVector( dum, m_processes );
+
+  m_systFileName = pt.get<string>("General.systFileName");
 }
 
 //=======================================
@@ -57,32 +63,41 @@ void Workspace::CreateWS() {
   RooSimultaneous *pdf = new RooSimultaneous( "combinedPdf", "combinedPdf", *m_category );
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parameterOfInterest" };
 
+  readConstraintFile( );
+
   for ( auto vName = m_categoriesNames.begin(); vName != m_categoriesNames.end(); vName++ ) {
     m_category->defineType( vName->c_str() );
-    m_categories.push_back( Category( *vName ) );
-    m_categories.back().SetSDef( &m_sDef );
-    m_categories.back().SetSystFileName( m_systFileName );
-    m_categories.back().SetProcesses( &m_processes );
-    m_categories.back().LoadParameters( m_configFileName );
-    m_categories.back().CreateWS();
+    m_category->setLabel( vName->c_str() );
+    m_categories.push_back( 0);
+    m_categories.back() = new Category( *vName );
+    m_categories.back()->SetSDef( &m_sDef );
+    m_categories.back()->SetSystFileName( m_systFileName );
+    m_categories.back()->SetProcesses( &m_processes );
+    m_categories.back()->LoadParameters( m_configFileName );
+    m_categories.back()->CreateWS();
 
-    RooWorkspace *workspace = m_categories.back().GetWorkspace();
-    pdf->addPdf( *workspace->pdf( string("model_" + *vName).c_str() ), m_category->getLabel() );
+    RooWorkspace *workspace = m_categories.back()->GetWorkspace();
+    string pdfName = "model_" + *vName;
+    pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
-    for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) 
-      m_mapSet[*vSet]->add( *workspace->set(vSet->c_str()) );
+    // for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) 
+    //   m_mapSet[*vSet]->add( *workspace->set(vSet->c_str()) );
 
-    datasetMap[*vName] = (RooDataSet*) workspace->data("obsData");
+    //    datasetMap[*vName] = (RooDataSet*) workspace->data("obsData");
+
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
-  for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) 
-    m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
+  m_workspace->import( *pdf );
+  m_workspace->Print();
+  exit(0);
+  // for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) 
+  //   m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
 
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap)); // ,WeightVar(wt));
   m_workspace->import(*obsData);
-  
+    
   cout << "Creating dataset with ghosts..." << endl;
   RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
   newData->SetNameTitle("obsData_G","obsData_G");
@@ -175,3 +190,48 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
   return newData;
   
 }
+
+
+//=================================
+void Workspace::readConstraintFile()
+  {
+    ifstream current_file(m_systFileName.c_str());
+    do 
+      {
+	string tmpString; 
+	getline(current_file, tmpString);
+	if(tmpString.size() == 0) continue;
+	if ( tmpString.find( "#" ) != string::npos ) continue;
+
+	int defConstraint = -1;
+	TString tmp(tmpString);
+	TObjArray tmpAr = *(tmp.Tokenize(" "));
+	switch ( tmpAr.GetEntries() ) {
+	case 1 : 
+	  continue;
+	case 2 : {
+	  TString tmpStrDefConst= ((TObjString*) tmpAr.At(1))->GetString();
+	  if(tmpStrDefConst == "NO_CONSTRAINT") defConstraint = NO_CONSTRAINT;
+	  else if(tmpStrDefConst == "GAUSS_CONSTRAINT") defConstraint = GAUSS_CONSTRAINT;
+	  else if(tmpStrDefConst == "LOGNORM_CONSTRAINT") defConstraint = LOGNORM_CONSTRAINT;
+	  else if(tmpStrDefConst == "ASYM_CONSTRAINT") defConstraint = ASYM_CONSTRAINT;
+	  else {
+	    cout << "Unknown constraint for syst. " << ((TObjString*) tmpAr.First())->GetString() << endl;
+	    continue;
+	  }
+	}// end case 2
+	  break;
+	case 8 :
+	  defConstraint = ASYM_CONSTRAINT;
+	  break;
+	case 3 :
+	  defConstraint = GAUSS_CONSTRAINT;
+	  break;
+	default :
+	  defConstraint = NO_CONSTRAINT;
+	}//end switch
+	m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
+      } while(!current_file.eof());
+
+
+  }

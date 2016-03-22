@@ -14,6 +14,10 @@ using std::vector;
 #include "RooWorkspace.h"
 #include "RooDataSet.h"
 
+
+enum ConstraintModel { NO_CONSTRAINT, GAUSS_CONSTRAINT, LOGNORM_CONSTRAINT, ASYM_CONSTRAINT };
+enum BackgroundModel { BKG_MODEL_EXPO, BKG_MODEL_EXPO_POL2, BKG_MODEL_BERN4, BKG_MODEL_BERN0 };
+
 class Category {
 
  public :
@@ -21,12 +25,10 @@ class Category {
   Category( string name );
   ~Category();
 
-  enum ConstraintModel { NO_CONSTRAINT, GAUSS_CONSTRAINT, LOGNORM_CONSTRAINT, ASYM_CONSTRAINT };
-  enum BackgroundModel { BKG_MODEL_EXPO, BKG_MODEL_EXPO_POL2, BKG_MODEL_BERN4, BKG_MODEL_BERN0 };
 
 
   void SetSDef( map<string, int> *sDef ) { m_sDef = sDef; }
-  void SetProcesses( vector<string> *processes ) { m_processes = processes; }
+  void SetProcesses( vector<string> *processes );
 
   RooWorkspace *GetWorkspace() { return m_workspace; }
 

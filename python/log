@@ -1,0 +1,54 @@
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+RooArgSet::parametersOfInterest = (mu,mu_BR_yy,mHcomb)
+end LoadingParameters
+ReadNuisanceParameter
+RooRealVar::PER_ATLAS_Hgg_mass = 0 C  L(-INF - +INF) 
+RooRealVar::PES_ATLAS_Hgg_mass = 0 C  L(-INF - +INF) 
+RooRealVar::bkg_model = 0 C  L(-INF - +INF) 
+/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/datacard.txt
+
+
+define the background model : 
+Correlated NP : mHcomb,mHRen,mu,mu_BR_yy,mu_XS_ggH,mu_XS_VBF,mu_XS_WH,mu_XS_ZH,mu_XS_ttH,nui_PER_ATLAS_Hgg_mass,glob_nui_PER_ATLAS_Hgg_mass,constraint_PER_ATLAS_Hgg_mass,nui_PES_ATLAS_Hgg_mass,glob_nui_PES_ATLAS_Hgg_mass,constraint_PES_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Resolving name conflict in workspace by changing name of imported node  modelSB to modelSB_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Resolving name conflict in workspace by changing name of imported node  bkg to bkg_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Resolving name conflict in workspace by changing name of imported node  mHRen to mHRen_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Changing name of variable p0 to p0_ggH on request
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Changing name of variable p1 to p1_ggH on request
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooAddPdf::modelSB_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooGenericPdf::bkg_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooFormulaVar::mHRen_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::mHcomb
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::p0_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::p1_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Changing name of variable sigma_PER_ATLAS_Hgg_mass to sigma_PER_ATLAS_Hgg_mass_ggH on request
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) Changing name of variable sigma_PES_ATLAS_Hgg_mass to sigma_PES_ATLAS_Hgg_mass_ggH on request
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooProdPdf::constraintPdf
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooGaussian::constraint_PER_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::nui_PER_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::glob_nui_PER_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::sigma_PER_ATLAS_Hgg_mass_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooGaussian::constraint_PES_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::nui_PES_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::glob_nui_PES_ATLAS_Hgg_mass
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooRealVar::sigma_PES_ATLAS_Hgg_mass_ggH
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) importing RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooAddPdf::modelSB_ggH for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooGenericPdf::bkg_ggH for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooFormulaVar::mHRen_ggH for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::mHcomb for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::p0_ggH for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::p1_ggH for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooProdPdf::constraintPdf for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooGaussian::constraint_PER_ATLAS_Hgg_mass for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::nui_PER_ATLAS_Hgg_mass for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::glob_nui_PER_ATLAS_Hgg_mass for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::sigma_PER_ATLAS_Hgg_mass_ggH for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooGaussian::constraint_PES_ATLAS_Hgg_mass for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::nui_PES_ATLAS_Hgg_mass for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::glob_nui_PES_ATLAS_Hgg_mass for import of RooProdPdf::model
+[#1] INFO:ObjectHandling -- RooWorkspace::import(ws_ggH) using existing copy of RooRealVar::sigma_PES_ATLAS_Hgg_mass_ggH for import of RooProdPdf::model

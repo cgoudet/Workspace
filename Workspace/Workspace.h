@@ -18,7 +18,7 @@ class Workspace {
  private :
 
   RooWorkspace *m_workspace;
-  vector<Category> m_categories;
+  vector<Category*> m_categories;
   string m_configFileName;
   vector<string> m_categoriesNames;
   vector<string> m_processes;
@@ -29,5 +29,7 @@ class Workspace {
   map<string, RooArgSet*> m_mapSet;
   string m_name;
   bool m_debug;
+
+  void readConstraintFile();
 };
 #endif
