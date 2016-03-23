@@ -91,14 +91,17 @@ void Workspace::CreateWS() {
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
-  m_workspace->import( *pdf );
+  m_workspace->import( *pdf, RecycleConflictNodes() );
   cout << "importedPdf" << endl;
   for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
 
 
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap)); // ,WeightVar(wt));
   m_workspace->import(*obsData);
-    
+  m_workspace->var( "mHcomb" )->setConstant(1);
+  m_workspace->var( "mu" )->setConstant(0);
+  m_workspace->pdf("combinedPdf")->fitTo( *obsData );
+
   cout << "Creating dataset with ghosts..." << endl;
   RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
   newData->SetNameTitle("obsData_G","obsData_G");

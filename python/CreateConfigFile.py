@@ -36,6 +36,7 @@ with open( "StatChallenge011.boost", 'w+' ) as configFile :
                                            ] ) )
             configFile.write( '\n' )
             configFile.write( 'fCB_'+ proc + '=' + workspaceName.replace( "%s", proc ) + ' fracCB_SM_c'+ str( iCat ) )
+            configFile.write( '\n' )
 
         configFile.write( '\n' )
         configFile.write( 'dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category\n' )

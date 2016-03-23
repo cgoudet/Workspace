@@ -23,6 +23,8 @@ using std::endl;
 #include "RooCategory.h"
 #include "RooPlot.h"
 #include "TCanvas.h"
+#include "RooAbsPdf.h"
+#include "TIterator.h"
 
 using namespace RooStats;
 using namespace RooFit;
@@ -123,6 +125,7 @@ void Category::LoadParameters( string configFileName ) {
       SelectInputWorkspace( inputParamInfo );
       if ( m_readInputWorkspace->var( inputParamInfo.back().c_str() ) ) {
 	m_mapVar[name] = new RooRealVar( name.c_str(), name.c_str(), m_readInputWorkspace->var( inputParamInfo.back().c_str() )->getVal() );
+	m_mapVar[name]->Print();
       }
     }
 
@@ -533,7 +536,7 @@ void Category::CreateWS() {
 
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
 
-  string constraintName = "constraintPdf_" + m_name;
+  string constraintName = "constraintPdf";
   m_mapPdf["constraintPdf"] = new RooProdPdf( constraintName.c_str(), constraintName.c_str(), *m_mapSet["constraintPdf"] );
 
 
@@ -541,15 +544,34 @@ void Category::CreateWS() {
   string dumName = "ws_" + m_name;
   m_workspace = new RooWorkspace( dumName.c_str(), dumName.c_str() );
   m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()) );
-  m_workspace->import( *m_mapPdf["constraintPdf"],  RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RecycleConflictNodes() );
 
   RooArgSet prodPdf;
   prodPdf.add( *m_workspace->pdf( string( string(m_mapPdf["modelSB"]->GetName()) + "_" + m_name ).c_str() ) );
-  prodPdf.add( *m_workspace->pdf( m_mapPdf["constraintPdf"]->GetName() ) );
+
+  TIterator *it_fullSet = m_mapSet["constraintPdf"]->createIterator();
+  RooAbsPdf *var = (RooAbsPdf*) it_fullSet->Next();
+  while(  var ) {
+    m_workspace->import( *var );
+    prodPdf.add( *m_workspace->pdf( var->GetName() ) );
+    var = (RooAbsPdf*) it_fullSet->Next();
+  }
+  SetConstantVar();
+  m_mapVar["mu"]->setConstant(0);
 
   string modelName = "model_" + m_name;
   m_mapPdf["model"] = new RooProdPdf( modelName.c_str(), modelName.c_str(), prodPdf );
   m_workspace->import( *m_mapPdf["model"], RecycleConflictNodes() );
+
+  TIterator* iter_observable = m_mapSet["nuisanceParameters"]->createIterator();
+  RooRealVar* parg_observable ;
+  while((parg_observable=(RooRealVar*)iter_observable->Next()) ) {
+    parg_observable->Print();
+    if( m_workspace->var(parg_observable->GetName() ) ) m_workspace->var(parg_observable->GetName() )->setVal(0);
+  }
+
+  m_mapPdf["modelSB"]->fitTo( *m_dataset );
+  exit(0);
+
   m_workspace->import( *m_dataset );
 
   cout << "seting sets" << endl;
@@ -678,7 +700,7 @@ RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_par
     if (!nui) { // if the np does not exist yet in this channel
       RooRealVar* glob_nui = new RooRealVar("glob_nui_"+name, "glob_nui_"+name, 0, -5, 5);
       glob_nui->setConstant();
-      nui = new RooRealVar("nui_"+name, "nui_"+name, 0, -5, 5);
+      nui = new RooRealVar("nui_"+name, "nui_"+name, 0, -5, 5 );
       nuisance_parameters->add(*nui);
       global_parameters->add(*glob_nui);
       channel_correlated_np += string( ",nui_"+name+",glob_nui_"+name );

@@ -45,7 +45,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c0
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c0
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c0
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c0
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c0
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c0
@@ -66,7 +67,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c0
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c0
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c0
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c0
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c0
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c0
@@ -87,7 +89,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c0
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c0
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c0
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c0
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c0
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c0
@@ -108,7 +111,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c0
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c0
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c0
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c0
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c0
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c0
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c0
@@ -130,6 +134,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c0
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c0
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c0
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_ggH
 
@@ -175,7 +180,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c1
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c1
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c1
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c1
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c1
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c1
@@ -196,7 +202,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c1
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c1
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c1
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c1
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c1
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c1
@@ -217,7 +224,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c1
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c1
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c1
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c1
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c1
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c1
@@ -238,7 +246,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c1
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c1
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c1
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c1
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c1
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c1
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c1
@@ -260,6 +269,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c1
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c1
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c1
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VBF_low
 
@@ -305,7 +315,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c2
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c2
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c2
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c2
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c2
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c2
@@ -326,7 +337,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c2
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c2
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c2
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c2
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c2
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c2
@@ -347,7 +359,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c2
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c2
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c2
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c2
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c2
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c2
@@ -368,7 +381,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c2
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c2
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c2
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c2
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c2
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c2
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c2
@@ -390,6 +404,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c2
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c2
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c2
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VBF_high
 
@@ -435,7 +450,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c3
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c3
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c3
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c3
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c3
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c3
@@ -456,7 +472,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c3
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c3
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c3
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c3
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c3
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c3
@@ -477,7 +494,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c3
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c3
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c3
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c3
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c3
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c3
@@ -498,7 +516,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c3
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c3
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c3
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c3
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c3
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c3
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c3
@@ -520,6 +539,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c3
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c3
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c3
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VH_hadronic_low
 
@@ -565,7 +585,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c4
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c4
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c4
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c4
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c4
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c4
@@ -586,7 +607,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c4
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c4
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c4
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c4
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c4
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c4
@@ -607,7 +629,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c4
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c4
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c4
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c4
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c4
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c4
@@ -628,7 +651,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c4
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c4
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c4
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c4
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c4
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c4
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c4
@@ -650,6 +674,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c4
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c4
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c4
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VH_hadronic_high
 
@@ -695,7 +720,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c5
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c5
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c5
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c5
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c5
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c5
@@ -716,7 +742,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c5
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c5
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c5
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c5
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c5
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c5
@@ -737,7 +764,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c5
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c5
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c5
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c5
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c5
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c5
@@ -758,7 +786,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c5
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c5
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c5
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c5
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c5
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c5
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c5
@@ -780,6 +809,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c5
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c5
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c5
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VH_MET
 
@@ -825,7 +855,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c6
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c6
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c6
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c6
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c6
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c6
@@ -846,7 +877,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c6
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c6
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c6
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c6
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c6
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c6
@@ -867,7 +899,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c6
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c6
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c6
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c6
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c6
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c6
@@ -888,7 +921,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c6
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c6
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c6
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c6
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c6
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c6
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c6
@@ -910,6 +944,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c6
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c6
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c6
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VH_leptonic
 
@@ -955,7 +990,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c7
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c7
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c7
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c7
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c7
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c7
@@ -976,7 +1012,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c7
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c7
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c7
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c7
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c7
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c7
@@ -997,7 +1034,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c7
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c7
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c7
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c7
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c7
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c7
@@ -1018,7 +1056,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c7
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c7
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c7
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c7
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c7
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c7
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c7
@@ -1040,6 +1079,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c7
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c7
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c7
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_VH_dileptons
 
@@ -1085,7 +1125,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c8
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c8
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c8
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c8
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c8
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c8
@@ -1106,7 +1147,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c8
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c8
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c8
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c8
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c8
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c8
@@ -1127,7 +1169,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c8
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c8
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c8
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c8
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c8
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c8
@@ -1148,7 +1191,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c8
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c8
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c8
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c8
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c8
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c8
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c8
@@ -1170,6 +1214,7 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c8
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c8
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c8
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_ttH_hadronic
 
@@ -1215,7 +1260,8 @@ b_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c9
 d_alphaCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c9
 nCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c9
-fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
+fCB_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ggH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9
+a_meanGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
 a_meanCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c9
 a_sigmaGA_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c9
 a_sigmaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c9
@@ -1236,7 +1282,8 @@ b_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 c_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c9
 d_alphaCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c9
 nCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c9
-fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
+fCB_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_VBF_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9
+a_meanGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
 a_meanCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c9
 a_sigmaGA_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c9
 a_sigmaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c9
@@ -1257,7 +1304,8 @@ b_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c9
 d_alphaCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c9
 nCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c9
-fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
+fCB_WH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_WH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9
+a_meanGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
 a_meanCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c9
 a_sigmaGA_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c9
 a_sigmaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c9
@@ -1278,7 +1326,8 @@ b_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_S
 c_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root c_alphaCB_SM_c9
 d_alphaCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c9
 nCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c9
-fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
+fCB_ZH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ZH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9
+a_meanGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muGANom_SM_c9
 a_meanCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_muCBNom_SM_c9
 a_sigmaGA_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaGANom_SM_c9
 a_sigmaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root a_sigmaCBNom_SM_c9
@@ -1300,5 +1349,6 @@ c_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_
 d_alphaCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root d_alphaCB_SM_c9
 nCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root nCB_SM_c9
 fCB_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_ttH_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root fracCB_SM_c9
+
 dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/ws_challenge_pseudo_data.root ws_challenge_pseudo_data absdata_data m_yy category
 dataCut=category==category::Channel_ttH_leptonic
