@@ -61,9 +61,9 @@ void Workspace::CreateWS() {
 
   map<string,RooDataSet*> datasetMap;
   RooSimultaneous *pdf = new RooSimultaneous( "combinedPdf", "combinedPdf", *m_category );
-  vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parameterOfInterest" };
+  vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest" };
 
-  readConstraintFile( );
+  readConstraintFile();
 
   for ( auto vName = m_categoriesNames.begin(); vName != m_categoriesNames.end(); vName++ ) {
     m_category->defineType( vName->c_str() );
@@ -81,19 +81,20 @@ void Workspace::CreateWS() {
     pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
-    // for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) 
-    //   m_mapSet[*vSet]->add( *workspace->set(vSet->c_str()) );
-
-    //    datasetMap[*vName] = (RooDataSet*) workspace->data("obsData");
+    for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ )  {
+      cout << *vSet << " " << m_mapSet[*vSet] << endl;
+      m_mapSet[*vSet]->add( *workspace->set(vSet->c_str()) );
+    }
+    string dataName = "obsData_" + *vName;
+    datasetMap[*vName] = (RooDataSet*) workspace->data( dataName.c_str() );
 
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
   m_workspace->import( *pdf );
-  m_workspace->Print();
-  exit(0);
-  // for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) 
-  //   m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
+  cout << "importedPdf" << endl;
+  for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
+
 
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap)); // ,WeightVar(wt));
   m_workspace->import(*obsData);
@@ -106,12 +107,12 @@ void Workspace::CreateWS() {
 
   cout << "Defining mconfig..." << endl; 
   ModelConfig *mconfig = new ModelConfig("mconfig", m_workspace);
-  // mconfig->SetPdf(*m_workspace->pdf("combinedPdf"));
-
-  // mconfig->SetObservables( *m_workspace->set("Observables"));
-  // mconfig->SetParametersOfInterest( *m_workspace->set("ParametersOfInterest") );
-  // mconfig->SetNuisanceParameters( *m_workspace->set("nuisanceParameters") );
-  // mconfig->SetGlobalObservables( *m_workspace->set("globalObservables") );
+  mconfig->SetPdf(*m_workspace->pdf("combinedPdf"));
+  
+  mconfig->SetObservables( *m_workspace->set("observables"));
+  mconfig->SetParametersOfInterest( *m_workspace->set("parametersOfInterest") );
+  mconfig->SetNuisanceParameters( *m_workspace->set("nuisanceParameters") );
+  mconfig->SetGlobalObservables( *m_workspace->set("globalObservables") );
 
 
   m_workspace->import(*mconfig);
@@ -235,3 +236,4 @@ void Workspace::readConstraintFile()
 
 
   }
+

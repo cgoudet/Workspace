@@ -87,5 +87,11 @@ class Category {
   RooRealVar *GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss );
   RooWorkspace *m_workspace;
   bool m_debug;
+
+  void SelectInputWorkspace( vector<string> &infos );
+
+  TFile *m_readInputFile;
+  RooWorkspace *m_readInputWorkspace;
+  void SetConstantVar();
 };
 #endif
