@@ -16,11 +16,12 @@ using std::stringstream;
 #include "TLatex.h"
 #include "PlotFunctions/SideFunctions.h"
 using std::ifstream;
+#include "PlotFunctions/DrawPlot.h"
 
 Workspace::Workspace() : m_debug(0)
 {
   m_workspace=0;
-  m_category = new RooCategory( "category", "category" );
+  m_category = new RooCategory( "CombCategory", "combCategory" );
   m_mapSet["observables"] = new RooArgSet( "observables" );
   m_mapSet["globalObservables"] = new RooArgSet( "globalObservables" );
   m_mapSet["parametersOfInterest"] = new RooArgSet( "parametersOfInterest" );
@@ -100,13 +101,15 @@ void Workspace::CreateWS() {
   m_workspace->import(*obsData);
   m_workspace->var( "mHcomb" )->setConstant(1);
   m_workspace->var( "mu" )->setConstant(0);
-  m_workspace->pdf("combinedPdf")->fitTo( *obsData );
+
+
 
   cout << "Creating dataset with ghosts..." << endl;
   RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
   newData->SetNameTitle("obsData_G","obsData_G");
   m_workspace->import(*newData);
   cout << "... sucessfully imported." << endl;
+  //  m_workspace->pdf("combinedPdf")->fitTo( *newData );
 
   cout << "Defining mconfig..." << endl; 
   ModelConfig *mconfig = new ModelConfig("mconfig", m_workspace);

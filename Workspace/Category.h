@@ -92,6 +92,6 @@ class Category {
 
   TFile *m_readInputFile;
   RooWorkspace *m_readInputWorkspace;
-  void SetConstantVar();
+
 };
 #endif

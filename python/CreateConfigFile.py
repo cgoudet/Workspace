@@ -16,13 +16,13 @@ with open( "StatChallenge011.boost", 'w+' ) as configFile :
     for iCat in range( 0, len( categoriesNames ) ) : 
         configFile.write( '\n' )
         configFile.write( '[' + categoriesNames[iCat] + ']\n' )
-        
-        configFile.write( '\n' )
-        configFile.write( '\n'.join( [ coef + '_yieldVar_' + proc
-                                       + '=' + workspaceYield + ' yieldVar_' + coef + '_SM_c'+ str( iCat )
-                                       for coef in coefNames for proc in processes ] ) )
 
-        for proc in processes :
+        configFile.write( 'signalModel=1\n' )
+        configFile.write( '\n'.join( [ coef + '_yieldVar_' + proc
+                                       + '=' + workspaceName.replace('%s', proc) + ' yieldVar_' + coef + '_SM_c'+ str( iCat )
+                                       for coef in coefNames for proc in processes ] ) )
+        for proc in processes :        
+
             configFile.write( '\n'.join( [ coef + '_' + param + form + '_' + proc 
                                            +'=' + workspaceName.replace('%s', proc) + ' ' + coef + '_' + ( param if param != "mean" else "mu" ) + form + 'Nom_SM_c' + str( iCat )
                                            for coef in coefNames for param in paramNames for form in formNames  ] ) )
