@@ -26,7 +26,7 @@ Workspace::Workspace() : m_debug(0)
   m_mapSet["globalObservables"] = new RooArgSet( "globalObservables" );
   m_mapSet["parametersOfInterest"] = new RooArgSet( "parametersOfInterest" );
   m_mapSet["nuisanceParameters"] = new RooArgSet( "nuisanceParameters" );
-  m_name = "Workspace";
+  m_name = "/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/Workspace.root";
 
 }
 
@@ -55,6 +55,9 @@ void Workspace::Configure( string configFileName ) {
   ParseVector( dum, m_processes );
 
   m_systFileName = pt.get<string>("General.systFileName");
+
+  dum = pt.get<string>("General.outName", "");
+  if ( dum != "" ) m_name = dum;
 }
 
 //=======================================
@@ -123,9 +126,8 @@ void Workspace::CreateWS() {
 
   m_workspace->import(*mconfig);
 
-  TString myfile = "/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/"+m_name+".root";
-  cout << "Saving workspace to file... '" << myfile << "'" << endl;
-  m_workspace->writeToFile(myfile, 1);
+  cout << "Saving workspace to file... '" << m_name << "'" << endl;
+  m_workspace->writeToFile(m_name.c_str(), 1);
 
 }
 

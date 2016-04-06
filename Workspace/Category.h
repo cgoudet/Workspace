@@ -66,6 +66,7 @@ class Category {
      1 : common signal sum of processes
    */
   unsigned int m_signalModel;
+  unsigned int m_signalInput;
 
   RooDataSet *m_dataset;
   string m_dataFileName;
@@ -92,6 +93,8 @@ class Category {
 
   TFile *m_readInputFile;
   RooWorkspace *m_readInputWorkspace;
-
+  void SignalFromParameters();
+  void SignalFromPdf();
+  map<string, string> m_mapPdfInfo;
 };
 #endif
