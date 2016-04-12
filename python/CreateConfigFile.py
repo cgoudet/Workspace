@@ -1,5 +1,5 @@
-#categoriesNames = ["ggH", "VBF_low", "VBF_high", "VH_hadronic_low", "VH_hadronic_high", "VH_MET", "VH_leptonic", "VH_dileptons", "ttH_hadronic", "ttH_leptonic"]
-categoriesNames = ["ggH"]
+categoriesNames = ["ggH", "VBF_low", "VBF_high", "VH_hadronic_low", "VH_hadronic_high", "VH_MET", "VH_leptonic", "VH_dileptons", "ttH_hadronic", "ttH_leptonic"]
+#categoriesNames = ["ggH"]
 coefNames=['a', 'b', 'c', 'd' ]
 paramNames=['mean', 'sigma' ]
 formNames=['GA', 'CB' ]

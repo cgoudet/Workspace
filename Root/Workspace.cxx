@@ -92,6 +92,8 @@ void Workspace::CreateWS() {
     string dataName = "obsData_" + *vName;
     datasetMap[*vName] = (RooDataSet*) workspace->data( dataName.c_str() );
 
+    cout << "fit 2 : " << endl;
+    //    workspace->pdf( pdfName.c_str() )->fitTo( *workspace->data( dataName.c_str() ) );
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
