@@ -7,7 +7,8 @@ tag = subprocess.check_output(['date', '+%Y%m%d%H%M%S'])[0:-1]
 print tag
 
 #MENU
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
+#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
 
 dataset='--data obsData_G'
 options='--saveCsv --save_np'
@@ -29,11 +30,11 @@ ymax=1.4
 variables=['mu_XS_VBF', 'mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ttH']
 #['mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ggH', 'mu_XS_ttH', 'mHcomb'] 
 
-strategy='--strategy 0'
+strategy='--strategy 1'
 fitperjob=5
 justMin=1
 #'-m 1' #Choose 0 if no specific changes to do
-modif_scheme=''#'--scheme 1' 
+modif_scheme=' --scheme 0' 
 #'--Snapshot abcx'  Give the name of snapshot for asimov
 snapshot=''
 

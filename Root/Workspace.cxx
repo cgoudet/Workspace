@@ -124,11 +124,13 @@ void Workspace::CreateWS() {
   mconfig->SetGlobalObservables( *m_workspace->set("globalObservables") );
 
 
+
   m_workspace->import(*mconfig);
 
   cout << "Saving workspace to file... '" << m_name << "'" << endl;
   m_workspace->writeToFile(m_name.c_str(), 1);
 
+  //  mconfig->GetNuisanceParameters()->Print("v");
 }
 
 
@@ -245,3 +247,378 @@ void Workspace::readConstraintFile()
 
   }
 
+// void Workspace::makeAsimovData( RooRealVar* mH, ModelConfig* mcInWs, bool doConditional, RooWorkspace* combWs, RooAbsPdf* combPdf, RooDataSet* combData, bool b_only)
+// {
+  // cout << " Make Asimov Data Beginning " << endl; 
+  
+  // ////////////////////
+  // //make asimov data//
+  // ////////////////////
+  
+  // stringstream muStr;
+  // muStr << "_" << !b_only;
+  // RooRealVar* mu = (RooRealVar*)mcInWs->GetParametersOfInterest()->first();
+  // mu->setVal(!b_only);  
+
+  // cout <<  mu->getVal() << endl; 
+
+
+  // // RooRealVar* mH = NULL; 
+  // // mH = combWs->var("mH");
+  // mH->setConstant();
+  // mH->setVal(125.6);
+
+  // RooRealVar* mu_ggF = NULL; 
+  // mu_ggF = combWs->var("mu_ggH");
+  // mu_ggF->setConstant();
+  // mu_ggF->setVal(1);
+
+  // RooRealVar* mu_VBF = NULL; 
+  // mu_VBF= combWs->var("mu_VBF");
+  // mu_VBF->setConstant();
+  // mu_VBF->setVal(1);
+
+  // cout << "mu ggF Asimov == " << mu_ggF->getVal() << endl; 
+  // cout << "mu VBF Asimov == " << mu_VBF->getVal() << endl; 
+
+  // RooRealVar* mu_VH = NULL; 
+  // if (combWs->var("mu_VH")) {
+  //   mu_VH = combWs->var("mu_VH");
+  //   mu_VH->setConstant();
+  //   mu_VH->setVal(1);
+  //   cout << "mu VH Asimov == " << mu_VH->getVal() << endl; 
+  // }
+
+  // RooRealVar* mu_WH = NULL; 
+  // if (combWs->var("mu_WH")) {
+  //   mu_WH = combWs->var("mu_WH");
+  //   mu_WH->setConstant();
+  //   mu_WH->setVal(1);
+  //   cout << "mu WH Asimov == " << mu_WH->getVal() << endl; 
+  // }
+
+  // RooRealVar* mu_ZH = NULL; 
+  // if (combWs->var("mu_ZH")) {
+  //   mu_ZH = combWs->var("mu_ZH");
+  //   mu_ZH->setConstant();
+  //   mu_ZH->setVal(1);
+  //   cout << "mu ZH Asimov == " << mu_ZH->getVal() << endl; 
+  // }
+
+  // RooRealVar* mu_ttH = NULL; 
+  // if (combWs->var("mu_ttH")) {
+  //   mu_ttH = combWs->var("mu_ttH");
+  //   mu_ttH->setConstant();
+  //   mu_ttH->setVal(1);
+  //   cout << "mu ttH Asimov == " << mu_ttH->getVal() << endl; 
+  // }
+
+  // RooRealVar* mu_bbH = NULL; 
+  // if (combWs->var("mu_bbH")) {
+  //   mu_bbH = combWs->var("mu_bbH");
+  //   mu_bbH->setConstant();
+  //   mu_bbH->setVal(1);
+  //   cout << "mu bbH Asimov == " << mu_bbH->getVal() << endl; 
+  // }
+  
+  // RooArgSet mc_obs = *mcInWs->GetObservables();
+  // RooArgSet mc_globs = *mcInWs->GetGlobalObservables();
+  // RooArgSet mc_nuis = *mcInWs->GetNuisanceParameters();
+  
+  // // set all global variables to constant
+  // const RooArgSet* globs_ptr = mcInWs->GetGlobalObservables();
+  // TIterator* glob_itr = globs_ptr->createIterator();
+  // RooRealVar* glob_var;
+  // while ((glob_var = (RooRealVar*)glob_itr->Next())) {
+  //   glob_var->setConstant(1);
+  // }
+  
+  // //pair the nuisance parameter to the global observable
+  // RooArgSet mc_nuis_tmp = mc_nuis;
+  // RooArgList nui_list("ordered_nuis");
+  // RooArgList glob_list("ordered_globs");
+  // RooArgSet constraint_set_tmp(*combPdf->getAllConstraints(mc_obs, mc_nuis_tmp, false));
+  // RooArgSet constraint_set;
+  // int counter_tmp = 0;
+  // unfoldConstraints(constraint_set_tmp, constraint_set, mc_obs, mc_nuis_tmp, counter_tmp);
+  // cout << " After Unfold Constraints " << endl; 
+
+  // TIterator* cIter = constraint_set.createIterator();
+  // RooAbsArg* arg;
+  // //For each constraint
+  // while ((arg = (RooAbsArg*)cIter->Next())) {
+  //   RooAbsPdf* pdf = (RooAbsPdf*)arg;
+  //   if (!pdf) continue;
+
+  //   //finds a variable from which the pdf depends on
+  //   TIterator* nIter = mc_nuis.createIterator();
+  //   RooRealVar* thisNui = NULL;
+  //   RooAbsArg* nui_arg;
+  //   while ((nui_arg = (RooAbsArg*)nIter->Next())) {
+  //     if (pdf->dependsOn(*nui_arg)) {
+  // 	thisNui = (RooRealVar*)nui_arg;
+  // 	break;
+  //     }
+  //   }
+  //   delete nIter;
+
+  //   //Delete components that depends on other variables in the set
+  //   RooArgSet* components = pdf->getComponents();
+  //   components->remove(*pdf);
+  //   if (components->getSize()) {
+  //     TIterator* itr1 = components->createIterator();
+  //     RooAbsArg* arg1;
+  //     while ((arg1 = (RooAbsArg*)itr1->Next())) {
+  // 	TIterator* itr2 = components->createIterator();
+  // 	RooAbsArg* arg2;
+  // 	while ((arg2 = (RooAbsArg*)itr2->Next())) {
+  // 	  if (arg1 == arg2) 
+  // 	    continue;
+  // 	  if (arg2->dependsOn(*arg1)) {
+  // 	    components->remove(*arg1);
+  // 	  }
+  // 	}
+  // 	delete itr2;
+  //     }
+  //     delete itr1;
+  //   }//end components getsize
+  //   if (components->getSize() > 1) {
+  //     cout << "ERROR::Couldn't isolate proper nuisance parameter" << endl;
+  //     return;
+  //   }
+  //   else if (components->getSize() == 1) {
+  //     thisNui = (RooRealVar*)components->first();
+  //   }
+    
+  //   //Get the global observable corresponding on which the constraint depend.    
+  //   TIterator* gIter = mc_globs.createIterator();
+  //   RooRealVar* thisGlob = NULL;
+  //   RooAbsArg* glob_arg;
+  //   while ((glob_arg = (RooAbsArg*)gIter->Next())) {
+  //     if (pdf->dependsOn(*glob_arg)) {
+  // 	thisGlob = (RooRealVar*)glob_arg;
+  // 	break;
+  //     }
+  //   }
+  //   delete gIter;
+    
+  //   if (!thisNui || !thisGlob) {
+  //     cout << "WARNING::Couldn't find nui or glob for constraint: " << pdf->GetName() << endl;
+  //     continue;
+  //   }
+    
+  //   cout << "Pairing nui: " << thisNui->GetName() << ", with glob: " << thisGlob->GetName() << ", from constraint: " << pdf->GetName() << endl;
+    
+  //   nui_list.add(*thisNui);
+  //   glob_list.add(*thisGlob);  
+  // } // end loop on cIter (constraints)
+  // delete cIter;
+  
+  
+  // combWs->saveSnapshot("nominalGlobs",glob_list);
+  // combWs->saveSnapshot("nominalNuis", nui_list);
+
+  
+  // ///  RooArgSet nuiSet_tmp_before(nui_list);
+  // //mu->setRange(-100,100.);
+  // mu->setVal(0.0);
+  // // combPdf->fitTo(*combData, Hesse(false), Minos(false), PrintLevel(0), Constrain(nuiSet_tmp_before));
+  // // double mu_hat = mu->getVal(); 
+  // // mu->setVal(mu_hat);
+  // mu->setConstant(1);
+  
+  // //Set the spurious signal to 0
+  // int nrNuis = nui_list.getSize();
+  // cout << " Number of NP = "<< nrNuis << endl; 
+  // for (int i=0;i<nrNuis;i++) {
+  //   RooRealVar* nui = (RooRealVar*)nui_list.at(i);
+  //   TString nui_name = nui->GetName();
+  //   if ( !nui_name.Contains("spurious_") && !nui_name.Contains("BIAS")) continue;
+  //   cout << " Fixing to constant nuisance parameters" << endl; 
+  //   nui->setVal(0);
+  //   nui->setConstant(1);
+  // }
+  
+  // //fit data with backgroud only model.
+  // RooArgSet nuiSet_tmp(nui_list);
+  // RooFitResult *result2 = combPdf->fitTo(*combData,Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp), Save(),SumW2Error(kFALSE));
+  // //  combPdf->fitTo(*combData, Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp));
+  // cout << "Done" << endl;
+  
+  // mu->setConstant(0);
+  
+  // if (nrNuis != glob_list.getSize())  {
+  //   cout << "ERROR::nui_list.getSize() != glob_list.getSize()!" << endl;
+  //   return;
+  // }
+  
+  // for (int i=0;i<nrNuis;i++) {
+  //   RooRealVar* nui = (RooRealVar*)nui_list.at(i);
+  //   RooRealVar* glob = (RooRealVar*)glob_list.at(i);
+    
+  //   cout << "nui: " << nui << ", glob: " << glob << endl;
+  //   cout << "Setting glob: " << glob->GetName() << ", which had previous val: " << glob->getVal() << ", to conditional val: " << nui->getVal() << endl;
+  //   glob->setVal(nui->getVal());  
+  // }//end for i
+  
+  // //save the snapshots of conditional parameters
+  // cout << "Saving conditional snapshots" << endl;
+  // combWs->saveSnapshot(("conditionalGlobs"+muStr.str()).c_str(),glob_list);
+  // combWs->saveSnapshot(("conditionalNuis" +muStr.str()).c_str(), nui_list);
+  
+  // if (!doConditional) {
+  //   combWs->loadSnapshot("nominalGlobs");
+  //   combWs->loadSnapshot("nominalNuis");
+  // }
+  
+  // for (int i=0;i<nrNuis;i++) {
+  //   RooRealVar* nui = (RooRealVar*)nui_list.at(i);
+  //   TString nui_name2 = nui->GetName();
+  //   if (!nui_name2.Contains("spurious_") && !nui_name2.Contains("BIAS")) continue;
+  //   nui->setConstant(0);
+  // }
+  
+  
+  // cout << "Making asimov" << endl;
+  // //  mu->setVal(!b_only);
+  // // mH->setConstant();
+  // // mH->setVal(125.5);
+
+  // if (!b_only) {
+  //   mu->setVal(1.);
+  //   //    mu->setVal(1.);
+  //   // mu_ggF->setVal(1.62);
+  //   // mu_VBF->setVal(1.55);
+  //   // mu_WH->setVal(1.47);
+  //   // mu_ZH->setVal(2.92);
+  // }
+  // else 
+  //   mu->setVal(0);
+  // ModelConfig* mc = mcInWs;
+  
+  // int iFrame=0;
+  
+  // const char* weightName="weightVar";
+  // RooArgSet obsAndWeight;
+  // cout << "adding obs" << endl;
+  // obsAndWeight.add(*mc->GetObservables());
+  // cout << "adding weight" << endl;
+  
+  // RooRealVar* weightVar = NULL;
+  // if (!(weightVar = combWs->var(weightName))) {
+  //   combWs->import(*(new RooRealVar(weightName, weightName, 1,0,10000000)));
+  //   //   combWs->import(*(new RooRealVar(weightName, weightName, 1,0,1000)));
+  //   weightVar = combWs->var(weightName);    
+  // }
+  // //  cout << "weightVar: " << weightVar << endl;
+  // obsAndWeight.add(*combWs->var(weightName));
+  
+  // //  cout << "defining set" << endl;
+  // combWs->defineSet("obsAndWeight",obsAndWeight);
+
+  
+  // //////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////
+  // //////////////////////////////////////////////////////
+  // // MAKE ASIMOV DATA FOR OBSERVABLES
+
+  // // dummy var can just have one bin since it's a dummy
+  // if(combWs->var("dummyX"))  
+  //   combWs->var("dummyX")->setBins(1);
+
+  // cout << endl << "Check expectedData by category" << endl;
+  // //RooDataSet* simData=NULL;
+  // RooSimultaneous* simPdf = dynamic_cast<RooSimultaneous*>(mc->GetPdf());
+  // map<string, RooDataSet*> asimovDataMap;
+  // //try fix for sim pdf
+  // // RooCategory* channelCat = (RooCategory*)combWs->cat("master_channel");//(RooCategory*) (&simPdf->indexCat());
+  // RooCategory* channelCat = (RooCategory*) (&simPdf->indexCat());
+
+  // // TIterator* iter = simPdf->indexCat().typeIterator() ;
+  // // TIterator* iter = channelCat->typeIterator() ;
+  // // RooCatType* tt = NULL;
+  // int nrIndices = channelCat->numTypes();
+
+  // for (int i=0;i<nrIndices;i++) {
+  //   channelCat->setIndex(i);
+  //   iFrame++;
+  //   // Get pdf associated with state from simpdf
+  //   RooAbsPdf* pdftmp = simPdf->getPdf(channelCat->getLabel()) ;
+	
+  //   // Generate observables defined by the pdf associated with this state
+  //   RooArgSet* obstmp = pdftmp->getObservables(*mc->GetObservables()) ;
+  //   obstmp->Print();
+    
+  //   //channelCat->setIndex(string(tt->GetName()).c_str());
+  //   cout << "on type " << channelCat->getLabel() << " " << iFrame << endl;
+    
+  //   RooDataSet* obsDataUnbinned = new RooDataSet(Form("combAsimovData%d",iFrame),Form("combAsimovData%d",iFrame),RooArgSet(obsAndWeight,*channelCat),WeightVar(*weightVar));
+  //   RooRealVar* thisObs = ((RooRealVar*)obstmp->first());
+  //   double expectedEvents = pdftmp->expectedEvents(*obstmp);
+  //   double thisNorm = 0;
+  //   for(int jj=0; jj<thisObs->numBins(); ++jj) {
+  //     thisObs->setBin(jj);
+  //     //	cout << "pdf = "<<pdftmp->getVal(obstmp) <<endl;
+  //     thisNorm = pdftmp->getVal(obstmp)*thisObs->getBinWidth(jj);
+  //     if (thisNorm*expectedEvents > pow(10., -2) && thisNorm*expectedEvents < pow(10., 9)) 
+  // 	obsDataUnbinned->add(*mc->GetObservables(), thisNorm*expectedEvents);
+  //   }
+    
+  //   obsDataUnbinned->Print();
+  //   cout << "sum entries " << obsDataUnbinned->sumEntries() << endl;
+  //   if(obsDataUnbinned->sumEntries() != obsDataUnbinned->sumEntries()){
+  //     cout << "sum entries is nan"<<endl;
+  //     exit(1);
+  //   }
+    
+  //   ((RooRealVar*)obstmp->first())->Print();
+  //   cout << "expected events " << pdftmp->expectedEvents(*obstmp) << endl;
+    
+  //   asimovDataMap[string(channelCat->getLabel())] = obsDataUnbinned;//tempData;
+    
+  //   cout << "channel: " << channelCat->getLabel() << ", data: ";
+  //   obsDataUnbinned->Print();
+  //   cout << endl;
+  // }
+  
+  
+  // RooDataSet* asimovData = new RooDataSet(("asimovData"+muStr.str()).c_str(),("asimovData"+muStr.str()).c_str(),RooArgSet(obsAndWeight,*channelCat),Index(*channelCat),Import(asimovDataMap),WeightVar(*weightVar));
+  // if (combWs->data(asimovData->GetName())) {
+  //   combWs->import(*asimovData, true); // Bool_t import(TObject& object, const char* aliasName, Bool_t replaceExisting = kFALSE)
+  // }
+  // else {
+  //   combWs->import(*asimovData);
+  // }
+  
+  
+  // //  RooDataSet* asimovData = new RooDataSet(("asimovData"+muStr.str()).c_str(),("asimovData"+muStr.str()).c_str(),RooArgSet(obsAndWeight,*channelCat),Index(*channelCat),Import(asimovDataMap),WeightVar(*weightVar));
+  // //combWs->import(*asimovData);
+  
+  
+  // //bring us back to nominal for exporting
+  // combWs->loadSnapshot("nominalNuis");
+  // combWs->loadSnapshot("nominalGlobs");
+  
+  // asimovData->Print();
+
+  // delete result2;  
+
+
+  // // TCanvas *c = new TCanvas();
+  // // RooPlot* frame=combWs->var("invMass")->frame(100);
+  // // frame->SetTitle(""); //empty title to prevent printing "A RooPlot of ..."
+  // // frame->SetXTitle("m_{H}");
+  // // char buffer_dummy[200]; 
+  // // sprintf(buffer_dummy,"Events / %4.1f GeV",(frame->GetXaxis()->GetXmax()-frame->GetXaxis()->GetXmin())/frame->GetXaxis()->GetNbins());
+  // // frame->SetYTitle(buffer_dummy);
+  // // frame->SetXTitle("m_{#gamma#gamma} [GeV]");
+  
+  // // asimovData->plotOn(frame, MarkerColor(kRed));
+  // // simPdf->plotOn(frame, LineColor(kBlue));
+  
+  // // frame->Draw();      
+  // // c->SaveAs("test_asimov.png");
+
+//}

@@ -1,8 +1,8 @@
 [General]
 catNames=ggH VBF_low VBF_high VH_hadronic_low VH_hadronic_high VH_MET VH_leptonic VH_dileptons ttH_hadronic ttH_leptonic
-process=ggH VBF WH ZH ttH
+process=ggH VBF WH ZH ttH bbH 
 outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root
-systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/datacard.txt
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011_fix/datacard.txt
 
 [ggH]
 signalModel=1

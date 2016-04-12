@@ -38,12 +38,13 @@ Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0)
   m_processes = 0;
 
   m_mapVar["lumi"] = new RooRealVar( "lumi", "lumi", 10 );
+  m_mapVar["lumi"]->setConstant(1);
   m_mapVar["invMass"] = new RooRealVar ("invariant_mass","invariant_mass",126.5, 110.,160.); 
   m_mapVar["mHcomb"] = new RooRealVar("mHcomb","mHcomb",125, 110, 160); // reference is mH = 125 GeV
   m_mapFormula["mHRen"] = new RooFormulaVar("mHRen","mHRen","(@0-100)/100.", RooArgList(*m_mapVar["mHcomb"])); 
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1 );
   m_mapVar["mu_BR_yy"] = new RooRealVar( "mu_BR_yy", "mu_BR_yy", 1 );
-  m_correlatedVar = "mHcomb,mHRen,mu,mu_BR_yy";
+  m_correlatedVar = "mHcomb,mHRen,mu,mu_BR_yy,lumi";
 
   m_coef = { "a", "b", "c", "d" };
   m_form = { "CB", "GA", "Var" };
@@ -65,7 +66,7 @@ Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0)
 Category::Category( string name ) : Category()
 {
   m_name = name;
-  m_mapSet["parametersOfInterest"]->Print();
+  //  m_mapSet["parametersOfInterest"]->Print();
   string dumName = "ws_" + m_name;
   m_workspace = new RooWorkspace( dumName.c_str(), dumName.c_str() );
 
@@ -87,7 +88,6 @@ Category::~Category() {
 
 
 void Category::LoadParameters( string configFileName ) {
-  cout << "starting signalInput : " << m_signalInput << endl;
   boost::property_tree::ptree pt;
   boost::property_tree::ini_parser::read_ini(configFileName, pt);
   vector<string> inputParamInfo( 2, "" );
@@ -120,7 +120,6 @@ void Category::LoadParameters( string configFileName ) {
     string name = "nCB_" + *vProc;
     string inputLine = pt.get<string>( m_name + "." + name, "" );
     m_mapPdfInfo[name] = inputLine;
-    cout << "signalInput : " << m_signalInput << endl;
     if ( inputLine != "" && m_signalInput==1 )  {
       ParseVector( inputLine, inputParamInfo );
       SelectInputWorkspace( inputParamInfo );
@@ -200,11 +199,11 @@ void Category::ReadNuisanceParameters() {
     if (fullName == "bkg_model") continue;
 
     TObjArray* Strings = fullName.Tokenize( "_" );
-    bool containsTYPE = false;
-    TString type =  ((TObjString*) Strings->First())->GetString();
-    //    cout << "type : " << type << endl;
-    if (type == "YIELD" || type ==  "PES" || type == "PER" || type ==  "ESS" || type == "MRES" ) containsTYPE = true;
-    else type = "YIELD";
+    // bool containsTYPE = false;
+    // TString type =  ((TObjString*) Strings->First())->GetString();
+    // cout << "type : " << type << endl;
+    // if (type == "YIELD" || type ==  "PES" || type == "PER" || type ==  "ESS" || type == "MRES" ) containsTYPE = true;
+    // else type = "YIELD";
 
     bool containsPROCESS = false;
     TString process =  ((TObjString*) Strings->Last())->GetString();
@@ -212,14 +211,16 @@ void Category::ReadNuisanceParameters() {
     else process = "common";
 
     TString NPname = fullName;
-    if (containsPROCESS) {
-      // remove also the underscore before the process name
-      NPname.Replace(NPname.Index("_"+process),NPname.Length(),""); 
-      if (((TObjString*) Strings->At(Strings->GetEntries()-2))->GetString()==process)
- 	NPname+="_"+process;
-    }
+    //Correlation between parameters
+    // if ( NPname.Contains( "pdf_qq" ) ) NPname = "pdf_qq";
+    // else if ( NPname.Contains( "pdf_gg_ttH" ) ) NPname = "pdf_gg_ggH";
 
-    if (containsTYPE) cout  << endl;// NPname.Replace(0, NPname.Index(type)+type.Length()+1,""); // remove also the underscore after the type name
+    // if (containsPROCESS) {
+    //   // remove also the underscore before the process name
+    //   NPname.Replace(NPname.Index("_"+process),NPname.Length(),""); 
+    //   if (((TObjString*) Strings->At(Strings->GetEntries()-2))->GetString()==process)
+    // 	NPname+="_"+process;
+    // }
 
     double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
     // do not add systematics at 0 (surcharge the workspace without valid reason)
@@ -270,8 +271,8 @@ void Category::ReadNuisanceParameters() {
     }//end switch on constraint
 
     if (NPname.Contains("spurious") || NPname.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
-    else if (type == "ESS" || type == "PES" ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
-    else if (type == "MRES" || type == "PER" ) m_mapSet["systematicResolution_"+string(process)]->add(*current_syst);
+    else if ( NPname.Contains("MSS" ) ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
+    else if ( NPname.Contains("MRES" ) ) m_mapSet["systematicResolution_"+string(process)]->add(*current_syst);
     else { // means that type == YIELD
       m_mapSet[string("systematicYield_"+process)]->add(*current_syst);    
     }
@@ -364,7 +365,7 @@ void Category::ReadNuisanceParameters() {
 
 //#################################################
 void Category::CreateBackgroundModel() {
-  cout << "define the background model : " << endl;
+  cout << "define the background model : " << m_name << endl;
   int bkg_model =  ((RooRealVar*)m_mapSet["systematicValues"]->find("bkg_model"))->getVal();
     RooFormulaVar *x = new RooFormulaVar("x","x", "(@0-100.)/100.", *m_mapVar["invMass"]);  
   switch (bkg_model ) {
@@ -417,8 +418,9 @@ void Category::CreateBackgroundModel() {
   m_mapSet["modelParameters"]->add(*nbkg);
   m_mapSet["nuisanceParameters"]->add(*nbkg);
   if ( m_dataset && m_dataset->sumEntries() > 1  ) m_mapPdf["bkg"]->fitTo( *m_dataset );
+  cout << "draw" << endl;
   DrawPlot( m_mapVar["invMass"], {m_dataset, m_mapPdf["bkg"] }, "/sps/atlas/c/cgoudet/Plots/HgamBkg_"+m_name );
-
+  cout << "DefineBackground done" << endl;
 }
 
 
@@ -427,26 +429,25 @@ void Category::CreateSignalModel() {
 
   if ( m_signalInput == 1 ) SignalFromParameters();
   else if ( m_signalInput == 2 ) SignalFromPdf();
-  cout << "signalModel : " << m_signalModel << endl;
+  //  cout << "signalModel : " << m_signalModel << endl;
 
-  m_mapSet["pdfProc"]->Print();
-  m_mapSet["yieldsSpurious"]->Print();
-  m_mapSet["yieldsToAdd"]->Print();
+  // m_mapSet["pdfProc"]->Print();
+  // m_mapSet["yieldsSpurious"]->Print();
+  // m_mapSet["yieldsToAdd"]->Print();
   switch ( m_signalModel ) {
   case 1 :
     for ( unsigned int iProc = 0; iProc < m_processes->size(); iProc++ ) {
       string name = "signalSumPdf_" + (*m_processes)[iProc];
       m_mapPdf[name] = new RooAddPdf( name.c_str(), name.c_str(), *m_mapSet["pdfProc"], *m_mapSet["yieldsSpurious"] );
       if ( m_mapSet["yieldsToAdd"]->find( string( "yieldFactor_" + (*m_processes)[iProc] ).c_str() ) ) m_mapSet["pdfToAdd"]->add( *m_mapPdf[name] );
-      cout << "signalSumPdf : " << m_mapPdf[name] << endl;
       }
     break;
   default :
-    cout << "pdfProc : " << m_mapSet["pdfProc"] << endl;
+    //    cout << "pdfProc : " << m_mapSet["pdfProc"] << endl;
     m_mapSet["pdfToAdd"]->add( *m_mapSet["pdfProc"] );
     break;
 }
-  m_mapSet["pdfToAdd"]->Print();
+  //  m_mapSet["pdfToAdd"]->Print();
 }
 
 //===================================
@@ -480,6 +481,7 @@ void Category::CreateWS() {
 
   m_mapSet["pdfToAdd"]->Print("v");
   m_mapSet["yieldsToAdd"]->Print("v");
+
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
 
   cout << "Correlated NP : " << m_correlatedVar << endl;
@@ -517,13 +519,6 @@ void Category::CreateWS() {
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest", "modelParameters" };
   for ( auto set : sets ) DefineSet( set );
 
-  // TIterator* iter_observable = m_mapSet["modelParameters"]->createIterator();
-  // RooRealVar* parg_observable ;
-  // while((parg_observable=(RooRealVar*)iter_observable->Next()) ) {
-  //   parg_observable->setConstant(0);
-  // }
-
-  cout << m_dataset->GetName() << endl;
   cout << "end CreateWS" << endl;
 }
 
@@ -545,7 +540,7 @@ void Category::CreateWS() {
       cout << dynamic_cast<TObjString*>(dataNomenclature->At(0))->GetString() << "does not exists" << endl;
       exit(0);
     }
-    inFile->Print();
+    //    inFile->Print();
 
     //Get the TTree or the workspace
     if ( dataNomenclature->GetEntries()>1 ) {
@@ -553,7 +548,7 @@ void Category::CreateWS() {
       TString className =  inFile->Get( objName )->ClassName();
       if (  className == "TTree" ) {
 	inTree = (TTree*) inFile->Get( objName );
-	inTree->Print();
+	//	inTree->Print();
       }
       else {
 	inWS = (RooWorkspace*) inFile->Get( objName );
@@ -572,7 +567,7 @@ void Category::CreateWS() {
 	}
 	if ( dataNomenclature->GetEntries() > 4 ) {
 	  eventCateg = (RooCategory*) inWS->cat( dynamic_cast<TObjString*>(dataNomenclature->At(4))->GetString() );
-	  eventCateg->Print();
+	  //	  eventCateg->Print();
 	  cout << "dataCut : " << m_dataCut << endl;
 	  m_mapSet["observables"]->add( *eventCateg );
 	}
@@ -651,7 +646,7 @@ RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_par
       else {
 	constraint = new RooGaussian("constraint_"+name, "constraint_"+name, *nui, *glob_nui, *sigma_gauss_constraint);
       }
-      if ( name.Contains( "spurious" )  ) constraint->Print();
+      //      if ( name.Contains( "spurious" )  ) constraint->Print();
       if (! allConstraints->find(constraint->GetName())) { // if constraint not yet considered, should be the case since the NP does not exist yet
 	constraints_pdf_list->add(*constraint); // add it to the list of constraints to be applied to this channel
 	allConstraints->add(*constraint); // add it to the list of all constraints (for all channels)not to apply it twice
@@ -787,28 +782,29 @@ void Category::SignalFromPdf() {
     string name = "signal_" + *vProc;
     if ( m_mapPdfInfo[name] == "" ) {
       cout << " No input Pdf for " << m_name << " " << *vProc << endl;
-      exit(0);
+      continue;
     }
 
     ParseVector( m_mapPdfInfo[name], inputParamInfo );
     SelectInputWorkspace( inputParamInfo );
-    if ( !m_readInputWorkspace->pdf( inputParamInfo.back().c_str() ) ) {
-      cout << " No input Pdf for " << m_name << " " << *vProc << endl;
-      exit(0);
-    }
-
+    if ( !m_readInputWorkspace->pdf( inputParamInfo.back().c_str() ) ) continue;
+    string newName;
     RooAbsPdf *tmpPdf = m_readInputWorkspace->pdf( inputParamInfo.back().c_str() );
     stringstream editStr; 
-    string newName = "tmpSignal";
-    editStr << "EDIT::" << newName << "(" << tmpPdf->GetName()
-	    << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName()
-	    << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName() << ")";
-    m_readInputWorkspace->import( *m_mapVar["invMass"], RecycleConflictNodes() );
-    m_readInputWorkspace->import( *m_mapVar["mHcomb"], RecycleConflictNodes() );
 
-    cout << editStr.str() << endl;
-    m_readInputWorkspace->factory(editStr.str().c_str());      
-    tmpPdf = m_readInputWorkspace->pdf( newName.c_str() );
+    RooWorkspace *dumWS = new RooWorkspace( "dumWS", "dumWS" );
+    dumWS->import( *tmpPdf );
+    // newName = "signal";
+    // editStr << "EDIT::" << newName << "(" << tmpPdf->GetName()
+    // 	    << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName()
+    // 	    << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName() << ")";
+    // m_readInputWorkspace->import( *m_mapVar["invMass"], RecycleConflictNodes() );
+    // m_readInputWorkspace->import( *m_mapVar["mHcomb"], RecycleConflictNodes() );
+    
+    // cout << editStr.str() << endl;
+    // m_readInputWorkspace->factory(editStr.str().c_str());      
+    // tmpPdf = m_readInputWorkspace->pdf( newName.c_str() );
+
 
     newName = "signal";
     editStr.str( "" );
@@ -826,12 +822,6 @@ void Category::SignalFromPdf() {
     mapSet["yield"].add( *m_mapSet["systematicYield_" + *vProc] );
     mapSet["yield"].add( *m_mapSet["systematicYield_common"] );
 
-    editStr << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName();
-    m_readInputWorkspace->import( *m_mapVar["invMass"], RecycleConflictNodes() );
-    editStr << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName();
-    m_readInputWorkspace->import( *m_mapVar["mHcomb"], RecycleConflictNodes() );
-    m_readInputWorkspace->Print();
-
     for ( auto vVar : varToEdit ) {
       string dumName = vVar;
       cout << vVar << " " << m_mapPdfInfo[vVar] << endl;
@@ -846,7 +836,7 @@ void Category::SignalFromPdf() {
 
       RooProduct *form = new RooProduct( vVar.c_str(), vVar.c_str(), varProd);
       m_readInputWorkspace->import( *form, RecycleConflictNodes() );
-      form->Print();
+      //      form->Print();
       editStr << form->GetName();
 
     }//end vVar
@@ -857,44 +847,65 @@ void Category::SignalFromPdf() {
 
     m_readInputWorkspace->factory(editStr.str().c_str());      
     tmpPdf = m_readInputWorkspace->pdf( newName.c_str() );
+    
+    m_readInputWorkspace->var( m_mapPdfInfo["mHcomb"].c_str() )->SetName( "mHcomb" );
+    
+    // RooPlot *plot = m_readInputWorkspace->var( "m_yy" )->frame(25);
+    // m_dataset->plotOn( plot );
+    // tmpPdf->plotOn( plot, LineColor(2) );
+    // m_readInputWorkspace->var( "mHcomb" )->setVal(130);
+    // tmpPdf->plotOn( plot, LineColor(4) );
+    // TCanvas can;
+    // plot->Draw();
+    // can.SaveAs( TString::Format("/sps/atlas/c/cgoudet/Plots/cat_%s.pdf", m_name.c_str() ) );
+
+
     newName += "_" + *vProc;
     m_workspace->import( *tmpPdf, RecycleConflictNodes(), RenameAllVariablesExcept( vProc->c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc->c_str() ) );
     
     cout << newName << " " << m_workspace->pdf( newName.c_str() ) << endl;
 
-    if ( m_workspace->pdf( newName.c_str() ) ) m_mapSet["pdfProc"]->add( *m_workspace->pdf( newName.c_str() ) );
+
 
     name = "yield_" + *vProc;
     ParseVector( m_mapPdfInfo[name], inputParamInfo );
     SelectInputWorkspace( inputParamInfo );
     if ( !m_readInputWorkspace->function( inputParamInfo.back().c_str() ) ) {
+      cout << m_readInputWorkspace->GetName() << " " << inputParamInfo.back() << endl;
       cout << " No input yield for " << m_name << " " << *vProc << endl;
-      exit(0);
+      //      exit(0);
+      continue;
     }
+
+    if ( m_workspace->pdf( newName.c_str() ) ) m_mapSet["pdfProc"]->add( *m_workspace->pdf( newName.c_str() ) );
 
     editStr.str( "" );
     editStr.clear();
-    RooAbsReal *yield = m_readInputWorkspace->function( inputParamInfo.back().c_str() );
-    newName = "yield_" + *vProc;
-    editStr << "EDIT::" << newName << "(" << yield->GetName()
-	    << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName()
-	    << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName() << ")";
+    RooAbsReal *yieldLumi = m_readInputWorkspace->function( inputParamInfo.back().c_str() );
+    newName = "yieldPerLum";
+    editStr << "EDIT::" << newName << "(" << yieldLumi->GetName()
+    	    << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName()
+    	    << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName() << ")";
     m_readInputWorkspace->import( *m_mapVar["invMass"], RecycleConflictNodes() );
     m_readInputWorkspace->import( *m_mapVar["mHcomb"], RecycleConflictNodes() );
 
     m_readInputWorkspace->factory(editStr.str().c_str());      
-    yield = m_readInputWorkspace->pdf( newName.c_str() );
-
-    m_workspace->import( *yield, RecycleConflictNodes() );
-    yield = m_workspace->function( name.c_str() );
+    yieldLumi = m_readInputWorkspace->function( newName.c_str() );
+    newName = "yield";
+    RooProduct *yield = new RooProduct( newName.c_str(), newName.c_str(), RooArgSet(*yieldLumi, *m_mapVar["lumi"] ) );
+    m_workspace->import( *yield, RecycleConflictNodes(), RenameAllVariablesExcept( vProc->c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc->c_str() ) );
+    m_workspace->var( m_mapVar["invMass"]->GetName() )->setRange( 110, 160 );
+    newName +="_"+*vProc;
+    yield = (RooProduct*) m_workspace->function( newName.c_str() );
     m_mapSet["yieldsSpurious"]->add( *yield );
     mapSet["yield"].add( *yield );
     name = "yieldFactor_" + *vProc;
     RooProduct *product = new RooProduct( name.c_str(), name.c_str(), mapSet["yield"] );
+    product->Print();
     m_mapSet["yieldsToAdd"]->add( *product );
 
   }//end vProc
-  m_mapSet["pdfProc"]->Print();
-  m_mapSet["yieldsToAdd"]->Print();
-    exit(0);
+  // m_mapSet["pdfProc"]->Print();
+  // m_mapSet["yieldsToAdd"]->Print();
+
 }
