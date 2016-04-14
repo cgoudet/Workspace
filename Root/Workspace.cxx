@@ -92,12 +92,18 @@ void Workspace::CreateWS() {
     string dataName = "obsData_" + *vName;
     datasetMap[*vName] = (RooDataSet*) workspace->data( dataName.c_str() );
 
-    cout << "fit 2 : " << endl;
-    //    workspace->pdf( pdfName.c_str() )->fitTo( *workspace->data( dataName.c_str() ) );
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
   m_workspace->import( *pdf, RecycleConflictNodes() );
+
+  // m_workspace->var( "nui_QCDscale_bbH" )->setVal(0);
+  // cout <<   m_workspace->pdf( pdf->GetName() )->getVal()  << endl;
+  // m_workspace->var( "nui_QCDscale_bbH" )->setVal(2);
+  // cout <<   m_workspace->pdf( pdf->GetName() )->getVal()  << endl;
+
+  //  exit(0);
+
   cout << "importedPdf" << endl;
   for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
 

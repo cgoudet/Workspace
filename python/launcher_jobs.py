@@ -7,7 +7,8 @@ tag = subprocess.check_output(['date', '+%Y%m%d%H%M%S'])[0:-1]
 print tag
 
 #MENU
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test9cat.root'
+#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
 
 dataset='--data obsData_G'
@@ -34,7 +35,7 @@ strategy='--strategy 1'
 fitperjob=5
 justMin=1
 #'-m 1' #Choose 0 if no specific changes to do
-modif_scheme=' --scheme 0' 
+modif_scheme=' --scheme 0'
 #'--Snapshot abcx'  Give the name of snapshot for asimov
 snapshot=''
 

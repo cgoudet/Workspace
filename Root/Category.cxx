@@ -519,8 +519,6 @@ void Category::CreateWS() {
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest", "modelParameters" };
   for ( auto set : sets ) DefineSet( set );
 
-  //  m_workspace->pdf( m_mapPdf["model"]->GetName() )->fitTo( *m_dataset );
-  //  exit(0);
   cout << "end CreateWS" << endl;
 }
 
@@ -840,7 +838,7 @@ void Category::SignalFromPdf() {
 
       RooProduct *form = new RooProduct( vVar.c_str(), vVar.c_str(), varProd);
       dumWS->import( *form, RecycleConflictNodes() );
-      //      form->Print();
+      form->Print();
       editStr << form->GetName();
 
     }//end vVar
