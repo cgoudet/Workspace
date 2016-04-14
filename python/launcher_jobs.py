@@ -7,7 +7,8 @@ tag = subprocess.check_output(['date', '+%Y%m%d%H%M%S'])[0:-1]
 print tag
 
 #MENU
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test9cat.root'
+#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test12cat.root'
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_test.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
 

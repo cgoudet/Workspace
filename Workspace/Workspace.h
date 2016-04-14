@@ -31,6 +31,7 @@ class Workspace {
   bool m_debug;
 
   void readConstraintFile();
-  //  void makeAsimovData( RooRealVar* mH, ModelConfig* mcInWs, bool doConditional, RooWorkspace* combWs, RooAbsPdf* combPdf, RooDataSet* combData, bool b_only);
+  void MakeAsimovData();
+  void UnfoldConstraints(RooArgSet& initial, RooArgSet& final, RooArgSet& obs, RooArgSet& nuis, int& counter);
 };
 #endif

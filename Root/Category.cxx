@@ -511,7 +511,7 @@ void Category::CreateWS() {
   m_workspace->var( "mu" )->setConstant(0);
   m_workspace->var( "mu" )->setVal(1);
 
-  //  m_mapPdf["model"]->fitTo( *m_dataset );
+  //m_mapPdf["model"]->fitTo( *m_dataset );
   DrawPlot( m_mapVar["invMass"], { m_dataset, m_mapPdf["model"] }, "/sps/atlas/c/cgoudet/Plots/HgamModel_"+m_name );
 
   m_workspace->import( *m_dataset );
@@ -780,6 +780,11 @@ void Category::SignalFromPdf() {
   vector<string> varToEdit = { "meanCB", "meanGA", "sigmaCB", "sigmaGA", "alphaCB", "nCB", "fCB" };
   m_correlatedVar += "," + m_mapPdfInfo["mHcomb"];
 
+  RooRealVar *width = new RooRealVar( "width", "width", 0);
+  RooFormulaVar *prodWidth = new RooFormulaVar( "prodWidth", "prodWidth", "1+@0", RooArgSet( *width ) );
+  width->setConstant(0);
+  m_correlatedVar += ",width";
+
   for ( auto vProc = m_processes->begin(); vProc != m_processes->end(); vProc++ ) {
     string name = "signal_" + *vProc;
     if ( m_mapPdfInfo[name] == "" ) {
@@ -818,6 +823,7 @@ void Category::SignalFromPdf() {
     mapSet["mean"].add( *m_mapSet["systematicPeak_common"] );
     mapSet["sigma"].add( *m_mapSet["systematicResolution_" + *vProc] );
     mapSet["sigma"].add( *m_mapSet["systematicResolution_common"] );
+    //    mapSet["sigma"].add( *prodWidth );
     mapSet["yield"].add( *m_mapVar["mu_XS_" + *vProc ] );//muXS
     mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
     mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
