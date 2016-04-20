@@ -7,13 +7,13 @@ tag = subprocess.check_output(['date', '+%Y%m%d%H%M%S'])[0:-1]
 print tag
 
 #MENU
-#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test12cat.root'
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_test.root'
+#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_width18Cat.root'
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test5.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
 
 dataset='--data obsData_G'
-options='--saveCsv --save_np'
+options='--saveCsv --save_np --constraint 1'
 
 #variable1='mu'
 variable1='mu_XS_ggH'
@@ -29,7 +29,7 @@ ymin=0.6
 ymax=1.4
 #Put profiled variables
 #variables=[]
-variables=['mu_XS_VBF', 'mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ttH']
+variables=['mu_XS_VBF', 'mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ttH', 'mu']
 #['mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ggH', 'mu_XS_ttH', 'mHcomb'] 
 
 strategy='--strategy 1'

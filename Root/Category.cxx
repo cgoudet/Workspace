@@ -823,7 +823,7 @@ void Category::SignalFromPdf() {
     mapSet["mean"].add( *m_mapSet["systematicPeak_common"] );
     mapSet["sigma"].add( *m_mapSet["systematicResolution_" + *vProc] );
     mapSet["sigma"].add( *m_mapSet["systematicResolution_common"] );
-    //    mapSet["sigma"].add( *prodWidth );
+    //mapSet["sigma"].add( *prodWidth );
     mapSet["yield"].add( *m_mapVar["mu_XS_" + *vProc ] );//muXS
     mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
     mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
@@ -844,7 +844,6 @@ void Category::SignalFromPdf() {
 
       RooProduct *form = new RooProduct( vVar.c_str(), vVar.c_str(), varProd);
       dumWS->import( *form, RecycleConflictNodes() );
-      form->Print();
       editStr << form->GetName();
 
     }//end vVar
@@ -905,14 +904,12 @@ void Category::SignalFromPdf() {
     mapSet["yield"].add( *yield );
     name = "yieldFactor";
     RooProduct *product = new RooProduct( name.c_str(), name.c_str(), mapSet["yield"] );
-    product->Print();
     newName = name + "_" + *vProc;
     m_workspace->import( *product, RecycleConflictNodes(), RenameAllVariablesExcept( vProc->c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc->c_str() ) );
     cout << newName << " " << m_workspace->function( newName.c_str() ) << endl;
 
     m_mapSet["yieldsToAdd"]->add( *m_workspace->function( newName.c_str() ) );
 
-    m_workspace->Print();
     m_workspace->var( m_mapVar["invMass"]->GetName() )->setRange( 110, 160 );
     //    cout << m_workspace->var( m_mapPdfInfo["mHcomb"].c_str() ) << " " << m_mapPdfInfo["mHcomb"] << endl;
     m_workspace->var( m_mapPdfInfo["mHcomb"].c_str() )->SetName( "mHcomb" );

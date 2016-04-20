@@ -97,32 +97,20 @@ void Workspace::CreateWS() {
 
   m_workspace = new RooWorkspace( "combination", "combination" );
   m_workspace->import( *pdf, RecycleConflictNodes() );
-
-  m_workspace->var( "nui_QCDscale_bbH" )->setVal(0);
-  cout << "nui_QCDscale_bbH=" <<   m_workspace->pdf( pdf->GetName() )->getVal()  << endl;
-  m_workspace->var( "nui_QCDscale_bbH" )->setVal(2);
-  cout << "nui_QCDscale_bbH=" <<   m_workspace->pdf( pdf->GetName() )->getVal()  << endl;
-
   cout << "importedPdf" << endl;
   for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
 
-
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap)); // ,WeightVar(wt));
   m_workspace->import(*obsData);
-  m_workspace->var( "mHcomb" )->setConstant(1);
-  m_workspace->var( "mu" )->setConstant(0);
-
-
 
   cout << "Creating dataset with ghosts..." << endl;
   RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
   newData->SetNameTitle("obsData_G","obsData_G");
   m_workspace->import(*newData);
   cout << "... sucessfully imported." << endl;
-  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained() );
-  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrain(RooArgSet(*m_workspace->var("nui_QCDscale_bbH" ))) );
+  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained(), SumW2Error(kFALSE) );
   cout << "fitted constrained" << endl;
-  MakeAsimovData();
+
 
   cout << "Defining mconfig..." << endl; 
   ModelConfig *mconfig = new ModelConfig("mconfig", m_workspace);
@@ -136,12 +124,7 @@ void Workspace::CreateWS() {
 
 
   m_workspace->import(*mconfig);
-
-  m_workspace->var( "nui_QCDscale_bbH" )->setVal(0);
-  cout << "nui_QCDscale_bbH=" <<   m_workspace->pdf( pdf->GetName() )->getVal()  << endl;
-  m_workspace->var( "nui_QCDscale_bbH" )->setVal(2);
-  cout << "nui_QCDscale_bbH=" <<   m_workspace->pdf( pdf->GetName() )->getVal()  << endl;
-
+  MakeAsimovData();
   cout << "Saving workspace to file... '" << m_name << "'" << endl;
   m_workspace->writeToFile(m_name.c_str(), 1);
 
@@ -410,7 +393,7 @@ void Workspace::MakeAsimovData() {
   //fit data with backgroud only model.
   RooArgSet nuiSet_tmp(nui_list);
   RooDataSet *combData = (RooDataSet*) m_workspace->data( "obsData_G" );
-  RooFitResult *result2 = combPdf->fitTo(*combData,Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp), Save(),SumW2Error(kFALSE));
+  RooFitResult *result2 = 0;//combPdf->fitTo(*combData,Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp), Save(),SumW2Error(kFALSE));
   //  combPdf->fitTo(*combData, Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp));
   cout << "Done" << endl;
   
@@ -464,7 +447,10 @@ void Workspace::MakeAsimovData() {
   else 
     mu->setVal(0);
   ModelConfig* mc = (ModelConfig*) m_workspace->obj( "mconfig" );
-  
+  if ( !mc ) {
+    cout << "ModelConfig not found" << endl;
+    exit(0);
+  }
   int iFrame=0;
   
   const char* weightName="weightVar";
@@ -573,7 +559,7 @@ void Workspace::MakeAsimovData() {
   
   asimovData->Print();
 
-  delete result2;  
+  if ( result2 )  delete result2;  
 }
 
 
