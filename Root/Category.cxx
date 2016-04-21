@@ -801,19 +801,6 @@ void Category::SignalFromPdf() {
 
     RooWorkspace *dumWS = new RooWorkspace( "dumWS", "dumWS" );
     dumWS->import( *tmpPdf );
-    // newName = "signal";
-    // editStr << "EDIT::" << newName << "(" << tmpPdf->GetName()
-    // 	    << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName()
-    // 	    << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName() << ")";
-    // m_readInputWorkspace->import( *m_mapVar["invMass"], RecycleConflictNodes() );
-    // m_readInputWorkspace->import( *m_mapVar["mHcomb"], RecycleConflictNodes() );
-    
-    // cout << editStr.str() << endl;
-    // m_readInputWorkspace->factory(editStr.str().c_str());      
-    // tmpPdf = m_readInputWorkspace->pdf( newName.c_str() );
-    // editStr.str( "" );
-    // editStr.clear();
-
 
     newName = "signal";
     editStr << "EDIT::" << newName << "(" << tmpPdf->GetName();

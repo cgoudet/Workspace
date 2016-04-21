@@ -8,15 +8,15 @@ print tag
 
 #MENU
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_width18Cat.root'
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test5.root'
-#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
+#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test.root'
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
 
 dataset='--data obsData_G'
-options='--saveCsv --save_np --constraint 1'
+options='--saveCsv --save_np --constraint 0'
 
-#variable1='mu'
-variable1='mu_XS_ggH'
+variable1='mu'
+#variable1='mu_XS_ggH'
 nx=50
 xmin=1
 xmax=1
@@ -28,15 +28,15 @@ ny=1
 ymin=0.6
 ymax=1.4
 #Put profiled variables
-#variables=[]
-variables=['mu_XS_VBF', 'mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ttH', 'mu']
+variables=[]
+#variables=['mu_XS_VBF', 'mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ttH']
 #['mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ggH', 'mu_XS_ttH', 'mHcomb'] 
 
-strategy='--strategy 1'
+strategy='--strategy 0'
 fitperjob=5
 justMin=1
 #'-m 1' #Choose 0 if no specific changes to do
-modif_scheme=' --scheme 0'
+modif_scheme=' --scheme 4'
 #'--Snapshot abcx'  Give the name of snapshot for asimov
 snapshot=''
 
