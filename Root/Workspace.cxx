@@ -92,15 +92,16 @@ void Workspace::CreateWS() {
     }
     string dataName = "obsData_" + *vName;
     datasetMap[*vName] = (RooDataSet*) workspace->data( dataName.c_str() );
-
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
   m_workspace->import( *pdf, RecycleConflictNodes() );
   cout << "importedPdf" << endl;
   for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
-
-  RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap)); // ,WeightVar(wt));
+  RooRealVar wt( "weight", "weight", 1 );
+  m_mapSet["observables"]->add( wt );
+  RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap) ,WeightVar(wt ));
+  obsData->Print();
   m_workspace->import(*obsData);
 
   cout << "Creating dataset with ghosts..." << endl;
@@ -124,7 +125,7 @@ void Workspace::CreateWS() {
 
 
   m_workspace->import(*mconfig);
-  MakeAsimovData();
+  //  MakeAsimovData();
   cout << "Saving workspace to file... '" << m_name << "'" << endl;
   m_workspace->writeToFile(m_name.c_str(), 1);
 
@@ -139,7 +140,7 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
   TList* datalist = orig->split(*m_category, true);
   TIterator* dataItr = datalist->MakeIterator();
   RooAbsData* ds;
-  RooRealVar* weightVar = new RooRealVar("wt","wt",1);
+  RooRealVar* weightVar = new RooRealVar("weight","weight",1);
   RooRealVar* firstObs = (RooRealVar*) observables->first();  
   RooArgSet obsWeight( *firstObs, *m_category, *weightVar );
   //  obsWeight.add( *weightVar );
@@ -150,13 +151,18 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
     stringstream datasetName;
     datasetName << "newData_" << typeName << endl;
 
-    RooDataSet* thisData = new RooDataSet(datasetName.str().c_str(),datasetName.str().c_str(), obsWeight, WeightVar(*weightVar) );
+    // RooDataSet* thisData = new RooDataSet(datasetName.str().c_str(),datasetName.str().c_str(), obsWeight, WeightVar(*weightVar) );
+    RooDataSet* thisData = new RooDataSet( *(RooDataSet*) ds, datasetName.str().c_str() );
     //    cout << "entries : " << nrEntries << endl;
 
-    for (int ib=0;ib<nrEntries;ib++) {
-      firstObs->setVal( ((RooRealVar*) ds->get(ib)->first())->getVal() );
-      thisData->add(obsWeight, 1);  
-    }
+    // for (int ib=0;ib<nrEntries;ib++) {
+    //   firstObs->setVal( ((RooRealVar*) ds->get(ib)->first())->getVal() );
+    //   ds->get(ib)->Print();
+    //   cout << ds->get(ib)->find( "weight" ) << endl;
+
+    //   cout << ( (RooRealVar*) ds->get(ib)->find( "weight" ))->getVal() << endl;
+    //   thisData->add(obsWeight, ( (RooRealVar*) ds->get(ib)->find( "weight" ))->getVal());  
+    // }
 
     TString string_tn(typeName);
     if ( nrEntries <20) {

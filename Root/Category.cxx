@@ -155,7 +155,8 @@ void Category::LoadParameters( string configFileName ) {
   m_signalModel = pt.get<unsigned int>( m_name + ".signalModel", 0 );
 
   m_dataFileName = pt.get<string>( m_name + ".dataFileName" );
-  m_dataCut = pt.get<string>( m_name + ".dataCut" );
+  m_dataCut = pt.get<string>( m_name + ".dataCut", "" );
+  m_mapPdfInfo["dataWeight"] = pt.get<string>( m_name + ".dataWeight", "" );
   cout << "end LoadingParameters" << endl;
 
   if ( !m_signalInput ) {
@@ -370,9 +371,9 @@ void Category::CreateBackgroundModel() {
     RooFormulaVar *x = new RooFormulaVar("x","x", "(@0-100.)/100.", *m_mapVar["invMass"]);  
   switch (bkg_model ) {
   case  BKG_MODEL_EXPO : {
-    RooRealVar *slope = new RooRealVar("slope", "slope", -2e-2, -5, -5e-6);
+    RooRealVar *slope = new RooRealVar("slope", "slope", -2e-2, -1e3, 0.);
     m_mapSet["nuisanceParameters"]->add(*slope);
-    RooExponential *exp_pdf = new RooExponential ("bkgExp", "bkgExp", *x, *slope);
+    RooExponential *exp_pdf = new RooExponential ("bkgExp", "bkgExp", *m_mapVar["invMass"], *slope);
     m_mapPdf["bkg"] = exp_pdf;
     break;
   }
@@ -417,7 +418,7 @@ void Category::CreateBackgroundModel() {
   m_mapSet["pdfToAdd"]->add( *m_mapPdf["bkg"] );
   m_mapSet["modelParameters"]->add(*nbkg);
   m_mapSet["nuisanceParameters"]->add(*nbkg);
-  if ( m_dataset && m_dataset->sumEntries() > 1  ) m_mapPdf["bkg"]->fitTo( *m_dataset );
+  if ( m_dataset && m_dataset->sumEntries() > 1  ) m_mapPdf["bkg"]->fitTo( *m_dataset, PrintLevel(-1) );
   cout << "draw" << endl;
   DrawPlot( m_mapVar["invMass"], {m_dataset, m_mapPdf["bkg"] }, "/sps/atlas/c/cgoudet/Plots/HgamBkg_"+m_name );
   cout << "DefineBackground done" << endl;
@@ -511,7 +512,7 @@ void Category::CreateWS() {
   m_workspace->var( "mu" )->setConstant(0);
   m_workspace->var( "mu" )->setVal(1);
 
-  //m_mapPdf["model"]->fitTo( *m_dataset );
+  //  m_mapPdf["model"]->fitTo( *m_dataset, Strategy(1), SumW2Error(1) );
   DrawPlot( m_mapVar["invMass"], { m_dataset, m_mapPdf["model"] }, "/sps/atlas/c/cgoudet/Plots/HgamModel_"+m_name );
 
   m_workspace->import( *m_dataset );
@@ -558,35 +559,46 @@ void Category::CreateWS() {
 	}
 	cout << "inWS : " << inWS->GetName() << endl;
 	gROOT->cd();
-	RooDataSet *dumDataSet=0;
+
 	RooCategory *eventCateg = 0;
-	if ( dataNomenclature->GetEntries() > 2 ) dumDataSet = (RooDataSet*) inWS->data( dynamic_cast<TObjString*>(dataNomenclature->At(2))->GetString() );
+	if ( dataNomenclature->GetEntries() > 2 ) m_dataset = (RooDataSet*) inWS->data( dynamic_cast<TObjString*>(dataNomenclature->At(2))->GetString() );
+	if ( !m_dataset ) {
+	  cout << "dumdataset not found" << endl;
+	  exit(0);
+	}
+
+
 	if ( dataNomenclature->GetEntries() > 3 ) {
 	  m_mapVar["invMass"]->SetName( dynamic_cast<TObjString*>(dataNomenclature->At(3))->GetString() );
 	  m_correlatedVar += "," + string( m_mapVar["invMass"]->GetName() );
 	}
+
+	m_mapSet["observables"]->add( *m_mapVar["invMass"] );
+	// if ( m_mapPdfInfo["dataWeight"] != "" ) {
+	//   m_mapVar["dataWeight"] = inWS->var(  m_mapPdfInfo["dataWeight"].c_str() );
+	//   cout << m_mapPdfInfo["dataWeight"] << " " << m_mapVar["dataWeight"] << endl;
+	//   m_mapVar["dataWeight"]->SetName( "dataWeight" );
+	//   m_mapSet["observables"]->add( *m_mapVar["dataWeight"] );
+	// }
+
+	string datasetName = "obsData_" + m_name;
 	if ( dataNomenclature->GetEntries() > 4 ) {
+	  RooDataSet *dumDataSet=m_dataset;
 	  eventCateg = (RooCategory*) inWS->cat( dynamic_cast<TObjString*>(dataNomenclature->At(4))->GetString() );
 	  //	  eventCateg->Print();
 	  cout << "dataCut : " << m_dataCut << endl;
 	  m_mapSet["observables"]->add( *eventCateg );
-	}
-	m_mapSet["observables"]->add( *m_mapVar["invMass"] );
-	
-	//	observables->add( *m_eventCateg );
-	string datasetName = "obsData_" + m_name;
-	if ( dumDataSet ) {
 	  m_dataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(),  
 				      dumDataSet, 
 				      *m_mapSet["observables"],
 				      m_dataCut.c_str() );
 	}
-	else {
-	  cout << "dumdataset not found" << endl;
-	  exit(0);
-	}
-	// m_dataset->Print();
-	// exit(0);
+	
+
+	m_dataset->SetName( datasetName.c_str() );
+
+	m_dataset->Print();
+	//	exit(0);
 
     //	if ( inWS ) delete inWS; inWS=0;
       }//end else workspace
