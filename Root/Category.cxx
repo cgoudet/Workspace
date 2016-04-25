@@ -198,7 +198,7 @@ void Category::ReadNuisanceParameters() {
   for( auto iter = m_sDef->begin(); iter != m_sDef->end(); iter++) {
     TString fullName = iter->first;
     if (fullName == "bkg_model") continue;
-
+   
     TObjArray* Strings = fullName.Tokenize( "_" );
     // bool containsTYPE = false;
     // TString type =  ((TObjString*) Strings->First())->GetString();
@@ -211,7 +211,11 @@ void Category::ReadNuisanceParameters() {
     if ( SearchVectorBin( string(process), *m_processes ) != m_processes->size())  containsPROCESS = true;
     else process = "common";
 
+
     TString NPname = fullName;
+    if ( NPname == "QCDscale_WH" || NPname == "QCDscale_ZH" ) NPname = "QCDscale_VH";
+    if ( NPname.Contains( "pdf_qq" ) ) NPname = "pdf_qq";
+
     //Correlation between parameters
     // if ( NPname.Contains( "pdf_qq" ) ) NPname = "pdf_qq";
     // else if ( NPname.Contains( "pdf_gg_ttH" ) ) NPname = "pdf_gg_ggH";
