@@ -1,6 +1,10 @@
 import os
 import subprocess
 
+# def launchLine ( commandLine ) :
+
+    
+
 path='/afs/in2p3.fr/home/c/cgoudet/private/Couplings/'
 data='/sps/atlas/c/cgoudet/Hgam/Couplages/JobsOutput/'
 tag = subprocess.check_output(['date', '+%Y%m%d%H%M%S'])[0:-1]
@@ -11,15 +15,14 @@ input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_asimov.roo
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
 #input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
-
 dataset='--data obsData'
 options='--saveCsv --save_np --constraint 0'
 
-variable1='mu'
+#variable1='mu'
 variable1='mu_XS_ggH'
 nx=50
-xmin=1
-xmax=1
+xmin=0
+xmax=2
 
 #Set to '' to make true 1D profile
 variable2=''
@@ -33,8 +36,8 @@ variables=['mu_XS_VBF', 'mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ttH']
 #['mu_XS_WH', 'mu_XS_ZH', 'mu_XS_ggH', 'mu_XS_ttH', 'mHcomb'] 
 
 strategy='--strategy 1'
-fitperjob=5
-justMin=1
+fitperjob=50
+justMin=0
 #'-m 1' #Choose 0 if no specific changes to do
 modif_scheme=' --scheme 0'
 #'--Snapshot abcx'  Give the name of snapshot for asimov
@@ -64,7 +67,7 @@ valueVar2 = [0] if variable2=='' else ([ ymin ] if ny==1 else [ymin + ( ymax-ymi
 if justMin==1 : fitperjob=1
 if variable1=='' : ny=1
 
-for step1 in range( -1, 0 if justMin==1 else nx , fitperjob ):
+for step1 in range( 0, 0 if justMin==1 else nx , fitperjob ):
     for step2 in range( 0,  ny if step1 != -1 else 1 ):
         
 
@@ -94,6 +97,6 @@ for step1 in range( -1, 0 if justMin==1 else nx , fitperjob ):
             bashFile.write( 'cp -v *.csv ' + directory + '\n')
             bashFile.write( 'cp -v *.pdf ' + directory + '\n')
             
-        qsubLine = 'qsub -P P_atlas -m e -M goudet@lal.in2p3.fr -l ct=29:00:00 -l vmem=4G,fsize=10G -l sps=1 -N LP_' + str(step1) + '_' + str(nx) + '_' + str(step2) + '_' + str(ny) + ' -o ' + log + ' -e ' + logerror + ' ' + file
+        qsubLine = '~/sub28.sh LP_' + str(step1) + '_' + str(nx) + '_' + str(step2) + '_' + str(ny) + ' ' + log + ' ' + logerror + ' ' + file
         os.system(qsubLine)
 

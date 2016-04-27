@@ -125,7 +125,7 @@ elif model == 3 :
                                            for proc in processes  ] ) )
             configFile.write( '\n' )
             configFile.write( '\n'.join( [ "yield_" + proc 
-                                           +'=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge/StatisticsChallenge/h011/inputs/workspace_Yield_Signal_bbH_tHjb_tWH.root  Yield_Signal_tWH_SM_Per1fbMinus1_Channel_' + categoriesNames[iCat]
+                                           +'=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge/StatisticsChallenge/h011/inputs/workspace_Yield_Signal_bbH_tHjb_tWH.root  Yield_Signal_' + proc + '_SM_Per1fbMinus1_Channel_' + categoriesNames[iCat]
                                            for proc in newProcesses  ] ) )
 
             configFile.write( '\n' )

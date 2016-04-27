@@ -372,18 +372,18 @@ void Category::ReadNuisanceParameters() {
 void Category::CreateBackgroundModel() {
   cout << "define the background model : " << m_name << endl;
   int bkg_model =  ((RooRealVar*)m_mapSet["systematicValues"]->find("bkg_model"))->getVal();
-    RooFormulaVar *x = new RooFormulaVar("x","x", "(@0-100.)/100.", *m_mapVar["invMass"]);  
+  RooFormulaVar *x = new RooFormulaVar("x","x", "(@0-100.)/100.", *m_mapVar["invMass"]);  
   switch (bkg_model ) {
   case  BKG_MODEL_EXPO : {
-    RooRealVar *slope = new RooRealVar("slope", "slope", -2e-2, -1e3, 0.);
+    RooRealVar *slope = new RooRealVar("slope", "slope", -2e-2, -1, 0.);
     m_mapSet["nuisanceParameters"]->add(*slope);
     RooExponential *exp_pdf = new RooExponential ("bkgExp", "bkgExp", *m_mapVar["invMass"], *slope);
     m_mapPdf["bkg"] = exp_pdf;
     break;
   }
   case  BKG_MODEL_EXPO_POL2 : {
-    RooRealVar *p1 = new RooRealVar("p0", "p1", 0, -100, 100);
-    RooRealVar *p2 = new RooRealVar("p1", "p2", 0, -100, 100);
+    RooRealVar *p1 = new RooRealVar("p0", "p1", 0, -10, 10);
+    RooRealVar *p2 = new RooRealVar("p1", "p2", 0, -10, 10);
     RooArgSet *coefficients = new RooArgSet(*p1,*p2);
     m_mapSet["modelParameters"]->add(*coefficients);
     m_mapSet["nuisanceParameters"]->add(*coefficients);
@@ -602,7 +602,7 @@ void Category::CreateWS() {
 	m_dataset->SetName( datasetName.c_str() );
 
 	m_dataset->Print();
-	//	exit(0);
+	//exit(0);
 
     //	if ( inWS ) delete inWS; inWS=0;
       }//end else workspace
@@ -679,7 +679,8 @@ void Category::SetProcesses( vector<string> *processes ) {
   m_processes = processes;
   for ( auto vProc = m_processes->begin(); vProc != m_processes->end(); vProc++ ) {
     string muName = "mu_XS_"+ *vProc;
-    m_mapVar[muName] = new RooRealVar( muName.c_str(), muName.c_str(), 1 );
+    m_mapVar[muName] = new RooRealVar( muName.c_str(), muName.c_str(), 1, -7, 7 );
+    m_mapVar[muName]->setConstant(1);
     m_mapSet["parametersOfInterest"]->add( *m_mapVar[muName] );
     m_correlatedVar += "," + muName;
   }
@@ -913,7 +914,7 @@ void Category::SignalFromPdf() {
 
     m_mapSet["yieldsToAdd"]->add( *m_workspace->function( newName.c_str() ) );
 
-    m_workspace->var( m_mapVar["invMass"]->GetName() )->setRange( 110, 160 );
+    m_workspace->var( m_mapVar["invMass"]->GetName() )->setRange( 105, 160 );
     //    cout << m_workspace->var( m_mapPdfInfo["mHcomb"].c_str() ) << " " << m_mapPdfInfo["mHcomb"] << endl;
     m_workspace->var( m_mapPdfInfo["mHcomb"].c_str() )->SetName( "mHcomb" );
 
