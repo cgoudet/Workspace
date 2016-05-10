@@ -1,21 +1,21 @@
-categoriesNames = ["ggH", "VBF_low", "VBF_high", "VH_hadronic_low", "VH_hadronic_high", "VH_MET", "VH_leptonic", "VH_dileptons", "ttH_hadronic", "ttH_leptonic"]
+categoriesNames = ["ggHrest", "VBFloose", "VBFtight", "VHhad_loose", "VHhad_tight", "VHMET", "VHlep", "VHdilep", "ttHhad", "ttHlep"]
 #categoriesNames = ["ggH"]
 coefNames=['a', 'b', 'c', 'd' ]
 paramNames=['mean', 'sigma' ]
-formNames=['GA', 'CB' ]
+formNames=[ 'CB' ]
 processes=['ggH', 'VBF', 'WH', 'ZH', 'ttH' ]
 
 workspaceName='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_%s_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root'
 workspaceYield='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011/RAW_SignalModel/SigParam_all_shape_categories/Parameterized/SM/res_SM_CBGA_Parameterized_workspace.root'
 datacard='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge_h011_fix/datacard.txt'
-model=3;
+model=4;
 
 if model==0 :
     with open( "StatChallenge011.boost", 'w+' ) as configFile :
         configFile.write( "[General]\n" )
         configFile.write( 'catNames=' + ' '.join( categoriesNames ) + '\n' )
         configFile.write( 'process=' + ' '.join( processes ) + ' bbH \n' )
-        configFile.write( 'outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root\n' )
+        configFile.write( 'outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h012.root\n' )
         configFile.write( 'systFileName=' + datacard + '\n' )
         
         
@@ -154,4 +154,49 @@ elif model == 3 :
 
             configFile.write( '\n' )
             configFile.write( 'dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge/StatisticsChallenge/h011/inputs/ws_challenge_pseudo_data_Channel_' + categoriesNames[iCat] + '.root ws_challenge_pseudo_data_Channel_' + categoriesNames[iCat] + ' absdata_data_Channel_' + categoriesNames[iCat] + ' m_yy\n' )
+            configFile.write( 'dataWeight=weight\n' )
+
+elif model == 4 :
+    workspaceName='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012_singleFit/inputs/ModelSignal/RAW/SigSimple_%s_categories/Individual/SM/res_SM_DoubleCB_workspace.root'
+
+    newProcesses = [ 'bbH', 'tHjb', 'tWH' ]
+    with open( "StatChallenge012_asimov.boost", 'w+' ) as configFile :
+        configFile.write( "[General]\n" )
+        configFile.write( 'catNames=' + ' '.join( categoriesNames ) + '\n' )
+        configFile.write( 'process=' + ' '.join( processes + newProcesses) + '\n' )
+        configFile.write( 'systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012_singleFit/Code/datacard.txt\n' )
+        configFile.write( 'outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h012_asimov.root\n' )    
+
+
+        for iCat in range( 0, len( categoriesNames ) ) : 
+            configFile.write( '\n' )
+            configFile.write( '[' + categoriesNames[iCat] + ']\n' )
+
+            configFile.write( 'signalModel=0\n' )
+                   
+            configFile.write( '\n'.join( [ "signal_" + proc 
+                                           +'=' + workspaceName.replace('%s', 'all_shape') + ' sigPdf_SM_m125000_c' + str( iCat)
+                                           for proc in processes+newProcesses  ] ) )
+            configFile.write( '\n' )
+            configFile.write( '\n'.join( [ "yield_" + proc 
+                                           +'=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012_singleFit/inputs/ModelSignal/RAW/SigSimple_yield_' + proc + '_categories/Individual/SM/resonance_yieldList.txt ' + str( iCat)
+                                           for proc in processes  ] ) )
+            configFile.write( '\n' )
+            configFile.write( '\n'.join( [ "yield_" + proc 
+                                           +'=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge/StatisticsChallenge/h011/inputs/workspace_Yield_Signal_bbH_tHjb_tWH.root  Yield_Signal_' + proc + '_SM_Per1fbMinus1_Channel_' + categoriesNames[iCat]
+                                           for proc in newProcesses  ] ) )
+
+            configFile.write( '\n' )
+            configFile.write( '\n'.join( [ param + form + '_' + proc 
+                                           +'=' + (param if param != "mean" else 'mu')  + form + '_SM_m125000_c' + str( iCat )
+                                           for param in paramNames for form in formNames for proc in processes+newProcesses  ] ) )
+
+            configFile.write( '\n' )
+            configFile.write( 'invMass=m_yy_m125000_c' + str(iCat) )
+            configFile.write( '\n' )
+            configFile.write( 'mHcomb=mResonance' )
+            configFile.write( '\n' )
+
+            configFile.write( '\n' )
+            configFile.write( 'dataFileName = /sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012_singleFit/inputs/PseudoData/ws_challenge_pseudo_data_' + categoriesNames[iCat] + '.root ws_challenge_pseudo_data_' + categoriesNames[iCat] + ' absdata_data_' + categoriesNames[iCat] + ' m_yy\n' )
             configFile.write( 'dataWeight=weight\n' )

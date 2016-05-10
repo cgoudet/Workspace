@@ -2,7 +2,7 @@
 catNames=ggH VBF_low VBF_high VH_hadronic_low VH_hadronic_high VH_MET VH_leptonic VH_dileptons ttH_hadronic ttH_leptonic
 process=ggH VBF WH ZH ttH bbH tHjb tWH
 systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/StatChallenge/StatisticsChallenge/h011/inputs/datacard.txt
-outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_asimov0.root
+outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_asimov.root
 
 [ggH]
 signalModel=0

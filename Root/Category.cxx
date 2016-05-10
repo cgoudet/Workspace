@@ -484,6 +484,7 @@ void Category::CreateWS() {
     m_workspace = new RooWorkspace( dumName.c_str(), dumName.c_str() );
   }
 
+
   m_mapSet["pdfToAdd"]->Print("v");
   m_mapSet["yieldsToAdd"]->Print("v");
 
@@ -794,8 +795,9 @@ void Category::SignalFromParameters() {
 void Category::SignalFromPdf() { 
   cout << "SignalFromPdf" <<endl;
   vector<string> inputParamInfo;
-  vector<string> varToEdit = { "meanCB", "meanGA", "sigmaCB", "sigmaGA", "alphaCB", "nCB", "fCB" };
-  m_correlatedVar += "," + m_mapPdfInfo["mHcomb"];
+  //  vector<string> varToEdit = { "meanCB", "meanGA", "sigmaCB", "sigmaGA", "alphaCB", "nCB", "fCB" };
+  vector<string> varToEdit = { "meanCB", "sigmaCB" };
+  m_correlatedVar += "," + m_mapPdfInfo["mHcomb"] + "," + m_mapPdfInfo["invMass"];
 
   RooRealVar *width = new RooRealVar( "width", "width", 0);
   RooFormulaVar *prodWidth = new RooFormulaVar( "prodWidth", "prodWidth", "1+@0", RooArgSet( *width ) );
@@ -814,6 +816,7 @@ void Category::SignalFromPdf() {
     if ( !m_readInputWorkspace->pdf( inputParamInfo.back().c_str() ) ) continue;
     string newName;
     RooAbsPdf *tmpPdf = m_readInputWorkspace->pdf( inputParamInfo.back().c_str() );
+    cout << "tmpPdf ; " << tmpPdf << endl;
     stringstream editStr; 
 
     RooWorkspace *dumWS = new RooWorkspace( "dumWS", "dumWS" );
@@ -834,6 +837,7 @@ void Category::SignalFromPdf() {
     mapSet["yield"].add( *m_mapSet["systematicYield_" + *vProc] );
     mapSet["yield"].add( *m_mapSet["systematicYield_common"] );
 
+    cout << "starting varToEdit." << endl;
     for ( auto vVar : varToEdit ) {
       string dumName = vVar;
       cout << vVar << " " << m_mapPdfInfo[vVar] << endl;
@@ -842,64 +846,71 @@ void Category::SignalFromPdf() {
       editStr << "," << m_mapPdfInfo[vVar] << "=";
       
       RooArgSet varProd;
-      varProd.add( *m_readInputWorkspace->function( m_mapPdfInfo[vVar].c_str() ) );
-      if ( TString(vVar).Contains("mean" ) ) varProd.add( mapSet["mean"] );
-      else if ( TString(vVar).Contains("sigma" ) ) varProd.add( mapSet["sigma"] );
+
+
+      if ( TString(vVar).Contains("mean" ) ) {
+	RooAbsArg *meanModel = new RooFormulaVar( "dependentMean", "@0+(@1-125)", RooArgList( *m_readInputWorkspace->function( m_mapPdfInfo[vVar].c_str() ), *m_readInputWorkspace->var(m_mapPdfInfo["mHcomb"].c_str() ) ) );
+	varProd.add( *meanModel );
+	varProd.add( mapSet["mean"] );
+      }
+      else if ( TString(vVar).Contains("sigma" ) ) {
+	varProd.add( *m_readInputWorkspace->function( m_mapPdfInfo[vVar].c_str() ) );
+	varProd.add( mapSet["sigma"] );
+      }
 
       RooProduct *form = new RooProduct( vVar.c_str(), vVar.c_str(), varProd);
       dumWS->import( *form, RecycleConflictNodes() );
       editStr << form->GetName();
 
     }//end vVar
-
+    cout << "end vartoedit" << endl;
 
     editStr << ")";
     cout << editStr.str()<< endl;
 
     dumWS->factory(editStr.str().c_str());      
     tmpPdf = dumWS->pdf( newName.c_str() );
-    
-    // RooPlot *plot = m_readInputWorkspace->var( "m_yy" )->frame(25);
-    // m_dataset->plotOn( plot );
-    // tmpPdf->plotOn( plot, LineColor(2) );
-    // m_readInputWorkspace->var( "mHcomb" )->setVal(130);
-    // tmpPdf->plotOn( plot, LineColor(4) );
-    // TCanvas can;
-    // plot->Draw();
-    // can.SaveAs( TString::Format("/sps/atlas/c/cgoudet/Plots/cat_%s.pdf", m_name.c_str() ) );
 
 
     newName += "_" + *vProc;
     m_workspace->import( *tmpPdf, RecycleConflictNodes(), RenameAllVariablesExcept( vProc->c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc->c_str() ) );
     cout << newName << " " << m_workspace->pdf( newName.c_str() ) << endl;
+    cout << "test" << endl;
 
     name = "yield_" + *vProc;
     ParseVector( m_mapPdfInfo[name], inputParamInfo );
-    SelectInputWorkspace( inputParamInfo );
-    if ( !m_readInputWorkspace->function( inputParamInfo.back().c_str() ) ) {
+    RooAbsReal *yieldLumi = 0;
+    if ( TString(inputParamInfo.front() ).Contains( ".txt" ) ) {
+      fstream stream;
+      stream.open( inputParamInfo.front().c_str(), fstream::in );
+      int category;
+      double yield, mass;
+      while ( stream >> mass >> category >> yield ) {
+	if ( category != stoi( inputParamInfo.back() ) ) continue;
+	yieldLumi = new RooRealVar( "yieldPerFb", "yieldPerFb", yield );
+	break;
+      }
+    }
+    else {
+      SelectInputWorkspace( inputParamInfo );
+      yieldLumi = m_readInputWorkspace->function( inputParamInfo.back().c_str() );
+    }
+    
+    if ( !yieldLumi ) {
       cout << m_readInputWorkspace->GetName() << " " << inputParamInfo.back() << endl;
       cout << " No input yield for " << m_name << " " << *vProc << endl;
-      //      exit(0);
       continue;
     }
 
+    cout << "newName : " << newName << endl;
     if ( m_workspace->pdf( newName.c_str() ) ) m_mapSet["pdfProc"]->add( *m_workspace->pdf( newName.c_str() ) );
-
     editStr.str( "" );
     editStr.clear();
-    RooAbsReal *yieldLumi = m_readInputWorkspace->function( inputParamInfo.back().c_str() );
-    //    newName = "yieldPerLum";
-    // editStr << "EDIT::" << newName << "(" << yieldLumi->GetName()
-    // 	    << "," << m_mapPdfInfo["invMass"] << "=" << m_mapVar["invMass"]->GetName()
-    // 	    << "," << m_mapPdfInfo["mHcomb"] << "=" << m_mapVar["mHcomb"]->GetName() << ")";
-    // m_readInputWorkspace->import( *m_mapVar["invMass"], RecycleConflictNodes() );
-    // m_readInputWorkspace->import( *m_mapVar["mHcomb"], RecycleConflictNodes() );
-    
-    // m_readInputWorkspace->factory(editStr.str().c_str());      
-    // yieldLumi = m_readInputWorkspace->function( newName.c_str() );
 
     newName = "yield";
+    cout << yieldLumi << " " << m_mapVar["lumi"] << endl;
     RooProduct *yield = new RooProduct( newName.c_str(), newName.c_str(), RooArgSet(*yieldLumi, *m_mapVar["lumi"] ) );
+    cout << "yield : " << endl;
     //    m_workspace->import( *yield, RecycleConflictNodes(), RenameAllVariablesExcept( vProc->c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc->c_str() ) );
     dumWS->import( *yield, RecycleConflictNodes() );
 
@@ -910,14 +921,23 @@ void Category::SignalFromPdf() {
     RooProduct *product = new RooProduct( name.c_str(), name.c_str(), mapSet["yield"] );
     newName = name + "_" + *vProc;
     m_workspace->import( *product, RecycleConflictNodes(), RenameAllVariablesExcept( vProc->c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc->c_str() ) );
+    cout << m_workspace->function( TString( product->GetName() ) + TString(vProc->c_str()) ) << endl;
+    //    exit(0);
     cout << newName << " " << m_workspace->function( newName.c_str() ) << endl;
-
+    cout << "test2" << endl;
+    cout << m_workspace->function( newName.c_str() ) << endl;
     m_mapSet["yieldsToAdd"]->add( *m_workspace->function( newName.c_str() ) );
-
+    cout << "setRAnge" << endl;
+    cout << m_mapVar["invMass"]->GetName() << " " << m_workspace->var( m_mapVar["invMass"]->GetName() ) << endl;
+    cout << m_mapPdfInfo["invMass"] << " " << m_workspace->var( m_mapPdfInfo["invMass"].c_str() ) << endl;
+    m_workspace->Print();
+    cout << "printed" << endl;
+    m_workspace->var( m_mapPdfInfo["invMass"].c_str() )->SetName( m_mapVar["invMass"]->GetName() );
     m_workspace->var( m_mapVar["invMass"]->GetName() )->setRange( 105, 160 );
     //    cout << m_workspace->var( m_mapPdfInfo["mHcomb"].c_str() ) << " " << m_mapPdfInfo["mHcomb"] << endl;
+    cout << "setName " << endl;
     m_workspace->var( m_mapPdfInfo["mHcomb"].c_str() )->SetName( "mHcomb" );
-
+    cout << "delete" << endl;
     delete dumWS;
     //    exit(0);
   }//end vProc
