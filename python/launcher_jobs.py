@@ -1,11 +1,7 @@
 import os
 import subprocess
 
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_asimov.root'
-#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_Test.root'
-#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_pdfReco.root'
-#input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h011_fullreco.root'
-
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h012_asimov.root'
 
 variables = {}
 variables["mu_XS_ggH"] = [ 0, 2, 50]    
@@ -17,10 +13,9 @@ variables["mu_XS_ttH"] = [ 0, 3.5, 50]
 
 
 fitperjob=50
-saveCsv=0
 options = {}
-options["justMin"]    = 0
-#options['saveCsv']    = 0
+options["justMin"]    = 1
+options['saveCsv']    = 0
 options['save_np']    = 1
 options['constraint'] = 0
 options['strategy']   = 1
@@ -48,7 +43,7 @@ def StripName( line, doPrefix = 1, doSuffix = 1 ) :
 
 optionLine = ' '.join( [ ( '--' + key + ' ' + str(options[key]) ) if str(options[key]) != '' else '' for key in options.keys() ] )
 if profiled != '' : optionLine += ' ' + ' '.join( [ '--profiled ' + var for var in profiled.split(' ') ] ) 
-if saveCsv : optionLine += ' --saveCsv '
+
 #For 1D plot
 commands = (
     [ [' '.join( [ var, str(ComputePointVal( variables[var], iPoint )), str(ComputePointVal( variables[var], min(iPoint+fitperjob, variables[var][-1]-1 ))), str(fitperjob) if iPoint+fitperjob<=variables[var][-1]-1  else str(variables[var][-1]-iPoint) ] ) 
@@ -92,6 +87,6 @@ for contents in commands :
         bashFile.write( 'cp -v *.csv ' + directory + '\n')
         bashFile.write( 'cp -v *.pdf ' + directory + '\n')
 
-    qsubLine = '~/sub28.sh LP_' + ' '.join( [contents[1], directory + 'log_' + contents[1] + '.log', directory + 'logerror' + contents[1] + '.log', file ] )
+    qsubLine = '~/sub1.sh LP_' + ' '.join( [contents[1], directory + 'log_' + contents[1] + '.log', directory + 'logerror' + contents[1] + '.log', file ] )
     os.system(qsubLine)
 

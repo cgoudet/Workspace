@@ -70,11 +70,11 @@ void Workspace::CreateWS() {
 
   readConstraintFile();
 
-  for ( auto vName = m_categoriesNames.begin(); vName != m_categoriesNames.end(); vName++ ) {
-    m_category->defineType( vName->c_str() );
-    m_category->setLabel( vName->c_str() );
+  for ( auto vName : m_categoriesNames ) {
+    m_category->defineType( vName.c_str() );
+    m_category->setLabel( vName.c_str() );
     m_categories.push_back( 0);
-    m_categories.back() = new Category( *vName );
+    m_categories.back() = new Category( vName );
     m_categories.back()->SetSDef( &m_sDef );
     m_categories.back()->SetSystFileName( m_systFileName );
     m_categories.back()->SetProcesses( &m_processes );
@@ -82,22 +82,22 @@ void Workspace::CreateWS() {
     m_categories.back()->CreateWS();
 
     RooWorkspace *workspace = m_categories.back()->GetWorkspace();
-    string pdfName = "model_" + *vName;
+    string pdfName = "model_" + vName;
     pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
-    for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ )  {
-      cout << *vSet << " " << m_mapSet[*vSet] << endl;
-      m_mapSet[*vSet]->add( *workspace->set(vSet->c_str()) );
+    for ( auto vSet : sets )  {
+      m_mapSet[vSet]->add( *workspace->set(vSet.c_str()) );
     }
-    string dataName = "obsData_" + *vName;
-    datasetMap[*vName] = (RooDataSet*) workspace->data( dataName.c_str() );
+    string dataName = "obsData_" + vName;
+    datasetMap[vName] = (RooDataSet*) workspace->data( dataName.c_str() );
   }
 
   m_workspace = new RooWorkspace( "combination", "combination" );
+
   m_workspace->import( *pdf, RecycleConflictNodes() );
   cout << "importedPdf" << endl;
-  for ( auto vSet = sets.begin(); vSet != sets.end(); vSet++ ) m_workspace->defineSet( vSet->c_str(), *m_mapSet[*vSet], kTRUE );
+  for ( auto vSet  : sets ) m_workspace->defineSet( vSet.c_str(), *m_mapSet[vSet], kTRUE );
   RooRealVar wt( "weight", "weight", 1 );
   m_mapSet["observables"]->add( wt );
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap) ,WeightVar(wt ));
@@ -109,7 +109,7 @@ void Workspace::CreateWS() {
   newData->SetNameTitle("obsData_G","obsData_G");
   m_workspace->import(*newData);
   cout << "... sucessfully imported." << endl;
-  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained(), SumW2Error(kFALSE) );
+  
   cout << "fitted constrained" << endl;
 
 
@@ -127,8 +127,10 @@ void Workspace::CreateWS() {
   m_workspace->import(*mconfig);
   //  MakeAsimovData();
   cout << "Saving workspace to file... '" << m_name << "'" << endl;
+  m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
+  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained(), SumW2Error(kFALSE) );
   //  mconfig->GetNuisanceParameters()->Print("v");
 }
 
@@ -234,8 +236,8 @@ void Workspace::readConstraintFile()
 	    cout << "Unknown constraint for syst. " << ((TObjString*) tmpAr.First())->GetString() << endl;
 	    continue;
 	  }
-	}// end case 2
 	  break;
+	}// end case 2
 	case 8 :
 	  defConstraint = ASYM_CONSTRAINT;
 	  break;
@@ -245,10 +247,9 @@ void Workspace::readConstraintFile()
 	default :
 	  defConstraint = NO_CONSTRAINT;
 	}//end switch
+	//	if ( TString(tmpString).Contains( "EL_SF_ISO" ) ) cout << tmpString << " " << defConstraint << endl;
 	m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
       } while(!current_file.eof());
-
-
   }
 
 // void Workspace::makeAsimovData( RooRealVar* mH, ModelConfig* mcInWs, bool doConditional, RooWorkspace* combWs, RooAbsPdf* combPdf, RooDataSet* combData, bool b_only)
