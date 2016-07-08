@@ -6,20 +6,20 @@ input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h012_asimo
 variables = {}
 variables["mu_XS_ggH"] = [ 0, 2, 50]    
 variables["mu_XS_VBF"] = [ -0.5, 2.5, 50]    
-variables["mu_XS_WH"]  = [ 0, 6, 50]    
-variables["mu_XS_ZH"]  = [ 0, 6, 50]    
-variables["mu_XS_ttH"] = [ 0, 3.5, 50]    
+variables["mu_XS_WH"]  = [ -3, 3, 50]    
+variables["mu_XS_ZH"]  = [ -3, 3, 50]    
+variables["mu_XS_ttH"] = [ -3, 3, 50]    
 #variables["mu"] = [ 0, 2]    
 
 
 fitperjob=50
 options = {}
-options["justMin"]    = 1
-options['saveCsv']    = 0
+options["justMin"]    = 0
+options['saveCsv']    = 1
 options['save_np']    = 1
 options['constraint'] = 0
 options['strategy']   = 1
-options['scheme']     = 0
+options['scheme']     = 4
 options['data']       = 'obsData'
 options['snapshot']   = ''
 
@@ -87,6 +87,6 @@ for contents in commands :
         bashFile.write( 'cp -v *.csv ' + directory + '\n')
         bashFile.write( 'cp -v *.pdf ' + directory + '\n')
 
-    qsubLine = '~/sub1.sh LP_' + ' '.join( [contents[1], directory + 'log_' + contents[1] + '.log', directory + 'logerror' + contents[1] + '.log', file ] )
+    qsubLine = '~/sub28.sh LP_' + ' '.join( [contents[1], directory + 'log_' + contents[1] + '.log', directory + 'logerror' + contents[1] + '.log', file ] )
     os.system(qsubLine)
 
