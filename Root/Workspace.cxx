@@ -28,7 +28,6 @@ Workspace::Workspace() : m_debug(0)
   m_mapSet["parametersOfInterest"] = new RooArgSet( "parametersOfInterest" );
   m_mapSet["nuisanceParameters"] = new RooArgSet( "nuisanceParameters" );
   m_name = "/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/Workspace.root";
-
 }
 
 Workspace::Workspace( string name ) : Workspace()
@@ -142,6 +141,7 @@ void Workspace::CreateWS() {
 //==================================================
 RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables ) {
   if ( m_debug ) cout << "addGhosts" << endl;
+  orig->Print();
   map<string, RooDataSet*> data_map;
   TList* datalist = orig->split(*m_category, true);
   TIterator* dataItr = datalist->MakeIterator();
@@ -201,9 +201,12 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
      }
 
       //    cout << "NAME = " <<  ds->GetName() << endl;
-    data_map[string(ds->GetName())] = (RooDataSet*)thisData;
+      data_map[string(ds->GetName())] = (RooDataSet*)thisData;
   }
 
+  obsWeight = RooRealVar();
+  obsWeight.add( *weightVar );
+  obsWeight.add( *orig->get(1) );
   RooDataSet* newData = new RooDataSet("newData","newData", obsWeight,
 				       Index(*m_category), Import(data_map), WeightVar( *weightVar) );
 
@@ -236,10 +239,7 @@ void Workspace::readConstraintFile()
 	  else if(tmpStrDefConst == "GAUSS_CONSTRAINT") defConstraint = GAUSS_CONSTRAINT;
 	  else if(tmpStrDefConst == "LOGNORM_CONSTRAINT") defConstraint = LOGNORM_CONSTRAINT;
 	  else if(tmpStrDefConst == "ASYM_CONSTRAINT") defConstraint = ASYM_CONSTRAINT;
-	  else {
-	    cout << "Unknown constraint for syst. " << ((TObjString*) tmpAr.First())->GetString() << endl;
-	    continue;
-	  }
+	  else  defConstraint = GAUSS_CONSTRAINT;
 	  break;
 	}// end case 2
 	case 8 :

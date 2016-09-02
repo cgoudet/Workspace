@@ -96,5 +96,6 @@ class Category {
   void SignalFromParameters();
   void SignalFromPdf();
   map<string, string> m_mapPdfInfo;
+  map<string, double> m_changeVar;
 };
 #endif
