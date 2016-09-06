@@ -44,7 +44,7 @@ Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0)
   m_mapFormula["mHRen"] = new RooFormulaVar("mHRen","mHRen","(@0-100)/100.", RooArgList(*m_mapVar["mHcomb"])); 
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1 );
   m_mapVar["mu_BR_yy"] = new RooRealVar( "mu_BR_yy", "mu_BR_yy", 1 );
-  m_correlatedVar = "mHcomb,mHRen,mu,mu_BR_yy,lumi_2015,lumi_2016,yieldScale";
+  m_correlatedVar = "mHcomb,mHRen,mu,mu_BR_yy,lumi_2015,lumi_2016,yieldScale,one,zero";
 
   m_coef = { "a", "b", "c", "d" };
   m_form = { "CB", "GA", "Var" };
@@ -191,7 +191,7 @@ void Category::ReadNuisanceParameters() {
   for( auto iter : *m_sDef ) {
     string name = iter.first;
     m_mapVar[name] = new RooRealVar(name.c_str(),name.c_str(),0); // initialize to 0                  
-    if ( m_debug )  cout << iter.first << " " << iter.second << " " << m_mapVar[name]->getVal() << endl;                                         
+    //    if ( m_debug )  cout << iter.first << " " << iter.second << " " << m_mapVar[name]->getVal() << endl;                                         
     m_mapSet["systematicValues"]->add(*m_mapVar[name]);
   }
   m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,"Common_2015");
@@ -205,7 +205,6 @@ void Category::ReadNuisanceParameters() {
     m_mapSet["systematicPeak_"+*vProc] = new RooArgSet();
     m_mapSet["systematicResolution_"+*vProc] = new RooArgSet();
   }
-
 
   m_mapVar["spurious"] = 0;
   m_mapSet["nuisanceParameters"] = new RooArgSet();
@@ -221,22 +220,17 @@ void Category::ReadNuisanceParameters() {
     double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
     // do not add systematics at 0 (surcharge the workspace without valid reason)
     if (current_value==0) continue; 
-    //    cout << "current_value : " << current_value << endl;
 
     cout << "systFullName : " << fullName << endl;   
-    //    TObjArray* Strings = fullName.Tokenize( "_" );
-    
+
+    //Impose all np to be correlated between categories (same name)    
     bool containsCategory= TString( fullName ).Contains( m_name );
     fullName.ReplaceAll( m_name, "" );
     for ( auto vCatName : *m_categoriesNames ) fullName.ReplaceAll( vCatName, "" );
-    // bool containsTYPE = false;
-    // TString type =  ((TObjString*) Strings->First())->GetString();
-    // cout << "type : " << type << endl;
-    // if (type == "YIELD" || type ==  "PES" || type == "PER" || type ==  "ESS" || type == "MRES" ) containsTYPE = true;
-    // else type = "YIELD";
+
 
     bool containsPROCESS = false;
-    TString process;
+    TString process = "common";
     vector<string> processes = *m_processes;
     processes.push_back( "WH" );
     processes.push_back( "ZH" );
@@ -246,24 +240,38 @@ void Category::ReadNuisanceParameters() {
       process = vProc;
       break;
     }
-    if ( !containsPROCESS ) process = "common";
-    else fullName.ReplaceAll( process, "" );
+    fullName.ReplaceAll( process, "" );
     if ( process == "WH" || process =="ZH" ) process = "VH";
-    string processForName = "common";
+    //this line imposes all processes to be correlated
+    //Its a shortcut for a non needed possilitu of definesystematic
+    string processForName = string(process);
+    cout << "process : " << process << endl;
 
+    //This imposes all NP from different years to be correlated
     bool containsYear = fullName.Contains( "2015" )  || fullName.Contains( "2016" );
     fullName.ReplaceAll( "2015", "" );
     fullName.ReplaceAll( "2016", "" );
 
-    while( fullName.EndsWith("_") ) fullName.Resize( fullName.Length()-1 );
-    fullName.ReplaceAll( "__", "" );
+
     //Do correlation model
     TString NPname = fullName;
-    cout << "NPName : " << NPname << endl;
-    if ( NPname.Contains("BIAS") ) NPname += "_" + m_name;
-    // if ( NPname == "QCDscale_WH" || NPname == "QCDscale_ZH" ) NPname = "QCDscale_VH";
-    // if ( NPname.Contains( "pdf_qq" ) ) NPname = "pdf_qq";
 
+    if ( NPname == "ATLAS_MET" ) {
+      cout << "dumATLAS_MET" << " " << process << endl;
+      if ( process == "VH" ) NPname+="_VH";
+      else NPname+="_nonVH";
+    }
+    else if ( NPname.Contains("BIAS") ) NPname+="_"+m_name;
+    else if ( NPname.Contains("pdf_acc_gg") && process=="ttH" ) NPname+="_"+process;
+    else if ( NPname.Contains("pdf_acc") ) NPname+="_"+process+"_"+m_name;
+    else if ( NPname.Contains("QCDscale") ) {
+      NPname = iter.first;
+      NPname.ReplaceAll( m_name, "" );
+    }
+    cout << "NPName : " << NPname << endl;
+    //    if ( NPname.Contains("BIAS") ) NPname += "_" + m_name;
+
+    CleanName( NPname );
 
     //This int is the functional form of the constraint
     int current_constraint = iter.second;
@@ -309,6 +317,7 @@ void Category::ReadNuisanceParameters() {
       continue;
     }//end switch on constraint
 
+    if (NPname == "ATLAS_MET" ) current_syst->Print();
     if (NPname.Contains("spurious") || NPname.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
     else if ( NPname.Contains("MSS" ) ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
     else if ( NPname.Contains("MRES" ) ) m_mapSet["systematicResolution_"+string(process)]->add(*current_syst);
@@ -330,16 +339,14 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
   TString suffix;
   if (process=="common") suffix = name;
   else  suffix = name+"_"+process;
-  // cout << "name : " << name << endl;
-  // cout << "suffix : " << suffix << endl;
   // the name of the systematics needs to take into account its process dependance, so add a suffix to it. E.g. JES_ggH
   
   RooRealVar *value = new RooRealVar("value_"+suffix, "value_"+suffix, sigma_value);  
   RooProduct *prod = new RooProduct("prod_"+suffix, "prod_"+suffix, RooArgSet(*nui,*value));  // use the nuisance parameter here
   double central_val = 1.;
-  if (name.Contains("spurious") || name.Contains("BIAS") )   central_val = 0.;    
-  RooRealVar *one = new RooRealVar("one_"+suffix, "one_"+suffix, central_val);
-  if ( channel_correlated_np.find(one->GetName()) == string::npos )  channel_correlated_np+=","+string(one->GetName());
+  if (name.Contains("spurious") || name.Contains("BIAS") )   central_val = 0.;
+  TString oneName = central_val ? "one" : "zero";
+  RooRealVar *one = new RooRealVar(oneName, oneName, central_val);
   // cout << "oneName : " << one->GetName() << endl;
   // cout << channel_correlated_np << endl;
   // exit(0);
@@ -392,7 +399,7 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
     vals_up.push_back(1+(sigma_value_up/100.)); 
     vals_down.push_back(1/(1-(sigma_value_down/100.))); 
     RooRealVar* nui = GetNuisanceParameter(name, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
-
+    cout << "nuiName : " << nui->GetName() << " " << (channel_correlated_np.find(nui->GetName()) == string::npos) << endl;
     RooArgList fix;  
     fix.add(*nui);
     HistFactory::FlexibleInterpVar *special_value = new HistFactory::FlexibleInterpVar("asymParam_"+suffix,"asymParam_"+suffix,fix,pdf_mean,vals_down,vals_up); // value that will be asymmetric
@@ -401,8 +408,7 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
     //  special_value->setAllInterpCodes(1);
     //  special_value->setAllInterpCodes(1);
     //       special_value->setAllInterpCodes(4);
-    RooRealVar *one = new RooRealVar("one_"+suffix, "one_"+suffix, 1);
-    if ( channel_correlated_np.find(one->GetName()) == string::npos )  channel_correlated_np+=","+string(one->GetName());
+    RooRealVar *one = new RooRealVar("one", "one", 1);
     RooProduct *systematic = new RooProduct("systematic_"+suffix, "systematic_"+suffix, RooArgSet(*one, *special_value)); // "1+" contained in vals_up and vals_down !
     //  systematic->Print();
 
@@ -718,7 +724,7 @@ void Category::DefineSet( string set ) {
 RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss ) //bool useBifurGauss=false) 2
   {
     //    if ( m_debug ) 
-    cout << "Category::GetNuisanceParameter" << endl;
+    cout << "Category::GetNuisanceParameter " << name << endl;
     RooRealVar *nui = ((RooRealVar*)nuisance_parameters->find(name));
     if (!nui) { // if the np does not exist yet in this channel
       RooRealVar* glob_nui = new RooRealVar("glob_nui_"+name, "glob_nui_"+name, 0, -5, 5);
@@ -984,7 +990,10 @@ void Category::SignalFromPdf() {
       
       //import the final pdf for the process in the final workspace
       editedPdfName += "_" + vProc;
+
+
       m_workspace->import( *tmpPdf, RecycleConflictNodes(), RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ) );
+
       m_mapSet["pdfProc"]->add( *m_workspace->pdf( editedPdfName.c_str() ) );
       if ( m_debug ) cout << editedPdfName << " imported" << endl;
     }//end if pdf for process exist
@@ -1029,8 +1038,17 @@ void Category::SignalFromPdf() {
       name = "yieldFactor";
       RooProduct *yield = new RooProduct( name.c_str(), name.c_str(), mapSet["yield"] );
       name = name + "_" + vProc;
-      
-      m_workspace->import( *yield, RecycleConflictNodes(), RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ) );
+      cout << "importYields" << endl;
+      cout << m_correlatedVar << endl;
+      m_workspace->Print();
+      m_workspace->import( *yield, RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ), RecycleConflictNodes() );
+
+      if ( m_name == "ttHlep" && vProc == "ttH" ) {
+	cout << "process : " << vProc << endl;
+	cout << m_correlatedVar << endl;
+	//	exit(0);
+      }
+
       yield = (RooProduct*) m_workspace->function( name.c_str() );
       m_mapSet["yieldsToAdd"]->add( *yield );
       m_mapSet["yieldsSpurious"]->add( *yield );
@@ -1038,6 +1056,7 @@ void Category::SignalFromPdf() {
     }
     delete dumWS; dumWS=0;
     }//end vProc
+
 
 }
  

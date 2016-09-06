@@ -70,6 +70,7 @@ void Workspace::CreateWS() {
   readConstraintFile();
 
   for ( auto vName : m_categoriesNames ) {
+    //    if ( vName != "ttHlep" ) continue;
     m_category->defineType( vName.c_str() );
     m_category->setLabel( vName.c_str() );
     m_categories.push_back( 0);
@@ -231,7 +232,6 @@ void Workspace::readConstraintFile()
 	int defConstraint = -1;
 	TString tmp(tmpString);
 	TObjArray tmpAr = *(tmp.Tokenize(" "));
-	if ( TString(tmpString).Contains("pdf_acc")  ) cout << tmpString << " " << tmpAr.GetEntries() << endl;
 
 	if ( tmpAr.GetEntries() == 2 ) {
 	  TString tmpStrDefConst= ((TObjString*) tmpAr.At(1))->GetString();
@@ -244,9 +244,9 @@ void Workspace::readConstraintFile()
 	else {
 	  if ( TString(tmpString).Contains("-100 L(" ) ) defConstraint = ASYM_CONSTRAINT;
 	  else defConstraint = GAUSS_CONSTRAINT;
-
+	  cout << tmpString << " " << defConstraint << endl;
 	}//end else 
-	//	if ( TString(tmpString).Contains( "EL_SF_ISO" ) ) cout << tmpString << " " << defConstraint << endl;
+
 	m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
       } while(!current_file.eof());
   }
