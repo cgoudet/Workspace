@@ -29,7 +29,7 @@ class Category {
 
   void SetSDef( map<string, int> *sDef ) { m_sDef = sDef; }
   void SetProcesses( vector<string> *processes );
-
+  void SetCategoriesNames( vector<string> *categoriesNames ) { m_categoriesNames = categoriesNames;}
   RooWorkspace *GetWorkspace() { return m_workspace; }
 
   string GetName() { return m_name; }
@@ -97,5 +97,6 @@ class Category {
   void SignalFromPdf();
   map<string, string> m_mapPdfInfo;
   map<string, double> m_changeVar;
+  vector<string> *m_categoriesNames;
 };
 #endif

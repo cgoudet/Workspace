@@ -31,7 +31,7 @@ using std::stringstream;
 using namespace RooStats;
 using namespace RooFit;
 
-Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0), m_debug(0)
+Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0), m_debug(1)
 {
   m_sDef = 0;
   m_dataset = 0;
@@ -191,7 +191,7 @@ void Category::ReadNuisanceParameters() {
   for( auto iter : *m_sDef ) {
     string name = iter.first;
     m_mapVar[name] = new RooRealVar(name.c_str(),name.c_str(),0); // initialize to 0                  
-    cout << iter.first << " " << iter.second << " " << m_mapVar[name]->getVal() << endl;                                         
+    if ( m_debug )  cout << iter.first << " " << iter.second << " " << m_mapVar[name]->getVal() << endl;                                         
     m_mapSet["systematicValues"]->add(*m_mapVar[name]);
   }
   m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,"Common_2015");
@@ -214,14 +214,21 @@ void Category::ReadNuisanceParameters() {
   m_mapSet["allConstraint"] = new RooArgSet();
   
   for( auto iter : *m_sDef ) {
+
     TString fullName = iter.first;
     if (fullName == "bkg_model") continue;
+
+    double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
+    // do not add systematics at 0 (surcharge the workspace without valid reason)
+    if (current_value==0) continue; 
+    //    cout << "current_value : " << current_value << endl;
+
     cout << "systFullName : " << fullName << endl;   
-    TObjArray* Strings = fullName.Tokenize( "_" );
+    //    TObjArray* Strings = fullName.Tokenize( "_" );
     
     bool containsCategory= TString( fullName ).Contains( m_name );
-    //    fullName.ReplaceAll( m_name, "" );
-
+    fullName.ReplaceAll( m_name, "" );
+    for ( auto vCatName : *m_categoriesNames ) fullName.ReplaceAll( vCatName, "" );
     // bool containsTYPE = false;
     // TString type =  ((TObjString*) Strings->First())->GetString();
     // cout << "type : " << type << endl;
@@ -229,23 +236,39 @@ void Category::ReadNuisanceParameters() {
     // else type = "YIELD";
 
     bool containsPROCESS = false;
-    // TString process =  ((TObjString*) Strings->Last())->GetString();
-    //     if ( SearchVectorBin( string(process), *m_processes ) != m_processes->size())  containsPROCESS = true;
-    // else process = "common";
+    TString process;
+    vector<string> processes = *m_processes;
+    processes.push_back( "WH" );
+    processes.push_back( "ZH" );
+    for ( auto vProc : processes ) {
+      if ( !fullName.Contains( vProc ) ) continue;
+      containsPROCESS = true;
+      process = vProc;
+      break;
+    }
+    if ( !containsPROCESS ) process = "common";
+    else fullName.ReplaceAll( process, "" );
+    if ( process == "WH" || process =="ZH" ) process = "VH";
+    string processForName = "common";
 
+    bool containsYear = fullName.Contains( "2015" )  || fullName.Contains( "2016" );
+    fullName.ReplaceAll( "2015", "" );
+    fullName.ReplaceAll( "2016", "" );
+
+    while( fullName.EndsWith("_") ) fullName.Resize( fullName.Length()-1 );
+    fullName.ReplaceAll( "__", "" );
     //Do correlation model
     TString NPname = fullName;
+    cout << "NPName : " << NPname << endl;
+    if ( NPname.Contains("BIAS") ) NPname += "_" + m_name;
     // if ( NPname == "QCDscale_WH" || NPname == "QCDscale_ZH" ) NPname = "QCDscale_VH";
     // if ( NPname.Contains( "pdf_qq" ) ) NPname = "pdf_qq";
 
-    double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
-    // do not add systematics at 0 (surcharge the workspace without valid reason)
-    if (current_value==0) continue; 
 
     //This int is the functional form of the constraint
-    int current_constraint = iter.second;  
+    int current_constraint = iter.second;
     RooRealVar *current_syst=0;
-
+    cout << "current constraint : " << current_constraint << endl;
     switch ( current_constraint ) {
     case GAUSS_CONSTRAINT :
       current_syst  = defineSystematic_Gauss(NPname, current_value,
@@ -254,7 +277,7 @@ void Category::ReadNuisanceParameters() {
  					     m_mapSet["constraintPdf"],
  					     m_correlatedVar,
  					     m_mapSet["allConstraint"],
- 					     process);
+ 					     processForName);
       break;
     case LOGNORM_CONSTRAINT :
       current_syst  = defineSystematic_LogNorm(NPname, current_value,
@@ -263,13 +286,13 @@ void Category::ReadNuisanceParameters() {
  					     m_mapSet["constraintPdf"],
  					     m_correlatedVar,
  					     m_mapSet["allConstraint"],
- 					       process );
+ 					       processForName );
       break;
     case ASYM_CONSTRAINT : {
       /* if (current_value > -99) */
       /* 	cout << "WARNING: the asymmetric systematics will not used the central value for the parameter !" << endl; */
-      double current_err_lo =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getMin();
-      double current_err_hi =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getMax();
+      double current_err_lo =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
+      double current_err_hi =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
       if (m_debug) {
  	cout << "asymmetric error with values : +" << current_err_hi << ", and " << current_err_lo << endl;
       }
@@ -279,7 +302,7 @@ void Category::ReadNuisanceParameters() {
 						  m_mapSet["constraintPdf"],
 						  m_correlatedVar,
 						  m_mapSet["allConstraint"],
-						  process );
+						  processForName );
       break;
     }
     default : //if no constraint
@@ -292,6 +315,7 @@ void Category::ReadNuisanceParameters() {
     else { // means that type == YIELD
       m_mapSet[string("systematicYield_"+process)]->add(*current_syst);    
     }
+
   } // end loop on systematics 
 
   cout << "end nuisanceParameters" << endl;
@@ -315,7 +339,7 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
   double central_val = 1.;
   if (name.Contains("spurious") || name.Contains("BIAS") )   central_val = 0.;    
   RooRealVar *one = new RooRealVar("one_"+suffix, "one_"+suffix, central_val);
-  channel_correlated_np+=","+string(one->GetName());
+  if ( channel_correlated_np.find(one->GetName()) == string::npos )  channel_correlated_np+=","+string(one->GetName());
   // cout << "oneName : " << one->GetName() << endl;
   // cout << channel_correlated_np << endl;
   // exit(0);
@@ -378,6 +402,7 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
     //  special_value->setAllInterpCodes(1);
     //       special_value->setAllInterpCodes(4);
     RooRealVar *one = new RooRealVar("one_"+suffix, "one_"+suffix, 1);
+    if ( channel_correlated_np.find(one->GetName()) == string::npos )  channel_correlated_np+=","+string(one->GetName());
     RooProduct *systematic = new RooProduct("systematic_"+suffix, "systematic_"+suffix, RooArgSet(*one, *special_value)); // "1+" contained in vals_up and vals_down !
     //  systematic->Print();
 
@@ -692,16 +717,19 @@ void Category::DefineSet( string set ) {
 //==============================
 RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss ) //bool useBifurGauss=false) 2
   {
-    RooRealVar *nui = ((RooRealVar*)nuisance_parameters->find("nui_"+name));
+    //    if ( m_debug ) 
+    cout << "Category::GetNuisanceParameter" << endl;
+    RooRealVar *nui = ((RooRealVar*)nuisance_parameters->find(name));
     if (!nui) { // if the np does not exist yet in this channel
       RooRealVar* glob_nui = new RooRealVar("glob_nui_"+name, "glob_nui_"+name, 0, -5, 5);
       glob_nui->setConstant();
-      nui = new RooRealVar("nui_"+name, "nui_"+name, 0, -5, 5 );
+      nui = new RooRealVar(name, name, 0, -5, 5 );
       nuisance_parameters->add(*nui);
       global_parameters->add(*glob_nui);
-      channel_correlated_np += string( ",nui_"+name+",glob_nui_"+name );
+
       // (Re)create the constraint
       RooRealVar *sigma_gauss_constraint = new RooRealVar("sigma_"+name, "sigma_"+name, 1);
+      channel_correlated_np += "," + string(nui->GetName()) + "," + string(glob_nui->GetName()) +"," +string(sigma_gauss_constraint->GetName());
       RooAbsPdf *constraint;
       if (sigmaRightBifurGauss>0) {
 	RooRealVar *sigma_gauss_constraint_right = new RooRealVar("sigma_right_"+name, "sigma_right_"+name, sigmaRightBifurGauss);

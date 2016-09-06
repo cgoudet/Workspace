@@ -77,6 +77,7 @@ void Workspace::CreateWS() {
     m_categories.back()->SetSDef( &m_sDef );
     m_categories.back()->SetSystFileName( m_systFileName );
     m_categories.back()->SetProcesses( &m_processes );
+    m_categories.back()->SetCategoriesNames( &m_categoriesNames );
     m_categories.back()->LoadParameters( m_configFileName );
     m_categories.back()->CreateWS();
 
@@ -230,27 +231,21 @@ void Workspace::readConstraintFile()
 	int defConstraint = -1;
 	TString tmp(tmpString);
 	TObjArray tmpAr = *(tmp.Tokenize(" "));
-	switch ( tmpAr.GetEntries() ) {
-	case 1 : 
-	  continue;
-	case 2 : {
+	if ( TString(tmpString).Contains("pdf_acc")  ) cout << tmpString << " " << tmpAr.GetEntries() << endl;
+
+	if ( tmpAr.GetEntries() == 2 ) {
 	  TString tmpStrDefConst= ((TObjString*) tmpAr.At(1))->GetString();
 	  if(tmpStrDefConst == "NO_CONSTRAINT") defConstraint = NO_CONSTRAINT;
 	  else if(tmpStrDefConst == "GAUSS_CONSTRAINT") defConstraint = GAUSS_CONSTRAINT;
 	  else if(tmpStrDefConst == "LOGNORM_CONSTRAINT") defConstraint = LOGNORM_CONSTRAINT;
 	  else if(tmpStrDefConst == "ASYM_CONSTRAINT") defConstraint = ASYM_CONSTRAINT;
 	  else  defConstraint = GAUSS_CONSTRAINT;
-	  break;
-	}// end case 2
-	case 8 :
-	  defConstraint = ASYM_CONSTRAINT;
-	  break;
-	case 3 :
-	  defConstraint = GAUSS_CONSTRAINT;
-	  break;
-	default :
-	  defConstraint = NO_CONSTRAINT;
-	}//end switch
+	}
+	else {
+	  if ( TString(tmpString).Contains("-100 L(" ) ) defConstraint = ASYM_CONSTRAINT;
+	  else defConstraint = GAUSS_CONSTRAINT;
+
+	}//end else 
 	//	if ( TString(tmpString).Contains( "EL_SF_ISO" ) ) cout << tmpString << " " << defConstraint << endl;
 	m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
       } while(!current_file.eof());
