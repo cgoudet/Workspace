@@ -244,7 +244,7 @@ void Workspace::readConstraintFile()
 	else {
 	  if ( TString(tmpString).Contains("-100 L(" ) ) defConstraint = ASYM_CONSTRAINT;
 	  else defConstraint = GAUSS_CONSTRAINT;
-	  cout << tmpString << " " << defConstraint << endl;
+	  //	  cout << tmpString << " " << defConstraint << endl;
 	}//end else 
 
 	m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;

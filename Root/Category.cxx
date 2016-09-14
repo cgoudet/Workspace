@@ -45,7 +45,7 @@ Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0)
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1 );
   m_mapVar["mu_BR_yy"] = new RooRealVar( "mu_BR_yy", "mu_BR_yy", 1 );
   m_correlatedVar = "mHcomb,mHRen,mu,mu_BR_yy,lumi_2015,lumi_2016,yieldScale,one,zero";
-
+  m_correlatedVar += ",XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_WH_yy,XS13_ZH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy";
   m_coef = { "a", "b", "c", "d" };
   m_form = { "CB", "GA", "Var" };
   m_param = { "mean", "sigma", "alpha", "yield" };
@@ -221,7 +221,8 @@ void Category::ReadNuisanceParameters() {
     // do not add systematics at 0 (surcharge the workspace without valid reason)
     if (current_value==0) continue; 
 
-    cout << "systFullName : " << fullName << endl;   
+    if ( fullName == "dumVar" )  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->Print();
+    cout << "systFullName : " << fullName << " " << current_value << endl;   
 
     //Impose all np to be correlated between categories (same name)    
     bool containsCategory= TString( fullName ).Contains( m_name );
@@ -252,26 +253,37 @@ void Category::ReadNuisanceParameters() {
     fullName.ReplaceAll( "2015", "" );
     fullName.ReplaceAll( "2016", "" );
 
-
+    CleanName( fullName );
     //Do correlation model
-    TString NPname = fullName;
-
-    if ( NPname == "ATLAS_MET" ) {
-      cout << "dumATLAS_MET" << " " << process << endl;
-      if ( process == "VH" ) NPname+="_VH";
-      else NPname+="_nonVH";
+    TString NPName = fullName;
+    cout << "NPName : " << NPName << endl;
+    if ( NPName == "ATLAS_MET" ) {
+      if ( process == "VH" || process == "WH" || process == "ZH" ) NPName+="_VH";
+      else NPName+="_nonVH";
     }
-    else if ( NPname.Contains("BIAS") ) NPname+="_"+m_name;
-    else if ( NPname.Contains("pdf_acc_gg") && process=="ttH" ) NPname+="_"+process;
-    else if ( NPname.Contains("pdf_acc") ) NPname+="_"+process+"_"+m_name;
-    else if ( NPname.Contains("QCDscale") ) {
-      NPname = iter.first;
-      NPname.ReplaceAll( m_name, "" );
+    else if ( NPName.Contains("BIAS") )  NPName+="_"+m_name;
+    else if ( NPName == "ATLAS_pdf_gg" || NPName== "ATLAS_pdf_qq" ) NPName = iter.first;
+    else if ( NPName.Contains("pdf_acc_gg") && process=="ttH" ) NPName+="_"+process;
+    else if ( NPName.Contains("pdf_acc") ) NPName+="_"+process+"_"+m_name;
+    else if ( NPName.Contains("QCDscale") ) {
+      NPName = iter.first;
+      NPName.ReplaceAll( m_name, "" );
+      if ( process == "VH" ) NPName.ReplaceAll( "WH", "VH").ReplaceAll( "ZH", "VH" );
     }
-    cout << "NPName : " << NPname << endl;
-    //    if ( NPname.Contains("BIAS") ) NPname += "_" + m_name;
+    else if ( NPName.Contains("syst_Shape_Bkg") ) {
+      NPName=iter.first;
+      iter.second = LOGNORM_CONSTRAINT;
+    }
+    else if ( NPName.Contains("syst_Yield_Bkg") ) {
+      NPName=iter.first;
+      iter.second = LOGNORM_CONSTRAINT;
+    }
+    else if ( NPName == "ATLAS_TRIGGER_HLT_g35_loose_g25_loose" ) iter.second = LOGNORM_CONSTRAINT;
+    else if ( NPName == "ATLAS_LUMI" ) iter.second = LOGNORM_CONSTRAINT;
+    else if ( NPName == "DeltaPhi_jj" ) iter.second = LOGNORM_CONSTRAINT;
+    else if ( NPName == "EtaStar" ) iter.second = LOGNORM_CONSTRAINT;
 
-    CleanName( NPname );
+    CleanName( NPName );
 
     //This int is the functional form of the constraint
     int current_constraint = iter.second;
@@ -279,7 +291,7 @@ void Category::ReadNuisanceParameters() {
     cout << "current constraint : " << current_constraint << endl;
     switch ( current_constraint ) {
     case GAUSS_CONSTRAINT :
-      current_syst  = defineSystematic_Gauss(NPname, current_value,
+      current_syst  = defineSystematic_Gauss(NPName, current_value,
  					     m_mapSet["nuisanceParameters"],
  					     m_mapSet["globalObservables"],
  					     m_mapSet["constraintPdf"],
@@ -288,7 +300,7 @@ void Category::ReadNuisanceParameters() {
  					     processForName);
       break;
     case LOGNORM_CONSTRAINT :
-      current_syst  = defineSystematic_LogNorm(NPname, current_value,
+      current_syst  = defineSystematic_LogNorm(NPName, current_value,
  					     m_mapSet["nuisanceParameters"],
  					     m_mapSet["globalObservables"],
  					     m_mapSet["constraintPdf"],
@@ -304,7 +316,7 @@ void Category::ReadNuisanceParameters() {
       if (m_debug) {
  	cout << "asymmetric error with values : +" << current_err_hi << ", and " << current_err_lo << endl;
       }
-      current_syst  = defineSystematic_asymmetric(NPname, current_err_hi, current_err_lo,
+      current_syst  = defineSystematic_asymmetric(NPName, current_err_hi, current_err_lo,
 						  m_mapSet["nuisanceParameters"],
 						  m_mapSet["globalObservables"],
 						  m_mapSet["constraintPdf"],
@@ -317,10 +329,10 @@ void Category::ReadNuisanceParameters() {
       continue;
     }//end switch on constraint
 
-    if (NPname == "ATLAS_MET" ) current_syst->Print();
-    if (NPname.Contains("spurious") || NPname.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
-    else if ( NPname.Contains("MSS" ) ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
-    else if ( NPname.Contains("MRES" ) ) m_mapSet["systematicResolution_"+string(process)]->add(*current_syst);
+    if (NPName.Contains("spurious") || NPName.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
+    else if ( NPName.Contains("MSS" ) ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("MRES" ) ) m_mapSet["systematicResolution_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("lhcMass") ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
     else { // means that type == YIELD
       m_mapSet[string("systematicYield_"+process)]->add(*current_syst);    
     }
@@ -389,7 +401,7 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
   RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process, double sigmaRightBifurGauss) //, bool useBifurGauss=false)
   {
     TString suffix;
-    if (process=="common")
+    if (process=="common") 
       suffix = name;
     else 
       suffix = name+"_"+process;// the name of the systematics needs to take into account its process dependance, so add a suffix to it. E.g. JES_ggH
@@ -399,9 +411,9 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
     vals_up.push_back(1+(sigma_value_up/100.)); 
     vals_down.push_back(1/(1-(sigma_value_down/100.))); 
     RooRealVar* nui = GetNuisanceParameter(name, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
-    cout << "nuiName : " << nui->GetName() << " " << (channel_correlated_np.find(nui->GetName()) == string::npos) << endl;
     RooArgList fix;  
     fix.add(*nui);
+
     HistFactory::FlexibleInterpVar *special_value = new HistFactory::FlexibleInterpVar("asymParam_"+suffix,"asymParam_"+suffix,fix,pdf_mean,vals_down,vals_up); // value that will be asymmetric
     // special_value->Print();
     // see http://www.usatlas.bnl.gov/~fisyak/star/root/roofit/histfactory/src/FlexibleInterpVar.cxx
@@ -604,6 +616,11 @@ void Category::CreateWS() {
 
   m_workspace->importClassCode();
   cout << "end CreateWS" << endl;
+
+  cout << "fitting cat only" << endl;
+  // m_mapPdf["model"]->fitTo( *m_dataset, RooFit::SumW2Error(kFALSE) );
+  // cout << "fitted BR : " << m_workspace->var( "ATLAS_BR_gamgam" )->getVal() << " " << m_workspace->var( "ATLAS_BR_gamgam" )->getError() << endl;
+
 }
 
 //=========================================
@@ -897,10 +914,13 @@ void Category::SignalFromPdf() {
     map<string,RooArgSet> mapSet;
     mapSet["mean"].add( *m_mapSet["systematicPeak_common"] );
     mapSet["sigma"].add( *m_mapSet["systematicResolution_common"] );
-    mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
-    mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
-    mapSet["yield"].add( *m_mapSet["systematicYield_common"] );
-    if ( vProc != "all" ) {
+    //    if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
+    if ( true ) {
+      mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
+      mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
+      mapSet["yield"].add( *m_mapSet["systematicYield_common"] );
+    }
+    if ( vProc != "all"  ) {
       mapSet["mean"].add(*m_mapSet["systematicPeak_" + vProc] );
       mapSet["sigma"].add( *m_mapSet["systematicResolution_" + vProc] );
       mapSet["yield"].add( *m_mapSet["systematicYield_" + vProc] );
