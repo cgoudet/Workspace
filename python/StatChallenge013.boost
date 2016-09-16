@@ -2,7 +2,7 @@
 catNames=ggH_CenLow ggH_CenHigh ggH_FwdLow ggH_FwdHigh VBFloose VBFtight VHMET VHlep VHdilep VHhad_loose VHhad_tight ttHhad ttHlep
 process=ggH VBF VH ttH bbH tHjb tWH
 systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
-outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h013.root
+outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/testStatChallenge_h013.root
 yieldScale=0.753195809821
 [ggH_CenLow]
 signalModel=0

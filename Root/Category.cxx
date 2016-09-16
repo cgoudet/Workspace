@@ -211,12 +211,6 @@ void Category::ReadNuisanceParameters() {
     m_mapSet["systematic_mass_"+*vProc] = new RooArgSet();
     m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
   }
-
-  m_mapVar["spurious"] = 0;
-  m_mapSet["nuisanceParameters"] = new RooArgSet();
-  m_mapSet["globalObservables"] = new RooArgSet();
-  m_mapSet["constraintPdf"] = new RooArgSet();
-  m_mapSet["allConstraint"] = new RooArgSet();
   
   for( auto iter : *m_sDef ) {
 
@@ -226,6 +220,10 @@ void Category::ReadNuisanceParameters() {
     double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
     // do not add systematics at 0 (surcharge the workspace without valid reason)
     if (current_value==0) continue; 
+
+    double current_err_lo =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
+    double current_err_hi =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
+
 
     if ( fullName == "dumVar" )  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->Print();
     cout << "systFullName : " << fullName << " " << current_value << endl;   
@@ -297,53 +295,18 @@ void Category::ReadNuisanceParameters() {
     //This int is the functional form of the constraint
     int current_constraint = iter.second;
     RooRealVar *current_syst=0;
+    if ( current_constraint == ASYM_CONSTRAINT ) current_syst = GetCurrentSyst( current_constraint, string(NPName), current_err_hi, current_err_lo );
+    else current_syst = GetCurrentSyst(  current_constraint, string(NPName), current_value );
     cout << "current constraint : " << current_constraint << endl;
-    switch ( current_constraint ) {
-    case GAUSS_CONSTRAINT :
-      current_syst  = defineSystematic_Gauss(NPName, current_value,
- 					     m_mapSet["nuisanceParameters"],
- 					     m_mapSet["globalObservables"],
- 					     m_mapSet["constraintPdf"],
- 					     m_correlatedVar,
- 					     m_mapSet["allConstraint"],
- 					     processForName);
-      break;
-    case LOGNORM_CONSTRAINT :
-      current_syst  = defineSystematic_LogNorm(NPName, current_value,
- 					     m_mapSet["nuisanceParameters"],
- 					     m_mapSet["globalObservables"],
- 					     m_mapSet["constraintPdf"],
- 					     m_correlatedVar,
- 					     m_mapSet["allConstraint"],
- 					       processForName );
-      break;
-    case ASYM_CONSTRAINT : {
-      /* if (current_value > -99) */
-      /* 	cout << "WARNING: the asymmetric systematics will not used the central value for the parameter !" << endl; */
-      double current_err_lo =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
-      double current_err_hi =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
-      if (m_debug) {
- 	cout << "asymmetric error with values : +" << current_err_hi << ", and " << current_err_lo << endl;
-      }
-      current_syst  = defineSystematic_asymmetric(NPName, current_err_hi, current_err_lo,
-						  m_mapSet["nuisanceParameters"],
-						  m_mapSet["globalObservables"],
-						  m_mapSet["constraintPdf"],
-						  m_correlatedVar,
-						  m_mapSet["allConstraint"],
-						  processForName );
-      break;
-    }
-    default : //if no constraint
-      continue;
-    }//end switch on constraint
 
     if (NPName.Contains("spurious") || NPName.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
     else if ( NPName.Contains("MSS" ) ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
     else if ( NPName.Contains("MRES" ) ) m_mapSet["systematic_sigma_"+string(process)]->add(*current_syst);
     else if ( NPName.Contains("lhcMass") ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
     else { // means that type == YIELD
+      cout << "mapSet : " << m_mapSet[string("systematic_yield_"+process)] << endl;
       m_mapSet[string("systematic_yield_"+process)]->add(*current_syst);    
+      cout << "adding" << endl;
     }
 
   } // end loop on systematics 
@@ -856,12 +819,12 @@ void Category::SignalFromParameters() {
 	factors.add( *m_mapFormula[formulaName] );
 
 	if ( vPar == "sigma" ) {
-	  factors.add( *m_mapSet["systematicResolution_" + *vProcess] );
-	  factors.add( *m_mapSet["systematicResolution_common"] );
+	  factors.add( *m_mapSet["systematic_sigma_" + *vProcess] );
+	  factors.add( *m_mapSet["systematic_sigma_common"] );
 	}
 	else if ( vPar == "mean" ) {
-	  factors.add( *m_mapSet["systematicPeak_" + *vProcess] );
-	  factors.add( *m_mapSet["systematicPeak_common"] );
+	  factors.add( *m_mapSet["systematic_mass_" + *vProcess] );
+	  factors.add( *m_mapSet["systematic_mass_common"] );
 	}
 	formulaName = "prod_" + formulaName;
 
@@ -888,8 +851,8 @@ void Category::SignalFromParameters() {
 	yieldsFactors.add( *m_mapVar["mu_XS_" + *vProcess ] );//muXS
 	yieldsFactors.add( *m_mapVar["mu"] );//globalMu
 	yieldsFactors.add( *m_mapVar["mu_BR_yy"] );//muBR
-	yieldsFactors.add( *m_mapSet["systematicYield_" + *vProcess] );
-	yieldsFactors.add( *m_mapSet["systematicYield_common"] );
+	yieldsFactors.add( *m_mapSet["systematic_yield_" + *vProcess] );
+	yieldsFactors.add( *m_mapSet["systematic_yield_common"] );
 	string yieldFactorName = string(TString::Format( "yieldFactor_%s", vProcess->c_str()));
 	RooProduct *yieldFactorProd = new RooProduct( yieldFactorName.c_str(), yieldFactorName.c_str(), yieldsFactors );
 	m_mapSet["yieldsToAdd"]->add( *yieldFactorProd );
@@ -928,18 +891,19 @@ void Category::SignalFromPdf() {
 
 
     map<string,RooArgSet> mapSet;
+    cout << "sets : " << m_mapSet["systematic_mass_common"] << " " << m_mapSet["systematic_sigma_common"] << endl;
     mapSet["mean"].add( *m_mapSet["systematic_mass_common"] );
-    mapSet["sigma"].add( *m_mapSet["systematic_Resolution_common"] );
+    mapSet["sigma"].add( *m_mapSet["systematic_sigma_common"] );
     //    if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
     if ( true ) {
       mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
       mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
-      mapSet["yield"].add( *m_mapSet["systematicYield_common"] );
+      mapSet["yield"].add( *m_mapSet["systematic_yield_common"] );
     }
     if ( vProc != "all"  ) {
-      mapSet["mean"].add(*m_mapSet["systematicPeak_" + vProc] );
-      mapSet["sigma"].add( *m_mapSet["systematicResolution_" + vProc] );
-      mapSet["yield"].add( *m_mapSet["systematicYield_" + vProc] );
+      mapSet["mean"].add(*m_mapSet["systematic_mass_" + vProc] );
+      mapSet["sigma"].add( *m_mapSet["systematic_sigma_" + vProc] );
+      mapSet["yield"].add( *m_mapSet["systematic_yield_" + vProc] );
       mapSet["yield"].add( *m_mapVar["mu_XS_" + vProc ] );//muXS
     }
 
