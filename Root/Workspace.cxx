@@ -67,7 +67,7 @@ void Workspace::CreateWS() {
   RooSimultaneous *pdf = new RooSimultaneous( "combinedPdf", "combinedPdf", *m_category );
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest" };
 
-  readConstraintFile();
+  if ( m_systFileName.find( ".xml" ) == string::npos )  readConstraintFile();
 
   for ( auto vName : m_categoriesNames ) {
     //    if ( vName != "ttHlep" ) continue;

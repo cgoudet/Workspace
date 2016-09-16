@@ -25,8 +25,6 @@ class Category {
   Category( string name );
   ~Category();
 
-
-
   void SetSDef( map<string, int> *sDef ) { m_sDef = sDef; }
   void SetProcesses( vector<string> *processes );
   void SetCategoriesNames( vector<string> *categoriesNames ) { m_categoriesNames = categoriesNames;}
@@ -56,6 +54,7 @@ class Category {
   map<string, int> *m_sDef;
   vector<string> *m_processes;
 
+  RooRealVar *GetCurrentSyst( int constraint, string NPName, double upVal, double downVal=0 );
   RooRealVar* defineSystematic_Gauss(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
   RooRealVar* defineSystematic_LogNorm(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
   RooRealVar* defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
@@ -76,6 +75,7 @@ class Category {
   void CreateSignalModel();
   void CreateSpurious();
   void ReadNuisanceParameters();
+  void ReadNuisanceParametersXML();
   void GetData();
   void DefineSet( string set );
 

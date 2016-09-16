@@ -1,0 +1,265 @@
+[General]
+catNames=ggH_CenLow ggH_CenHigh ggH_FwdLow ggH_FwdHigh VBFloose VBFtight VHMET VHlep VHdilep VHhad_loose VHhad_tight ttHhad ttHlep
+process=ggH VBF VH ttH bbH tHjb tWH
+systFileName=testConfig.xml
+outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/testConfig.root
+yieldScale=0.753195809821
+[ggH_CenLow]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c0
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_CenLow
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_CenLow
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_ggH_CenLow
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_ggH_CenLow
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_ggH_CenLow
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_ggH_CenLow
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_ggH_CenLow
+meanCB_all=muCB_SM_m125000_c0
+sigmaCB_all=sigmaCB_SM_m125000_c0
+invMass=m_yy_m125000_c0
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_ggH_CenLow.root ws_challenge_pseudo_data_ggH_CenLow absdata_data_ggH_CenLow m_yy_ggH_CenLow
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[ggH_CenHigh]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c1
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_CenHigh
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_CenHigh
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_ggH_CenHigh
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_ggH_CenHigh
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_ggH_CenHigh
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_ggH_CenHigh
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_ggH_CenHigh
+meanCB_all=muCB_SM_m125000_c1
+sigmaCB_all=sigmaCB_SM_m125000_c1
+invMass=m_yy_m125000_c1
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_ggH_CenHigh.root ws_challenge_pseudo_data_ggH_CenHigh absdata_data_ggH_CenHigh m_yy_ggH_CenHigh
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[ggH_FwdLow]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c2
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_FwdLow
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_FwdLow
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_ggH_FwdLow
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_ggH_FwdLow
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_ggH_FwdLow
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_ggH_FwdLow
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_ggH_FwdLow
+meanCB_all=muCB_SM_m125000_c2
+sigmaCB_all=sigmaCB_SM_m125000_c2
+invMass=m_yy_m125000_c2
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_ggH_FwdLow.root ws_challenge_pseudo_data_ggH_FwdLow absdata_data_ggH_FwdLow m_yy_ggH_FwdLow
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[ggH_FwdHigh]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c3
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_FwdHigh
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_FwdHigh
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_ggH_FwdHigh
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_ggH_FwdHigh
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_ggH_FwdHigh
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_ggH_FwdHigh
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_ggH_FwdHigh
+meanCB_all=muCB_SM_m125000_c3
+sigmaCB_all=sigmaCB_SM_m125000_c3
+invMass=m_yy_m125000_c3
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_ggH_FwdHigh.root ws_challenge_pseudo_data_ggH_FwdHigh absdata_data_ggH_FwdHigh m_yy_ggH_FwdHigh
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VBFloose]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c4
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VBFloose
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VBFloose
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VBFloose
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VBFloose
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VBFloose
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VBFloose
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VBFloose
+meanCB_all=muCB_SM_m125000_c4
+sigmaCB_all=sigmaCB_SM_m125000_c4
+invMass=m_yy_m125000_c4
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VBFloose.root ws_challenge_pseudo_data_VBFloose absdata_data_VBFloose m_yy_VBFloose
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VBFtight]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c5
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VBFtight
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VBFtight
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VBFtight
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VBFtight
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VBFtight
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VBFtight
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VBFtight
+meanCB_all=muCB_SM_m125000_c5
+sigmaCB_all=sigmaCB_SM_m125000_c5
+invMass=m_yy_m125000_c5
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VBFtight.root ws_challenge_pseudo_data_VBFtight absdata_data_VBFtight m_yy_VBFtight
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VHMET]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c6
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHMET
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHMET
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VHMET
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VHMET
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VHMET
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VHMET
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VHMET
+meanCB_all=muCB_SM_m125000_c6
+sigmaCB_all=sigmaCB_SM_m125000_c6
+invMass=m_yy_m125000_c6
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHMET.root ws_challenge_pseudo_data_VHMET absdata_data_VHMET m_yy_VHMET
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VHlep]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c7
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHlep
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHlep
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VHlep
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VHlep
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VHlep
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VHlep
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VHlep
+meanCB_all=muCB_SM_m125000_c7
+sigmaCB_all=sigmaCB_SM_m125000_c7
+invMass=m_yy_m125000_c7
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHlep.root ws_challenge_pseudo_data_VHlep absdata_data_VHlep m_yy_VHlep
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VHdilep]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c8
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHdilep
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHdilep
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VHdilep
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VHdilep
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VHdilep
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VHdilep
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VHdilep
+meanCB_all=muCB_SM_m125000_c8
+sigmaCB_all=sigmaCB_SM_m125000_c8
+invMass=m_yy_m125000_c8
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHdilep.root ws_challenge_pseudo_data_VHdilep absdata_data_VHdilep m_yy_VHdilep
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VHhad_loose]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c9
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHhad_loose
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHhad_loose
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VHhad_loose
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VHhad_loose
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VHhad_loose
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VHhad_loose
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VHhad_loose
+meanCB_all=muCB_SM_m125000_c9
+sigmaCB_all=sigmaCB_SM_m125000_c9
+invMass=m_yy_m125000_c9
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHhad_loose.root ws_challenge_pseudo_data_VHhad_loose absdata_data_VHhad_loose m_yy_VHhad_loose
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[VHhad_tight]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c10
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHhad_tight
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHhad_tight
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_VHhad_tight
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_VHhad_tight
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_VHhad_tight
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_VHhad_tight
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_VHhad_tight
+meanCB_all=muCB_SM_m125000_c10
+sigmaCB_all=sigmaCB_SM_m125000_c10
+invMass=m_yy_m125000_c10
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHhad_tight.root ws_challenge_pseudo_data_VHhad_tight absdata_data_VHhad_tight m_yy_VHhad_tight
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[ttHhad]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c11
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ttHhad
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ttHhad
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_ttHhad
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_ttHhad
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_ttHhad
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_ttHhad
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_ttHhad
+meanCB_all=muCB_SM_m125000_c11
+sigmaCB_all=sigmaCB_SM_m125000_c11
+invMass=m_yy_m125000_c11
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_ttHhad.root ws_challenge_pseudo_data_ttHhad absdata_data_ttHhad m_yy_ttHhad
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58
+
+[ttHlep]
+signalModel=0
+signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c12
+yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ttHlep
+yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ttHlep
+yield_VH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VH_SM_ttHlep
+yield_ttH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ttH_SM_ttHlep
+yield_bbH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_bbH_SM_ttHlep
+yield_tHjb=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tHjb_SM_ttHlep
+yield_tWH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_tWH_SM_ttHlep
+meanCB_all=muCB_SM_m125000_c12
+sigmaCB_all=sigmaCB_SM_m125000_c12
+invMass=m_yy_m125000_c12
+mHcomb=mResonance
+
+dataFileName =/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_ttHlep.root ws_challenge_pseudo_data_ttHlep absdata_data_ttHlep m_yy_ttHlep
+dataWeight=weight
+changeVarName=lumi_2015 lumi_2016
+changeVarVal=2.42 7.58

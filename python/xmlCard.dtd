@@ -1,0 +1,13 @@
+<!ELEMENT NPCorrelation (systematic)*>
+<!ATTLIST NPCorrelation Name CDATA #IMPLIED>
+<!ELEMENT systematic (systEffect)*>
+<!ATTLIST systematic Name CDATA #IMPLIED>
+<!ATTLIST systematic centralValue CDATA #IMPLIED>
+<!ATTLIST systematic correlation CDATA #IMPLIED>
+<!ATTLIST systematic constraint CDATA #IMPLIED>
+<!ELEMENT systEffect EMPTY >
+<!ATTLIST systEffect upVal CDATA #IMPLIED>
+<!ATTLIST systEffect downVal CDATA #IMPLIED>
+<!ATTLIST systEffect category CDATA #IMPLIED>
+<!ATTLIST systEffect process CDATA #IMPLIED>
+<!ATTLIST systEffect varName CDATA #IMPLIED>

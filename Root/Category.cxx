@@ -26,6 +26,13 @@ using std::endl;
 #include "TCanvas.h"
 #include "RooAbsPdf.h"
 #include "TIterator.h"
+#include "TXMLEngine.h"
+#include "TSystem.h"
+#include "TDOMParser.h"
+#include "TXMLDocument.h"
+#include "TXMLNode.h"
+#include "TXMLAttr.h"
+#include "TIterator.h"
 
 using std::stringstream;
 using namespace RooStats;
@@ -33,6 +40,7 @@ using namespace RooFit;
 
 Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0), m_debug(1)
 {
+
   m_sDef = 0;
   m_dataset = 0;
   m_processes = 0;
@@ -120,8 +128,6 @@ void Category::LoadParameters( string configFileName ) {
     }//end vform
 
 
-
-
     string name = "nCB_" + vProc;
     string inputLine = pt.get<string>( m_name + "." + name, "" );
     m_mapPdfInfo[name] = inputLine;
@@ -201,9 +207,9 @@ void Category::ReadNuisanceParameters() {
   vector<string> processes( *m_processes );
   processes.push_back( "common" );
   for ( auto vProc = processes.begin(); vProc != processes.end(); vProc++ ) {
-    m_mapSet["systematicYield_"+*vProc] = new RooArgSet();
-    m_mapSet["systematicPeak_"+*vProc] = new RooArgSet();
-    m_mapSet["systematicResolution_"+*vProc] = new RooArgSet();
+    m_mapSet["systematic_yield_"+*vProc] = new RooArgSet();
+    m_mapSet["systematic_mass_"+*vProc] = new RooArgSet();
+    m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
   }
 
   m_mapVar["spurious"] = 0;
@@ -226,11 +232,13 @@ void Category::ReadNuisanceParameters() {
 
     //Impose all np to be correlated between categories (same name)    
     bool containsCategory= TString( fullName ).Contains( m_name );
+    cout << "containsCategory : " << containsCategory << endl;
     fullName.ReplaceAll( m_name, "" );
     for ( auto vCatName : *m_categoriesNames ) fullName.ReplaceAll( vCatName, "" );
 
 
     bool containsPROCESS = false;
+    cout << "containsProcess : " << containsPROCESS << endl;
     TString process = "common";
     vector<string> processes = *m_processes;
     processes.push_back( "WH" );
@@ -250,6 +258,7 @@ void Category::ReadNuisanceParameters() {
 
     //This imposes all NP from different years to be correlated
     bool containsYear = fullName.Contains( "2015" )  || fullName.Contains( "2016" );
+    cout << "contains Year : " << containsYear << endl;
     fullName.ReplaceAll( "2015", "" );
     fullName.ReplaceAll( "2016", "" );
 
@@ -330,11 +339,11 @@ void Category::ReadNuisanceParameters() {
     }//end switch on constraint
 
     if (NPName.Contains("spurious") || NPName.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
-    else if ( NPName.Contains("MSS" ) ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
-    else if ( NPName.Contains("MRES" ) ) m_mapSet["systematicResolution_"+string(process)]->add(*current_syst);
-    else if ( NPName.Contains("lhcMass") ) m_mapSet["systematicPeak_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("MSS" ) ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("MRES" ) ) m_mapSet["systematic_sigma_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("lhcMass") ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
     else { // means that type == YIELD
-      m_mapSet[string("systematicYield_"+process)]->add(*current_syst);    
+      m_mapSet[string("systematic_yield_"+process)]->add(*current_syst);    
     }
 
   } // end loop on systematics 
@@ -544,7 +553,15 @@ void Category::CreateWS() {
 
   GetData();
 
-  ReadNuisanceParameters();
+  //Define datasets of nuisance parameters for ReadNuisanceParameters
+  m_mapSet["nuisanceParameters"] = new RooArgSet();
+  m_mapSet["globalObservables"] = new RooArgSet();
+  m_mapSet["constraintPdf"] = new RooArgSet();
+  m_mapSet["allConstraint"] = new RooArgSet();
+  
+  if ( m_systFileName.find( ".xml" ) != string::npos ) ReadNuisanceParametersXML();
+  else ReadNuisanceParameters();
+  
   CreateSignalModel();
   m_mapVar["invMass"]->setRange( 105, 160 );
   //If only the pdf all is available (or yield all)
@@ -641,15 +658,14 @@ void Category::GetData() {
       cout << dynamic_cast<TObjString*>(dataNomenclature->At(0))->GetString() << "does not exists" << endl;
       exit(0);
     }
-    //    inFile->Print();
-     
+         
     //Get the TTree or the workspace
     if ( dataNomenclature->GetEntries()>1 ) {
       TString objName = dynamic_cast<TObjString*>(dataNomenclature->At(1))->GetString();
       TString className =  inFile->Get( objName )->ClassName();
       if (  className == "TTree" ) {
 	inTree = (TTree*) inFile->Get( objName );
-	//	inTree->Print();
+	inTree->Print();
       }
       else {
 	inWS = (RooWorkspace*) inFile->Get( objName );
@@ -912,8 +928,8 @@ void Category::SignalFromPdf() {
 
 
     map<string,RooArgSet> mapSet;
-    mapSet["mean"].add( *m_mapSet["systematicPeak_common"] );
-    mapSet["sigma"].add( *m_mapSet["systematicResolution_common"] );
+    mapSet["mean"].add( *m_mapSet["systematic_mass_common"] );
+    mapSet["sigma"].add( *m_mapSet["systematic_Resolution_common"] );
     //    if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
     if ( true ) {
       mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
@@ -1080,3 +1096,130 @@ void Category::SignalFromPdf() {
 
 }
  
+//=============================================================
+void Category::ReadNuisanceParametersXML() {
+  if ( m_debug ) cout << "ReadNuisanceParameterXML" << endl;
+
+  //Define variable which will contain the spurious signal
+  m_mapVar["spurious"] = 0;
+
+  TDOMParser xmlparser;
+  //Check if the xml file is ok                                                                                                                                                                      
+  xmlparser.ParseFile( m_systFileName.c_str() );
+  TXMLDocument* xmldoc = xmlparser.GetXMLDocument();
+  TXMLNode *rootNode  = xmldoc->GetRootNode();
+  TXMLNode *systNode = rootNode->GetChildren();
+
+  //Loop over systematics
+  while ( systNode!=0 ) {
+    map<string, string> mapAttr;
+    //Affects all the attributes to a map
+    TList *systAttr = systNode->GetAttributes();
+    if(systAttr!=0) {
+      TIterator *it = systAttr->MakeIterator();
+      for ( auto attr = (TXMLAttr*) it->Next(); attr!=0; attr=(TXMLAttr*)it->Next() ) {
+    	mapAttr[attr->GetName()] = attr->GetValue();
+      }
+    }
+    TXMLNode *systEffectNode = systNode->GetChildren();
+    systNode = systNode->GetNextNode();
+
+    if ( mapAttr["Name"] == "" || !systAttr ) continue;
+    if ( mapAttr["Name" ] == "bkg_model" ) continue;
+    if ( m_debug ) cout << "systName : " << mapAttr["Name"] << endl;
+    //Deal with empty attributes
+    if ( mapAttr["correlation"]=="" ) mapAttr["correlation"] = "All";
+
+    int constraint = GAUSS_CONSTRAINT;
+    if (  mapAttr["constraint"]=="LogNorm" ) constraint = LOGNORM_CONSTRAINT;
+    else if ( mapAttr["constraint"]=="Asym" ) constraint = ASYM_CONSTRAINT;
+
+    //Loop over all effect in all categories and processes of the current systematic
+
+    while ( systEffectNode != 0 ) {
+      map<string,string> mapSystEffect;
+      TList *systEffectAttr = systEffectNode->GetAttributes();
+      if(systEffectAttr!=0) {
+	TIterator *it = systEffectAttr->MakeIterator();
+	for ( auto attr = (TXMLAttr*) it->Next(); attr!=0; attr=(TXMLAttr*)it->Next() ) {
+	  cout << attr->GetName() << " " << attr->GetValue() << endl;
+	  mapSystEffect[attr->GetName()] = attr->GetValue();
+	}
+      }
+      systEffectNode = systEffectNode->GetNextNode();	
+      if ( !systEffectAttr ) continue;
+      if ( mapSystEffect["upVal"] == 0 ) continue;
+      //If the systematic effect isnt common or in the category do nothing
+      if ( mapSystEffect["category"] != m_name && mapSystEffect["category"]!="common" ) continue;
+      if ( m_debug ) cout << "category/Process : " << mapSystEffect["category"] << " " << mapSystEffect["process"] << endl;
+
+	  
+      //Dealing with empty parameters
+      if ( mapAttr["process"]=="" ) mapAttr["process"] = "All";
+      if ( mapAttr["varName"]=="" ) mapAttr["varName"] = "yield";
+      
+      //Create the name of the nuisance parameter
+      string NPName = mapAttr["Name"];
+      if ( (mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Category") && mapSystEffect["process"]!="All" ) NPName += "_" + mapSystEffect["process"];
+      if ( mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Process" )  NPName += "_" + m_name;
+      cout << NPName << endl;
+	  
+      RooRealVar *currentSyst = GetCurrentSyst( constraint, NPName, std::stod( mapSystEffect["upVal"] ) , std::stod( mapSystEffect["downVal"] ) );
+      
+      if (mapAttr["Name"].find("spurious") != string::npos || mapAttr["Name"].find("BIAS") != string::npos ) m_mapVar["spurious"]  = currentSyst; // the systematics value is the spurious signal
+      else {
+	string setName = "systematic_" + mapSystEffect["varName"] + "_" + mapSystEffect["process"];
+	cout << "setName : " << setName << endl;
+	if ( !m_mapSet[setName] )  m_mapSet[setName] = new RooArgSet();
+	m_mapSet[setName]->add( *currentSyst );
+	m_mapSet[setName]->Print();
+      }
+      
+    }//end systEffectNode
+  }//end systNode
+
+  exit(0);
+
+}//end ReadNuisanceParameter
+
+
+//===========================================================
+RooRealVar *Category::GetCurrentSyst( int constraint, string NPName, double upVal, double downVal ) {
+
+  string processForName = "common";
+
+  RooRealVar *currentSyst = 0;
+  switch (constraint ) {
+  case GAUSS_CONSTRAINT :
+    currentSyst  = defineSystematic_Gauss(NPName, upVal,
+					   m_mapSet["nuisanceParameters"],
+					   m_mapSet["globalObservables"],
+					   m_mapSet["constraintPdf"],
+					   m_correlatedVar,
+					   m_mapSet["allConstraint"],
+					   processForName);
+    break;
+  case LOGNORM_CONSTRAINT :
+    currentSyst  = defineSystematic_LogNorm(NPName, upVal,
+  					     m_mapSet["nuisanceParameters"],
+  					     m_mapSet["globalObservables"],
+  					     m_mapSet["constraintPdf"],
+  					     m_correlatedVar,
+  					     m_mapSet["allConstraint"],
+					     processForName );
+    break;
+  case ASYM_CONSTRAINT : 
+    currentSyst  = defineSystematic_asymmetric(NPName, upVal, downVal,
+						m_mapSet["nuisanceParameters"],
+						m_mapSet["globalObservables"],
+						m_mapSet["constraintPdf"],
+						m_correlatedVar,
+						m_mapSet["allConstraint"],
+						processForName );
+    break;
+  default : //if no constraint
+    break;
+  }//end switch on constraint
+
+  return currentSyst;
+}

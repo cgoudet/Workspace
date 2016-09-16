@@ -10,7 +10,7 @@
 PACKAGE              = Workspace
 
 # the libraries to link with this one:
-PACKAGE_PRELOAD      = RooFitCore RooFit Hist Physics RooStats HistFactory
+PACKAGE_PRELOAD      = RooFitCore RooFit RooStats HistFactory  Physics Hist 
 
 # additional compilation flags to pass (not propagated to dependent packages):
 PACKAGE_CXXFLAGS     = 
@@ -19,16 +19,16 @@ PACKAGE_CXXFLAGS     =
 PACKAGE_OBJFLAGS     = 
 
 # additional linker flags to pass (for compiling the library):
-PACKAGE_LDFLAGS      =  -lboost_program_options
+PACKAGE_LDFLAGS      =  -lboost_program_options  
 
 # additional linker flags to pass (for compiling binaries):
-PACKAGE_BINFLAGS     =  -lboost_program_options
+PACKAGE_BINFLAGS     =  -lboost_program_options 
 
 # additional linker flags to pass (propagated to client libraries):
 PACKAGE_LIBFLAGS     = 
 
 # the list of packages we depend on:
-PACKAGE_DEP          = PlotFunctions Asg_Boost
+PACKAGE_DEP          = PlotFunctions Asg_Boost 
 
 # the list of packages we use if present, but that we can work without :
 PACKAGE_TRYDEP       = 

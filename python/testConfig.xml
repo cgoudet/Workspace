@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/xmlCard.dtd">
+
+<NPCorrelation>
+  <systematic Name="ATLAS_LUMI" centralValue="1" constraint="Gaus" correlation="All">
+    <systEffect category="common" downVal="0.5" process="common" upVal="0.5" varName="yield"/>
+  </systematic>
+</NPCorrelation>
