@@ -107,59 +107,15 @@ void Category::LoadParameters( string configFileName ) {
   string pdfInfoName;
   vector<string> processes = *m_processes;
   processes.push_back( "all" );
-  for ( auto vProc  : processes ) {
-    for ( auto vForm = m_form.begin(); vForm != m_form.end(); vForm++ ) {
-      for ( auto vParam = m_param.begin(); vParam != m_param.end(); vParam++ ) {
-	for ( auto vCoef = m_coef.begin(); vCoef != m_coef.end(); vCoef++ ) {
-	  string name = string( TString::Format("%s_%s%s_%s", vCoef->c_str(), vParam->c_str(), vForm->c_str(), vProc.c_str() ) );
-	  string inputLine = pt.get<string>( m_name + "." + name, "" );
-
-	  pdfInfoName = *vParam + *vForm + "_" + vProc;
-	  m_mapPdfInfo[pdfInfoName] = pt.get<string>( m_name + "." + pdfInfoName, "" );
-
-	  if ( inputLine == "" )  continue;
-	  if ( !TString( name ).Contains("yield" ) ) m_signalInput = 1;
-	  ParseVector( inputLine, inputParamInfo );
-	  SelectInputWorkspace( inputParamInfo );
-	  if ( !m_readInputWorkspace->var( inputParamInfo.back().c_str() ) ) {
-	    //	    cout << inputParamInfo.back() << " does not exists in " << m_readInputFile->GetName() << endl;
-	    continue;
-	  }
-	  m_mapVar[name] = new RooRealVar( name.c_str(), name.c_str(), m_readInputWorkspace->var( inputParamInfo.back().c_str() )->getVal() );
-	}
-      }
-    }//end vform
-
-
-    string name = "nCB_" + vProc;
-    string inputLine = pt.get<string>( m_name + "." + name, "" );
-    m_mapPdfInfo[name] = inputLine;
-    if ( inputLine != "" && m_signalInput==1 )  {
-      ParseVector( inputLine, inputParamInfo );
-      SelectInputWorkspace( inputParamInfo );
-      if ( m_readInputWorkspace->var( inputParamInfo.back().c_str() ) ) {
-	m_mapVar[name] = new RooRealVar( name.c_str(), name.c_str(), m_readInputWorkspace->var( inputParamInfo.back().c_str() )->getVal() );
-      }
-    }
-    
-    name = "fCB_" + vProc;
-    inputLine = pt.get<string>( m_name + "." + name, "" );
-    m_mapPdfInfo[name] = inputLine;
-    if ( inputLine != "" && m_signalInput==1) {
-      ParseVector( inputLine, inputParamInfo );
-      SelectInputWorkspace( inputParamInfo );
-      if ( m_readInputWorkspace->var( inputParamInfo.back().c_str() ) ) {
-	m_mapVar[name] = new RooRealVar( name.c_str(), name.c_str(), m_readInputWorkspace->var( inputParamInfo.back().c_str() )->getVal() );
-      }
-    }
-    
+  string name;
+  for ( auto vProc : processes ) {    
     m_mapPdfInfo["invMass"] = pt.get<string>( m_name + ".invMass", "" );
     m_mapPdfInfo["mHcomb"] = pt.get<string>( m_name + ".mHcomb", "" );
     //Loading pdf and formulas directly
     name = "signal_" + vProc;
     m_mapPdfInfo[name] = pt.get<string>( m_name + "." + name, "" );
     if ( m_mapPdfInfo[name] != "" ) m_signalInput=2;
-
+    
     name = "yield_" + vProc;
     m_mapPdfInfo[name] = pt.get<string>( m_name + "." + name, "" );
     if ( m_mapPdfInfo[name] != "" ) m_signalInput=2;
@@ -169,10 +125,11 @@ void Category::LoadParameters( string configFileName ) {
   m_signalModel = pt.get<unsigned int>( m_name + ".signalModel", 0 );
 
   m_dataFileName = pt.get<string>( m_name + ".dataFileName" );
+  cout << "m_dataFileName : " << m_dataFileName << endl;
   m_dataCut = pt.get<string>( m_name + ".dataCut", "" );
   m_mapPdfInfo["dataWeight"] = pt.get<string>( m_name + ".dataWeight", "" );
   cout << "end LoadingParameters" << endl;
-
+  exit(0);
   if ( !m_signalInput ) {
     cout << "no signal input defined" << endl;
     exit(0);

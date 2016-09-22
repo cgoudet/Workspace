@@ -1,0 +1,36 @@
+<!ELEMENT CreateWorkspace (processes,category)*>
+<!ATTLIST CreateWorkspace Name CDATA #IMPLIED>
+
+<!ELEMENT processes>
+
+<!ELEMENT category (yield,pdf,changeVar,data)*>
+<!ATTLIST category Name CDATA #IMPLIED>
+<!ATTLIST category systFileName CDATA #IMPLIED>
+
+<!ELEMENT yield >
+<!ATTLIST yield process CDATA #IMPLIED>
+<!ATTLIST yield inFileName CDATA #IMPLIED>
+<!ATTLIST yield inVarName CDATA #IMPLIED>
+<!ATTLIST yield inWSName CDATA #IMPLIED>
+
+<!ELEMENT pdf >
+<!ATTLIST pdf process CDATA #IMPLIED>
+<!ATTLIST pdf inFileName CDATA #IMPLIED>
+<!ATTLIST pdf inVarName CDATA #IMPLIED>
+<!ATTLIST pdf inWSName CDATA #IMPLIED>
+
+<!ELEMENT changeVar >
+<!ATTLIST changeVar inName CDATA #IMPLIED>
+<!ATTLIST changeVar outName CDATA #IMPLIED>
+<!ATTLIST changeVar outVal CDATA #IMPLIED>
+<!ATTLIST changeVar scale CDATA #IMPLIED>
+
+<!ELEMENT data (dataFile)* >
+
+<!ELEMENT dataFile >
+<!ATTLIST dataFile inFileName CDATA #IMPLIED>
+<!ATTLIST dataFile varName CDATA #IMPLIED>
+<!ATTLIST dataFile weightName CDATA #IMPLIED>
+<!ATTLIST dataFile rooCategoryName CDATA #IMPLIED>
+<!ATTLIST dataFile rooCategoryIndex CDATA #IMPLIED>
+<!ATTLIST dataFile datasetName CDATA #IMPLIED>
