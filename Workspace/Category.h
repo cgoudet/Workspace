@@ -25,7 +25,7 @@ class Category {
   Category( string name );
   ~Category();
 
-  void SetSDef( map<string, int> *sDef ) { m_sDef = sDef; }
+  //  void SetSDef( map<string, int> *sDef ) { m_sDef = sDef; }
   void SetProcesses( vector<string> *processes );
   void SetCategoriesNames( vector<string> *categoriesNames ) { m_categoriesNames = categoriesNames;}
   RooWorkspace *GetWorkspace() { return m_workspace; }
@@ -51,7 +51,7 @@ class Category {
   map<string, RooAbsPdf*> m_mapPdf;
   map<string, RooArgSet*> m_mapSet;
 
-  map<string, int> *m_sDef;
+  map<string, int> m_sDef;
   vector<string> *m_processes;
 
   RooRealVar *GetCurrentSyst( int constraint, string NPName, double upVal, double downVal=0 );
@@ -69,6 +69,7 @@ class Category {
 
   RooDataSet *m_dataset;
   string m_dataFileName;
+  //  vector<string> m_dataFilesName;
   string m_dataCut;
 
   void CreateBackgroundModel();
@@ -98,5 +99,7 @@ class Category {
   map<string, string> m_mapPdfInfo;
   map<string, double> m_changeVar;
   vector<string> *m_categoriesNames;
+  void readConstraintFile();
+
 };
 #endif

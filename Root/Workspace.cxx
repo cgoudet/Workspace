@@ -54,7 +54,7 @@ void Workspace::Configure( string configFileName ) {
   dum = pt.get<string>("General.process");
   ParseVector( dum, m_processes );
 
-  m_systFileName = pt.get<string>("General.systFileName");
+  //  m_systFileName = pt.get<string>("General.systFileName");
 
   dum = pt.get<string>("General.outName", "");
   if ( dum != "" ) m_name = dum;
@@ -67,16 +67,14 @@ void Workspace::CreateWS() {
   RooSimultaneous *pdf = new RooSimultaneous( "combinedPdf", "combinedPdf", *m_category );
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest" };
 
-  if ( m_systFileName.find( ".xml" ) == string::npos )  readConstraintFile();
-
   for ( auto vName : m_categoriesNames ) {
     //    if ( vName != "ttHlep" ) continue;
     m_category->defineType( vName.c_str() );
     m_category->setLabel( vName.c_str() );
     m_categories.push_back( 0);
     m_categories.back() = new Category( vName );
-    m_categories.back()->SetSDef( &m_sDef );
-    m_categories.back()->SetSystFileName( m_systFileName );
+    //    m_categories.back()->SetSDef( &m_sDef );
+    //    m_categories.back()->SetSystFileName( m_systFileName );
     m_categories.back()->SetProcesses( &m_processes );
     m_categories.back()->SetCategoriesNames( &m_categoriesNames );
     m_categories.back()->LoadParameters( m_configFileName );
@@ -96,7 +94,7 @@ void Workspace::CreateWS() {
 
   m_workspace = new RooWorkspace( "combination", "combination" );
 
-  m_workspace->import( *pdf, RecycleConflictNodes() );
+  m_workspace->import( *pdf, RecycleConflictNodes(), Silence() );
   cout << "importedPdf" << endl;
   for ( auto vSet  : sets ) m_workspace->defineSet( vSet.c_str(), *m_mapSet[vSet], kTRUE );
   RooRealVar wt( "weight", "weight", 1 );
@@ -104,12 +102,12 @@ void Workspace::CreateWS() {
   m_mapSet["observables"]->Print();
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap) ,WeightVar(wt ));
   obsData->Print();
-  m_workspace->import(*obsData);
+  m_workspace->import(*obsData, Silence());
 
   cout << "Creating dataset with ghosts..." << endl;
   RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
   newData->SetNameTitle("obsData_G","obsData_G");
-  m_workspace->import(*newData);
+  m_workspace->import(*newData, Silence());
   cout << "... sucessfully imported." << endl;
   
   cout << "fitted constrained" << endl;
@@ -127,15 +125,15 @@ void Workspace::CreateWS() {
 
 
   m_workspace->import(*mconfig);
-
-  //  MakeAsimovData();
+  //  mconfig->GetPdf()->fitTo( *obsData,SumW2Error(kFALSE) );
+  RooDataSet* asimovData = MakeAsimovData();
   cout << "Saving workspace to file... '" << m_name << "'" << endl;
   m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
 
-  obsData->Print();
-  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained(), SumW2Error(kFALSE) );
+  PlotPerCategory( { mconfig->GetPdf(), asimovData } , m_category );
+  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained(),  );
   //  mconfig->GetNuisanceParameters()->Print("v");
 }
 
@@ -143,7 +141,7 @@ void Workspace::CreateWS() {
 //==================================================
 RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables ) {
   if ( m_debug ) cout << "addGhosts" << endl;
-  orig->Print();
+
   map<string, RooDataSet*> data_map;
   TList* datalist = orig->split(*m_category, true);
   TIterator* dataItr = datalist->MakeIterator();
@@ -167,8 +165,6 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
 	break;
       }
     }
-    cout << ds->GetName() << " " << firstObs->GetName() << endl;
-
     RooDataSet* thisData = new RooDataSet( *(RooDataSet*) ds, datasetName.str().c_str() );
     obsWeight = RooArgSet( *firstObs, *m_category, *weightVar );
 	
@@ -219,63 +215,27 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
 
 
 //=================================
-void Workspace::readConstraintFile()
-  {
-    ifstream current_file(m_systFileName.c_str());
-    do 
-      {
-	string tmpString; 
-	getline(current_file, tmpString);
-	if(tmpString.size() == 0) continue;
-	if ( tmpString.find( "#" ) != string::npos ) continue;
-
-	int defConstraint = -1;
-	TString tmp(tmpString);
-	TObjArray tmpAr = *(tmp.Tokenize(" "));
-
-	if ( tmpAr.GetEntries() == 2 ) {
-	  TString tmpStrDefConst= ((TObjString*) tmpAr.At(1))->GetString();
-	  if(tmpStrDefConst == "NO_CONSTRAINT") defConstraint = NO_CONSTRAINT;
-	  else if(tmpStrDefConst == "GAUSS_CONSTRAINT") defConstraint = GAUSS_CONSTRAINT;
-	  else if(tmpStrDefConst == "LOGNORM_CONSTRAINT") defConstraint = LOGNORM_CONSTRAINT;
-	  else if(tmpStrDefConst == "ASYM_CONSTRAINT") defConstraint = ASYM_CONSTRAINT;
-	  else  defConstraint = GAUSS_CONSTRAINT;
-	}
-	else {
-	  if ( TString(tmpString).Contains("-100 L(" ) ) defConstraint = ASYM_CONSTRAINT;
-	  else defConstraint = GAUSS_CONSTRAINT;
-	  //	  cout << tmpString << " " << defConstraint << endl;
-	}//end else 
-
-	m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
-      } while(!current_file.eof());
-  }
-
-// void Workspace::makeAsimovData( RooRealVar* mH, ModelConfig* mcInWs, bool doConditional, RooWorkspace* combWs, RooAbsPdf* combPdf, RooDataSet* combData, bool b_only)
-void Workspace::MakeAsimovData() {
+// void Workspace::makeAsimovData( RooRealVar* mH, ModelConfig* mcInWs, bool doConditional, RooWorkspace* combWs, RooAbsPdf* combPdf, RooDataSet* combData, bool bkgOnly)
+RooDataSet* Workspace::MakeAsimovData() {
   
   cout << " Make Asimov Data Beginning " << endl; 
-
-  unsigned int b_only=0;
-  unsigned int doConditional = 1;
+  unsigned int bkgOnly=0;
+  unsigned int doConditional = 0;
   
   // ////////////////////
   // //make asimov data//
   // ////////////////////
   
   stringstream muStr;
-  muStr << "_" << !b_only;
+  muStr << "_" << !bkgOnly;
 
-  // mu->setVal(!b_only);  
-
-  // cout <<  mu->getVal() << endl; 
-
+  //Fix mus to some value
   for ( auto vProc : m_processes ) {
     string muName = "mu_XS_"+vProc;
     RooRealVar * mu = m_workspace->var( muName.c_str() );
     if ( !mu ) continue;
     mu->setConstant(0);
-    mu->setVal(1);
+    mu->setVal( bkgOnly ? 0 : 1 );
   }
 
   RooRealVar* mu = (RooRealVar*) m_workspace->var("mu");  
@@ -306,7 +266,6 @@ void Workspace::MakeAsimovData() {
   while ((arg = (RooAbsArg*)cIter->Next())) {
     RooAbsPdf* pdf = (RooAbsPdf*)arg;
     if (!pdf) continue;
-
     //finds a variable from which the pdf depends on
     TIterator* nIter = mc_nuis.createIterator();
     RooRealVar* thisNui = NULL;
@@ -332,16 +291,17 @@ void Workspace::MakeAsimovData() {
   	  if (arg1 == arg2) 
   	    continue;
   	  if (arg2->dependsOn(*arg1)) {
-  	    components->remove(*arg1);
+	    components->remove(*arg1);
   	  }
   	}
   	delete itr2;
       }
       delete itr1;
     }//end components getsize
+
     if (components->getSize() > 1) {
       cout << "ERROR::Couldn't isolate proper nuisance parameter" << endl;
-      return;
+      return 0;
     }
     else if (components->getSize() == 1) {
       thisNui = (RooRealVar*)components->first();
@@ -358,7 +318,7 @@ void Workspace::MakeAsimovData() {
       }
     }
     delete gIter;
-    
+
     if (!thisNui || !thisGlob) {
       cout << "WARNING::Couldn't find nui or glob for constraint: " << pdf->GetName() << endl;
       continue;
@@ -374,51 +334,45 @@ void Workspace::MakeAsimovData() {
   
   m_workspace->saveSnapshot("nominalGlobs",glob_list);
   m_workspace->saveSnapshot("nominalNuis", nui_list);
-
-
-  ///  RooArgSet nuiSet_tmp_before(nui_list);
-  //mu->setRange(-100,100.);
-  mu->setVal(0.0);
-  // combPdf->fitTo(*combData, Hesse(false), Minos(false), PrintLevel(0), Constrain(nuiSet_tmp_before));
-  // double mu_hat = mu->getVal(); 
-  // mu->setVal(mu_hat);
-  mu->setConstant(1);
   
+
   //Set the spurious signal to 0
-  int nrNuis = nui_list.getSize();
-  cout << " Number of NP = "<< nrNuis << endl; 
-  for (int i=0;i<nrNuis;i++) {
-    RooRealVar* nui = (RooRealVar*)nui_list.at(i);
-    TString nui_name = nui->GetName();
+  TIterator *iter = nui_list.createIterator();
+  RooRealVar *dumVar =0;
+  while ((dumVar = (RooRealVar*)iter->Next())) {
+    TString nui_name = dumVar->GetName();
     if ( !nui_name.Contains("spurious_") && !nui_name.Contains("BIAS")) continue;
     cout << " Fixing to constant nuisance parameters" << endl; 
-    nui->setVal(0);
-    nui->setConstant(1);
+    dumVar->setVal(0);
+    dumVar->setConstant(1);
   }
+  delete iter; iter=0;
   
   //fit data with backgroud only model.
-  RooArgSet nuiSet_tmp(nui_list);
-  RooDataSet *combData = (RooDataSet*) m_workspace->data( "obsData_G" );
+  // RooArgSet nuiSet_tmp(nui_list);
+  // RooDataSet *combData = (RooDataSet*) m_workspace->data( "obsData_G" );
   RooFitResult *result2 = 0;//combPdf->fitTo(*combData,Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp), Save(),SumW2Error(kFALSE));
   //  combPdf->fitTo(*combData, Hesse(false),Minos(false),PrintLevel(0),Extended(), Constrain(nuiSet_tmp));
-  cout << "Done" << endl;
-  
-  mu->setConstant(0);
-  
+  //  cout << "Done" << endl;
+  //  mu->setConstant(0);
+
+  int nrNuis = nui_list.getSize();   
   if (nrNuis != glob_list.getSize())  {
     cout << "ERROR::nui_list.getSize() != glob_list.getSize()!" << endl;
-    return;
+    return 0;
   }
-  
+
+
+  //If randomization of the globals do it here
   for (int i=0;i<nrNuis;i++) {
     RooRealVar* nui = (RooRealVar*)nui_list.at(i);
     RooRealVar* glob = (RooRealVar*)glob_list.at(i);
-    
     cout << "nui: " << nui << ", glob: " << glob << endl;
     cout << "Setting glob: " << glob->GetName() << ", which had previous val: " << glob->getVal() << ", to conditional val: " << nui->getVal() << endl;
     glob->setVal(nui->getVal());  
   }//end for i
-  
+
+
   //save the snapshots of conditional parameters
   cout << "Saving conditional snapshots" << endl;
   m_workspace->saveSnapshot(("conditionalGlobs"+muStr.str()).c_str(),glob_list);
@@ -429,40 +383,29 @@ void Workspace::MakeAsimovData() {
     m_workspace->loadSnapshot("nominalNuis");
   }
   
-  for (int i=0;i<nrNuis;i++) {
-    RooRealVar* nui = (RooRealVar*)nui_list.at(i);
-    TString nui_name2 = nui->GetName();
-    if (!nui_name2.Contains("spurious_") && !nui_name2.Contains("BIAS")) continue;
-    nui->setConstant(0);
-  }
   
+  iter = nui_list.createIterator();
+  dumVar =0;
+  while ((dumVar = (RooRealVar*)iter->Next())) {
+    TString nui_name = dumVar->GetName();
+    if ( !nui_name.Contains("spurious_") && !nui_name.Contains("BIAS")) continue;
+    dumVar->setConstant(0);
+  }
+  delete iter; iter=0;
+
   
   cout << "Making asimov" << endl;
-  //  mu->setVal(!b_only);
-  // mH->setConstant();
-  // mH->setVal(125.5);
 
-  if (!b_only) {
-    mu->setVal(1.);
-    //    mu->setVal(1.);
-    // mu_ggF->setVal(1.62);
-    // mu_VBF->setVal(1.55);
-    // mu_WH->setVal(1.47);
-    // mu_ZH->setVal(2.92);
-  }
-  else 
-    mu->setVal(0);
   ModelConfig* mc = (ModelConfig*) m_workspace->obj( "mconfig" );
   if ( !mc ) {
     cout << "ModelConfig not found" << endl;
     exit(0);
   }
+
+
   int iFrame=0;
-  
   const char* weightName="weightVar";
   RooArgSet obsAndWeight;
-  cout << "adding obs" << endl;
-  cout << mc->GetObservables() << endl;
   obsAndWeight.add(*mc->GetObservables());
   cout << "adding weight" << endl;
   
@@ -487,15 +430,14 @@ void Workspace::MakeAsimovData() {
   // MAKE ASIMOV DATA FOR OBSERVABLES
 
   // dummy var can just have one bin since it's a dummy
-  if(m_workspace->var("dummyX"))  
-    m_workspace->var("dummyX")->setBins(1);
+  // if(m_workspace->var("dummyX"))  
+  //   m_workspace->var("dummyX")->setBins(1);
 
   cout << endl << "Check expectedData by category" << endl;
   //RooDataSet* simData=NULL;
   RooSimultaneous* simPdf = dynamic_cast<RooSimultaneous*>(mc->GetPdf());
   map<string, RooDataSet*> asimovDataMap;
   //try fix for sim pdf
-  // RooCategory* channelCat = (RooCategory*)m_workspace->cat("master_channel");//(RooCategory*) (&simPdf->indexCat());
   RooCategory* channelCat = (RooCategory*) (&simPdf->indexCat());
 
   // TIterator* iter = simPdf->indexCat().typeIterator() ;
@@ -518,18 +460,27 @@ void Workspace::MakeAsimovData() {
     
     RooDataSet* obsDataUnbinned = new RooDataSet(Form("combAsimovData%d",iFrame),Form("combAsimovData%d",iFrame),RooArgSet(obsAndWeight,*channelCat),WeightVar(*weightVar));
     RooRealVar* thisObs = ((RooRealVar*)obstmp->first());
+    thisObs->setBins( (thisObs->getMax() - thisObs->getMin()) /0.1);
+    cout << "thisObsBins : " << thisObs->getBins() << " " << thisObs->getMax() << " " << thisObs->getMin() << endl;
+    thisObs->Print();
     double expectedEvents = pdftmp->expectedEvents(*obstmp);
+    cout << "expectedEvents : " << expectedEvents << endl;
+
     double thisNorm = 0;
+    cout << "nBins : " << thisObs->numBins() << endl;
     for(int jj=0; jj<thisObs->numBins(); ++jj) {
       thisObs->setBin(jj);
+      thisObs->Print();
       //	cout << "pdf = "<<pdftmp->getVal(obstmp) <<endl;
       thisNorm = pdftmp->getVal(obstmp)*thisObs->getBinWidth(jj);
-      if (thisNorm*expectedEvents > pow(10., -2) && thisNorm*expectedEvents < pow(10., 9)) 
-  	obsDataUnbinned->add(*mc->GetObservables(), thisNorm*expectedEvents);
+      cout << "thisNorm : " << thisNorm*expectedEvents << endl;
+      //      if (thisNorm*expectedEvents > pow(10., -2) && thisNorm*expectedEvents < pow(10., 9)) 
+      obsDataUnbinned->add(*mc->GetObservables(), thisNorm*expectedEvents);
     }
     
     obsDataUnbinned->Print();
     cout << "sum entries " << obsDataUnbinned->sumEntries() << endl;
+
     if(obsDataUnbinned->sumEntries() != obsDataUnbinned->sumEntries()){
       cout << "sum entries is nan"<<endl;
       exit(1);
@@ -547,11 +498,12 @@ void Workspace::MakeAsimovData() {
   
   
   RooDataSet* asimovData = new RooDataSet(("asimovData"+muStr.str()).c_str(),("asimovData"+muStr.str()).c_str(),RooArgSet(obsAndWeight,*channelCat),Index(*channelCat),Import(asimovDataMap),WeightVar(*weightVar));
+
   if (m_workspace->data(asimovData->GetName())) {
-    m_workspace->import(*asimovData, true); // Bool_t import(TObject& object, const char* aliasName, Bool_t replaceExisting = kFALSE)
+    m_workspace->import(*asimovData, true ); // Bool_t import(TObject& object, const char* aliasName, Bool_t replaceExisting = kFALSE)
   }
   else {
-    m_workspace->import(*asimovData);
+    m_workspace->import(*asimovData );
   }
   
   
@@ -564,31 +516,29 @@ void Workspace::MakeAsimovData() {
   m_workspace->loadSnapshot("nominalGlobs");
   
   asimovData->Print();
-
   if ( result2 )  delete result2;  
+  return asimovData;
 }
 
-
+//=============================================================
 void Workspace::UnfoldConstraints(RooArgSet& initial, RooArgSet& final, RooArgSet& obs, RooArgSet& nuis, int& counter)
 {
-  if (counter > 50)
-    {
-      cout << "ERROR::Couldn't unfold constraints!" << endl;
-      cout << "Initial: " << endl;
-      initial.Print("v");
-      cout << endl;
-      cout << "Final: " << endl;
-      final.Print("v");
-      exit(1);
-    }
+  if (counter > 50) {
+    cout << "ERROR::Couldn't unfold constraints!" << endl;
+    cout << "Initial: " << endl;
+    initial.Print("v");
+    cout << endl;
+    cout << "Final: " << endl;
+    final.Print("v");
+    exit(1);
+  }
+
   TIterator* itr = initial.createIterator();
   RooAbsPdf* pdf;
   while ((pdf = (RooAbsPdf*)itr->Next()))
     {
       RooArgSet nuis_tmp = nuis;
       RooArgSet constraint_set(*pdf->getAllConstraints(obs, nuis_tmp, false));
-      //if (constraint_set.getSize() > 1)
-      //{
       string className(pdf->ClassName());
       if (className != "RooGaussian" && className != "RooLognormal" && className != "RooGamma" && className != "RooPoisson" && className != "RooBifurGauss")
 	{

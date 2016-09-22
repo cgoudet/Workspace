@@ -17,6 +17,7 @@ subProcesses = ['bbH', 'tHjb', 'tWH' ]
 #processes=['ggH', 'VBF', 'WH', 'ZH', 'ttH' ]
 
 inputsFile='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/'
+#inputsFile='/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/'
 newProcesses = [ 'bbH', 'tHjb', 'tWH' ]
 
 def ConfigFile( inFileName ) :
@@ -28,16 +29,18 @@ def ConfigFile( inFileName ) :
         configFile.write( "[General]\n" )
         configFile.write( 'catNames=' + ' '.join( categoriesNames ) + '\n' )
         configFile.write( 'process=' + ' '.join( processes + newProcesses) + '\n' )
-#        configFile.write( 'systFileName=' + inputsFile + 'datacard_ICHEP.txt\n' )
-        configFile.write( 'systFileName=' + inFileName.replace('.boost', '.xml' ) + '\n' )
+
+ #
+#        configFile.write( 'systFileName=' + inFileName.replace('.boost', '.xml' ) + '\n' )
         configFile.write( 'outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + inFileName.replace('.boost', '.root' )+'\n' )    
-        configFile.write( 'yieldScale=' + str( 10/13.27676 ) )
+#        configFile.write( 'yieldScale=' + str( 10/13.27676 ) )
         
         for iCat in range( 0, len( categoriesNames ) ) : 
             configFile.write( '\n' )
             configFile.write( '[' + categoriesNames[iCat] + ']\n' )
-            
-            configFile.write( 'signalModel=0\n' )
+            configFile.write( 'systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/ICHEP_2016/config/category_run2_'+ categoriesNames[iCat] + '.xml\n' )            
+#           configFile.write( 'systFileName=' + inputsFile + 'datacard_ICHEP.txt\n' )
+            #            configFile.write( 'signalModel=0\n' )
             
             configFile.write( '\n'.join( [ "signal_" + proc 
                                            +'=' + inputsFile + 'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c' + str( iCat)
@@ -59,7 +62,8 @@ def ConfigFile( inFileName ) :
             configFile.write( '\n' )
         
             configFile.write( '\n' )
-            configFile.write( 'dataFileName ='+ inputsFile + 'PseudoData/ws_challenge_pseudo_data_' + categoriesNames[iCat] + '.root ws_challenge_pseudo_data_' + categoriesNames[iCat] + ' absdata_data_' + categoriesNames[iCat] + ' m_yy_' + categoriesNames[iCat] +'\n' )
+ #           configFile.write( 'dataFileName ='+ inputsFile + 'PseudoData/ws_challenge_pseudo_data_' + categoriesNames[iCat] + '.root ws_challenge_pseudo_data_' + categoriesNames[iCat] + ' absdata_data_' + categoriesNames[iCat] + ' m_yy_' + categoriesNames[iCat] +'\n' )
+            configFile.write( 'dataFileName =/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data15/data15/hist-data.root tree_selected m_yy\n' )
             configFile.write( 'dataWeight=weight\n' )
 
             configFile.write( 'changeVarName=' + ' '.join( ['lumi_2015', 'lumi_2016' ] ) +'\n')
@@ -227,7 +231,7 @@ def main():
 
     inFileName = 'StatChallenge013'
     CreateXMLSystFromDataCard( '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt', args.outFileName + '.xml' )    
-    ConfigFile( args.outFileName + '.boost' )
+    print( ConfigFile( args.outFileName + '.boost' ) )
 
 
 # The program entrance

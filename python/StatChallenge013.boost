@@ -1,11 +1,10 @@
 [General]
 catNames=ggH_CenLow ggH_CenHigh ggH_FwdLow ggH_FwdHigh VBFloose VBFtight VHMET VHlep VHdilep VHhad_loose VHhad_tight ttHhad ttHlep
 process=ggH VBF VH ttH bbH tHjb tWH
-systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
-outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/testStatChallenge_h013.root
+outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge013.root
 yieldScale=0.753195809821
 [ggH_CenLow]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c0
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_CenLow
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_CenLow
@@ -25,7 +24,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [ggH_CenHigh]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c1
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_CenHigh
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_CenHigh
@@ -45,7 +44,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [ggH_FwdLow]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c2
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_FwdLow
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_FwdLow
@@ -65,7 +64,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [ggH_FwdHigh]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c3
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ggH_FwdHigh
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ggH_FwdHigh
@@ -85,7 +84,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VBFloose]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c4
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VBFloose
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VBFloose
@@ -105,7 +104,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VBFtight]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c5
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VBFtight
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VBFtight
@@ -125,7 +124,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VHMET]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c6
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHMET
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHMET
@@ -145,7 +144,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VHlep]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c7
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHlep
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHlep
@@ -165,7 +164,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VHdilep]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c8
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHdilep
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHdilep
@@ -185,7 +184,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VHhad_loose]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c9
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHhad_loose
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHhad_loose
@@ -205,7 +204,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [VHhad_tight]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c10
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_VHhad_tight
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_VHhad_tight
@@ -225,7 +224,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [ttHhad]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c11
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ttHhad
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ttHhad
@@ -245,7 +244,7 @@ changeVarName=lumi_2015 lumi_2016
 changeVarVal=2.42 7.58
 
 [ttHlep]
-signalModel=0
+systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt
 signal_all=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c12
 yield_ggH=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_ggH_SM_ttHlep
 yield_VBF=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root Yield_Signal_VBF_SM_ttHlep

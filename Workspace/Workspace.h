@@ -22,7 +22,7 @@ class Workspace {
   string m_configFileName;
   vector<string> m_categoriesNames;
   vector<string> m_processes;
-  map<string, int> m_sDef;
+  //  map<string, int> m_sDef;
   string m_systFileName;
   RooCategory *m_category;
   RooDataSet* addGhosts(RooDataSet* orig, const RooArgSet *observables );
@@ -30,8 +30,11 @@ class Workspace {
   string m_name;
   bool m_debug;
 
-  void readConstraintFile();
-  void MakeAsimovData();
+  RooDataSet* MakeAsimovData();
+
+  /**
+     \brief Extract all constraint pdf
+   */
   void UnfoldConstraints(RooArgSet& initial, RooArgSet& final, RooArgSet& obs, RooArgSet& nuis, int& counter);
 };
 #endif

@@ -33,7 +33,7 @@ using std::endl;
 #include "TXMLNode.h"
 #include "TXMLAttr.h"
 #include "TIterator.h"
-
+using std::ifstream;
 using std::stringstream;
 using namespace RooStats;
 using namespace RooFit;
@@ -41,7 +41,6 @@ using namespace RooFit;
 Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0), m_debug(1)
 {
 
-  m_sDef = 0;
   m_dataset = 0;
   m_processes = 0;
 
@@ -100,6 +99,10 @@ Category::~Category() {
 void Category::LoadParameters( string configFileName ) {
   boost::property_tree::ptree pt;
   boost::property_tree::ini_parser::read_ini(configFileName, pt);
+
+  m_systFileName=pt.get<string>( m_name + ".systFileName" );
+  if ( m_systFileName.find( ".xml" ) == string::npos )  readConstraintFile();
+
   vector<string> inputParamInfo( 2, "" );
   string pdfInfoName;
   vector<string> processes = *m_processes;
@@ -194,7 +197,7 @@ void Category::LoadParameters( string configFileName ) {
 void Category::ReadNuisanceParameters() {
   cout << "ReadNuisanceParameter" << endl;
   m_mapSet["systematicValues"] = new RooArgSet();
-  for( auto iter : *m_sDef ) {
+  for( auto iter : m_sDef ) {
     string name = iter.first;
     m_mapVar[name] = new RooRealVar(name.c_str(),name.c_str(),0); // initialize to 0                  
     //    if ( m_debug )  cout << iter.first << " " << iter.second << " " << m_mapVar[name]->getVal() << endl;                                         
@@ -212,7 +215,7 @@ void Category::ReadNuisanceParameters() {
     m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
   }
   
-  for( auto iter : *m_sDef ) {
+  for( auto iter : m_sDef ) {
 
     TString fullName = iter.first;
     if (fullName == "bkg_model") continue;
@@ -555,7 +558,7 @@ void Category::CreateWS() {
 
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
 
-  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()) );
+  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()), Silence() );
   cout << "imported SB" << endl;
   RooArgSet prodPdf;
   prodPdf.add( *m_workspace->pdf( string( string(m_mapPdf["modelSB"]->GetName()) + "_" + m_name ).c_str() ) );
@@ -566,13 +569,13 @@ void Category::CreateWS() {
   while((parg=(RooAbsPdf*)iter->Next()) ) {
     TString name = parg->GetName();
     cout << name << endl;
-    m_workspace->import( *parg );
+    m_workspace->import( *parg, Silence() );
     prodPdf.add( *m_workspace->pdf( name ) );
   }
 
   string modelName = "model_" + m_name;
   m_mapPdf["model"] = new RooProdPdf( modelName.c_str(), modelName.c_str(), prodPdf );
-  m_workspace->import( *m_mapPdf["model"], RecycleConflictNodes() );
+  m_workspace->import( *m_mapPdf["model"], RecycleConflictNodes(), Silence() );
   cout << "importing model" << endl;
   cout << m_workspace->var( "mHcomb" ) << endl;
   m_workspace->var( "mHcomb" )->setConstant(1);
@@ -589,7 +592,7 @@ void Category::CreateWS() {
   //m_mapPdf["model"]->fitTo( *m_dataset, Strategy(1), SumW2Error(1) );
   DrawPlot( m_mapVar["invMass"], { m_dataset, m_mapPdf["model"] }, "/sps/atlas/c/cgoudet/Plots/HgamModel_"+m_name );
 
-  m_workspace->import( *m_dataset );
+  m_workspace->import( *m_dataset, Silence() );
   cout << "seting sets" << endl;
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest", "modelParameters" };
   for ( auto set : sets ) DefineSet( set );
@@ -919,7 +922,7 @@ void Category::SignalFromPdf() {
 
       //Retrieve the raw signal pdf
       RooAbsPdf *tmpPdf = m_readInputWorkspace->pdf( inputParamInfo.back().c_str() );
-      dumWS->import( *tmpPdf );
+      dumWS->import( *tmpPdf, Silence() );
 
       cout << "pdfComponents : " << endl;
       tmpPdf->getComponents()->Print();
@@ -972,7 +975,7 @@ void Category::SignalFromPdf() {
 	}
 
 	RooProduct *form = new RooProduct( vVar.c_str(), vVar.c_str(), varProd);
-	dumWS->import( *form, RecycleConflictNodes() );
+	dumWS->import( *form, RecycleConflictNodes(), Silence() );
 	editStr << form->GetName();
       }//end vVar
       editStr << ")";
@@ -992,7 +995,7 @@ void Category::SignalFromPdf() {
       editedPdfName += "_" + vProc;
 
 
-      m_workspace->import( *tmpPdf, RecycleConflictNodes(), RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ) );
+      m_workspace->import( *tmpPdf, RecycleConflictNodes(), RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ), Silence() );
 
       m_mapSet["pdfProc"]->add( *m_workspace->pdf( editedPdfName.c_str() ) );
       if ( m_debug ) cout << editedPdfName << " imported" << endl;
@@ -1041,7 +1044,7 @@ void Category::SignalFromPdf() {
       cout << "importYields" << endl;
       cout << m_correlatedVar << endl;
       m_workspace->Print();
-      m_workspace->import( *yield, RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ), RecycleConflictNodes() );
+      m_workspace->import( *yield, RenameAllVariablesExcept( vProc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( vProc.c_str() ), RecycleConflictNodes(), Silence() );
 
       if ( m_name == "ttHlep" && vProc == "ttH" ) {
 	cout << "process : " << vProc << endl;
@@ -1186,4 +1189,37 @@ RooRealVar *Category::GetCurrentSyst( int constraint, string NPName, double upVa
   }//end switch on constraint
 
   return currentSyst;
+}
+
+//=======================================================
+void Category::readConstraintFile()
+{
+  ifstream current_file(m_systFileName.c_str());
+  do 
+    {
+      string tmpString; 
+      getline(current_file, tmpString);
+      if(tmpString.size() == 0) continue;
+      if ( tmpString.find( "#" ) != string::npos ) continue;
+
+      int defConstraint = -1;
+      TString tmp(tmpString);
+      TObjArray tmpAr = *(tmp.Tokenize(" "));
+
+      if ( tmpAr.GetEntries() == 2 ) {
+	TString tmpStrDefConst= ((TObjString*) tmpAr.At(1))->GetString();
+	if(tmpStrDefConst == "NO_CONSTRAINT") defConstraint = NO_CONSTRAINT;
+	else if(tmpStrDefConst == "GAUSS_CONSTRAINT") defConstraint = GAUSS_CONSTRAINT;
+	else if(tmpStrDefConst == "LOGNORM_CONSTRAINT") defConstraint = LOGNORM_CONSTRAINT;
+	else if(tmpStrDefConst == "ASYM_CONSTRAINT") defConstraint = ASYM_CONSTRAINT;
+	else  defConstraint = GAUSS_CONSTRAINT;
+      }
+      else {
+	if ( TString(tmpString).Contains("-100 L(" ) ) defConstraint = ASYM_CONSTRAINT;
+	else defConstraint = GAUSS_CONSTRAINT;
+	//	  cout << tmpString << " " << defConstraint << endl;
+      }//end else 
+
+      m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
+    } while(!current_file.eof());
 }
