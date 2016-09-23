@@ -18,6 +18,11 @@ using std::stringstream;
 using std::ifstream;
 #include "PlotFunctions/DrawPlot.h"
 #include "RooFitResult.h"
+#include "TDOMParser.h"
+#include "TXMLDocument.h"
+#include "TXMLNode.h"
+#include "TXMLAttr.h"
+#include "TIterator.h"
 
 Workspace::Workspace() : m_debug(0)
 {
@@ -44,20 +49,30 @@ Workspace::~Workspace() {
 
 //=======================================
 void Workspace::Configure( string configFileName ) {
+  if ( m_debug ) cout << "Workspace::Configure" << endl;
   m_configFileName = configFileName;
 
-  boost::property_tree::ptree pt;
-  boost::property_tree::ini_parser::read_ini(configFileName, pt);
-  string dum = pt.get<string>("General.catNames");
-  ParseVector( dum  , m_categoriesNames );
 
-  dum = pt.get<string>("General.process");
-  ParseVector( dum, m_processes );
+  TDOMParser xmlparser;
+  //Check if the xml file is ok                                                                                                                                                                      
+  xmlparser.ParseFile( configFileName.c_str() );
+  TXMLDocument* xmldoc = xmlparser.GetXMLDocument();
+  TXMLNode *rootNode  = xmldoc->GetRootNode();
+  TXMLNode *catNode = rootNode->GetChildren();
 
-  //  m_systFileName = pt.get<string>("General.systFileName");
+  m_name = MapAttrNode( rootNode )["Name"];
 
-  dum = pt.get<string>("General.outName", "");
-  if ( dum != "" ) m_name = dum;
+  while ( catNode!=0 ) {
+    if ( string(catNode->GetNodeName()) == "processes" ) {
+      string dumString = catNode->GetText();
+      ParseVector( dumString, m_processes );
+      PrintVector( m_processes );
+    }
+    else if ( string(catNode->GetNodeName()) == "category" ) m_categoriesNames.push_back( MapAttrNode( catNode )["Name"] );
+    catNode = catNode->GetNextNode();
+  }
+  PrintVector( m_categoriesNames );
+  if ( m_debug ) cout << "Workspace::Configure Done" << endl;
 }
 
 //=======================================

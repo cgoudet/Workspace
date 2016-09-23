@@ -1,6 +1,6 @@
-<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/xmlCard.dtd">
 <?xml version="1.0" ?>
-<CreateWorkspace Name="outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge013.root">
+<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/CreateWorkspace.dtd">
+<CreateWorkspace Name="/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge013.root">
   <processes>ggH VBF VH ttH bbH tHjb tWH</processes>
   <category Name="ggH_CenLow" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ggH_CenLow" process="ggH"/>

@@ -38,7 +38,8 @@ using std::stringstream;
 using namespace RooStats;
 using namespace RooFit;
 
-Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0), m_debug(1)
+
+Category::Category() : m_name( "inclusive" ), m_signalModel(0), m_signalInput(0), m_debug(1), m_catProperties()
 {
 
   m_dataset = 0;
@@ -95,59 +96,75 @@ Category::~Category() {
   if ( m_workspace ) delete m_workspace;
 }
 
-
+//=========================================
 void Category::LoadParameters( string configFileName ) {
-  boost::property_tree::ptree pt;
-  boost::property_tree::ini_parser::read_ini(configFileName, pt);
+  //Reas xml configuration file
+  Arbre wsProperties = Arbre::ParseXML( configFileName );
+  
+  vector<string> vectNodeNames{ "category", "CreateWorkspace" };
+  vector< map< string, string > > vectOptions;
+  for ( unsigned int i=0; i<vectNodeNames.size(); i++ ) vectOptions.push_back(map< string, string >());
+  vectOptions.front()["Name"] = m_name;
 
-  m_systFileName=pt.get<string>( m_name + ".systFileName" );
-  if ( m_systFileName.find( ".xml" ) == string::npos )  readConstraintFile();
-
-  vector<string> inputParamInfo( 2, "" );
-  string pdfInfoName;
-  vector<string> processes = *m_processes;
-  processes.push_back( "all" );
-  string name;
-  for ( auto vProc : processes ) {    
-    m_mapPdfInfo["invMass"] = pt.get<string>( m_name + ".invMass", "" );
-    m_mapPdfInfo["mHcomb"] = pt.get<string>( m_name + ".mHcomb", "" );
-    //Loading pdf and formulas directly
-    name = "signal_" + vProc;
-    m_mapPdfInfo[name] = pt.get<string>( m_name + "." + name, "" );
-    if ( m_mapPdfInfo[name] != "" ) m_signalInput=2;
-    
-    name = "yield_" + vProc;
-    m_mapPdfInfo[name] = pt.get<string>( m_name + "." + name, "" );
-    if ( m_mapPdfInfo[name] != "" ) m_signalInput=2;
-    
-  }//end process
-
-  m_signalModel = pt.get<unsigned int>( m_name + ".signalModel", 0 );
-
-  m_dataFileName = pt.get<string>( m_name + ".dataFileName" );
-  cout << "m_dataFileName : " << m_dataFileName << endl;
-  m_dataCut = pt.get<string>( m_name + ".dataCut", "" );
-  m_mapPdfInfo["dataWeight"] = pt.get<string>( m_name + ".dataWeight", "" );
-  cout << "end LoadingParameters" << endl;
-  exit(0);
-  if ( !m_signalInput ) {
-    cout << "no signal input defined" << endl;
-    exit(0);
-  }
-
-  //Get change of variables
-  vector<string> changeVarName;
-  vector<double> changeVarVal;
-  string dumString = pt.get<string>( m_name + ".changeVarName","" );
-  ParseVector( dumString, changeVarName );
-  dumString=pt.get<string>( m_name + ".changeVarVal","" );
-  ParseVector( dumString, changeVarVal );
-
-  if ( changeVarVal.size() != changeVarName.size() ) { cout << "chnageVar sizes do not match : Name=" << changeVarName.size() << " Val=" << changeVarVal.size() << endl; exit(0); }
-  for ( unsigned int iName=0; iName< changeVarVal.size(); iName++ )
-    m_changeVar[changeVarName[iName]]= changeVarVal[iName];
-
+  vector<Arbre> vectNodes;
+  Arbre::GetArbresPath( wsProperties, vectNodes, vectNodeNames,  vectOptions );
+  if ( vectNodes.size() == 1 ) m_catProperties = vectNodes.front();
+  else  { cout << "No or too many nodes for the given category : " << m_name << " " << vectNodes.size() << endl; exit(0); }
+  m_catProperties.Dump();
 }
+// //=========================================
+// void Category::LoadParameters( string configFileName ) {
+//   boost::property_tree::ptree pt;
+//   boost::property_tree::ini_parser::read_ini(configFileName, pt);
+  
+//   m_systFileName=pt.get<string>( m_name + ".systFileName" );
+//   if ( m_systFileName.find( ".xml" ) == string::npos )  readConstraintFile();
+
+//   vector<string> inputParamInfo( 2, "" );
+//   string pdfInfoName;
+//   vector<string> processes = *m_processes;
+//   processes.push_back( "all" );
+//   string name;
+//   for ( auto vProc : processes ) {    
+//     m_mapPdfInfo["invMass"] = pt.get<string>( m_name + ".invMass", "" );
+//     m_mapPdfInfo["mHcomb"] = pt.get<string>( m_name + ".mHcomb", "" );
+//     //Loading pdf and formulas directly
+//     name = "signal_" + vProc;
+//     m_mapPdfInfo[name] = pt.get<string>( m_name + "." + name, "" );
+//     if ( m_mapPdfInfo[name] != "" ) m_signalInput=2;
+    
+//     name = "yield_" + vProc;
+//     m_mapPdfInfo[name] = pt.get<string>( m_name + "." + name, "" );
+//     if ( m_mapPdfInfo[name] != "" ) m_signalInput=2;
+    
+//   }//end process
+
+//   m_signalModel = pt.get<unsigned int>( m_name + ".signalModel", 0 );
+
+//   m_dataFileName = pt.get<string>( m_name + ".dataFileName" );
+//   cout << "m_dataFileName : " << m_dataFileName << endl;
+//   m_dataCut = pt.get<string>( m_name + ".dataCut", "" );
+//   m_mapPdfInfo["dataWeight"] = pt.get<string>( m_name + ".dataWeight", "" );
+//   cout << "end LoadingParameters" << endl;
+//   exit(0);
+//   if ( !m_signalInput ) {
+//     cout << "no signal input defined" << endl;
+//     exit(0);
+//   }
+
+//   //Get change of variables
+//   vector<string> changeVarName;
+//   vector<double> changeVarVal;
+//   string dumString = pt.get<string>( m_name + ".changeVarName","" );
+//   ParseVector( dumString, changeVarName );
+//   dumString=pt.get<string>( m_name + ".changeVarVal","" );
+//   ParseVector( dumString, changeVarVal );
+
+//   if ( changeVarVal.size() != changeVarName.size() ) { cout << "chnageVar sizes do not match : Name=" << changeVarName.size() << " Val=" << changeVarVal.size() << endl; exit(0); }
+//   for ( unsigned int iName=0; iName< changeVarVal.size(); iName++ )
+//     m_changeVar[changeVarName[iName]]= changeVarVal[iName];
+
+// }
 
 
 //=========================================
@@ -565,96 +582,78 @@ void Category::CreateWS() {
 
 //=========================================
 void Category::GetData() {
+  //  m_catProperties.Dump();
 
-  cout << "dataFileName : " << m_dataFileName << endl;
-  TFile *inFile=0;
-  if ( TString(m_dataFileName).Contains( ".txt" ) ) m_dataset = RooDataSet::read(m_dataFileName.c_str(), *m_mapSet["observables"]);
-  else {
+  vector<string> vectNodeNames;
+  vector<Arbre> vectNodes;
+  Arbre::GetArbresPath( m_catProperties, vectNodes, { "dataFile", "data", "category" } );
+  cout << "nNodes : " << vectNodes.size() << endl;
+  vectNodes.front().Dump();
 
-    TTree *inTree=0;
-    RooWorkspace *inWS = 0;
-    TObjArray *dataNomenclature = TString(m_dataFileName).Tokenize(" ");
-     
+  for ( auto vDataArbre : vectNodes ) {
+    RooDataSet *dumDataset = 0;
+    string inFileName = vDataArbre.GetAttribute( "inFileName" );
+    if ( TString(inFileName).Contains( ".txt" ) ) {
+      RooDataSet *newData = RooDataSet::read(m_dataFileName.c_str(), *m_mapSet["observables"]);
+      dumDataset = newData;
+      continue;
+    }
+    
     //Get the root file
-    inFile = new TFile( dynamic_cast<TObjString*>(dataNomenclature->At(0))->GetString() );
-    if ( !inFile ) {
-      cout << dynamic_cast<TObjString*>(dataNomenclature->At(0))->GetString() << "does not exists" << endl;
-      exit(0);
-    }
-         
+    TFile *inFile = new TFile( inFileName.c_str() );
+    if ( !inFile ) { cout << inFileName << " does not exist." << endl; exit(0);}
+    
     //Get the TTree or the workspace
-    if ( dataNomenclature->GetEntries()>1 ) {
-      TString objName = dynamic_cast<TObjString*>(dataNomenclature->At(1))->GetString();
-      TString className =  inFile->Get( objName )->ClassName();
-      if (  className == "TTree" ) {
-	inTree = (TTree*) inFile->Get( objName );
-	inTree->Print();
-      }
-      else {
-	inWS = (RooWorkspace*) inFile->Get( objName );
-	if ( !inWS ) {
-	  cout << objName << " not found in " << inFile->GetName() << endl;
-	  exit(0);
-	}
-	cout << "inWS : " << inWS->GetName() << endl;
-	gROOT->cd();
-
-	RooCategory *eventCateg = 0;
-	if ( dataNomenclature->GetEntries() > 2 ) m_dataset = (RooDataSet*) inWS->data( dynamic_cast<TObjString*>(dataNomenclature->At(2))->GetString() );
-	if ( !m_dataset ) {
-	  cout << "dumdataset not found" << endl;
-	  exit(0);
-	}
-
-
-	if ( dataNomenclature->GetEntries() > 3 ) {
-	  m_mapVar["invMass"]->SetName( dynamic_cast<TObjString*>(dataNomenclature->At(3))->GetString() );
-	  m_correlatedVar += "," + string( m_mapVar["invMass"]->GetName() );
-	}
-
-	m_mapSet["observables"]->add( *m_mapVar["invMass"] );
-	// if ( m_mapPdfInfo["dataWeight"] != "" ) {
-	//   m_mapVar["dataWeight"] = inWS->var(  m_mapPdfInfo["dataWeight"].c_str() );
-	//   cout << m_mapPdfInfo["dataWeight"] << " " << m_mapVar["dataWeight"] << endl;
-	//   m_mapVar["dataWeight"]->SetName( "dataWeight" );
-	//   m_mapSet["observables"]->add( *m_mapVar["dataWeight"] );
-	// }
-
-	string datasetName = "obsData_" + m_name;
-	if ( dataNomenclature->GetEntries() > 4 ) {
-	  RooDataSet *dumDataSet=m_dataset;
-	  eventCateg = (RooCategory*) inWS->cat( dynamic_cast<TObjString*>(dataNomenclature->At(4))->GetString() );
-	  //	  eventCateg->Print();
-	  cout << "dataCut : " << m_dataCut << endl;
-	  m_mapSet["observables"]->add( *eventCateg );
-	  m_dataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(),  
-				      dumDataSet, 
-				      *m_mapSet["observables"],
-				      m_dataCut.c_str() );
-	}
-	
-
-	m_dataset->SetName( datasetName.c_str() );
-
-	m_dataset->Print();
-	//	exit(0);
-
-	//	if ( inWS ) delete inWS; inWS=0;
-      }//end else workspace
-    }//end if tokenize
-
-    if ( !m_dataset ) {
-      cout << "No data found" << endl;
-      exit(0);
+    string datasetName = vDataArbre.GetAttribute( "datasetName" );
+    TTree *inTree = (TTree*) inFile->Get( datasetName.c_str() );
+    if ( inTree ) {
+      delete inTree; inTree=0;
+      delete inFile; inFile=0;
+      continue;
     }
-    cout << "dataNomenclature" << endl;
-    dataNomenclature->Delete();
+    
+    cout << datasetName  << " does not refer to TTree. Trying RooDataSet in workspace." << endl;
+    RooWorkspace *inWS = (RooWorkspace*) inFile->Get( FindDefaultTree( inFile, "RooWorkspace" ).c_str() );
+    if ( !inWS ) { cout << "TTree and Workspace failed." << endl; exit(0); }
+    
+    dumDataset = (RooDataSet*) inWS->data( datasetName.c_str() );
+    if ( !dumDataset ) { cout << "dataset failed." << endl; }
+    
+    string invMassName = vDataArbre.GetAttribute( "varName" );
+    if ( invMassName == "" ) { cout << "invariant mass parameter missiong from config file." << endl; exit(0); }
+    m_mapVar["invMass"]->SetName( invMassName.c_str() );
+    m_correlatedVar += "," + string( m_mapVar["invMass"]->GetName() );
+    m_mapSet["observables"]->add( *m_mapVar["invMass"] );
+    
+    string weightVarName = vDataArbre.GetAttribute( "weightName" );
+    if ( weightVarName != "" && 0 ) {
+      m_mapVar["dataWeight"] = inWS->var(  weightVarName.c_str() );
+      cout << weightVarName << " " << m_mapVar["dataWeight"] << endl;
+      m_mapVar["dataWeight"]->SetName( "dataWeight" );
+      m_mapSet["observables"]->add( *m_mapVar["dataWeight"] );
+    }
 
+    
+    datasetName = "obsData_" + m_name;
+    string catVarName = vDataArbre.GetAttribute( "catName" );
+    string catIndex = vDataArbre.GetAttribute( "catIndex" );
+    if ( catVarName != "" && catIndex!="") {
+      RooDataSet *dumDataSet=dumDataset;
+      RooCategory *eventCateg = (RooCategory*) inWS->cat( catVarName.c_str() );
+      m_mapSet["observables"]->add( *eventCateg );
+      dumDataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(),  
+				  dumDataSet, 
+				  *m_mapSet["observables"],
+				  catIndex.c_str() );
+      }
+    
+    if ( !m_dataset ) m_dataset = dumDataset;
+    else m_dataset->append( *dumDataset );
 
-    cout << "deleted" << endl;
-  }//end not txt file
+    // delete inWS; inWS=0;
+    // delete inFile; inFile=0;
 
-  if ( inFile ) delete inFile; inFile=0;
+  }//end for dataFile
   cout << "end GetData" << endl;
 }
 
@@ -835,7 +834,6 @@ void Category::SignalFromPdf() {
   if ( m_debug ) cout << "Category::SignalFromPdf()" <<endl;
 
   vector<string> inputParamInfo;
-  //  vector<string> varToEdit = { "meanCB", "meanGA", "sigmaCB", "sigmaGA", "alphaCB", "nCB", "fCB" };
   vector<string> varToEdit = { "meanCB", "sigmaCB" };
   m_correlatedVar += "," + m_mapPdfInfo["mHcomb"] + "," + m_mapPdfInfo["invMass"];
   
@@ -854,8 +852,7 @@ void Category::SignalFromPdf() {
     cout << "sets : " << m_mapSet["systematic_mass_common"] << " " << m_mapSet["systematic_sigma_common"] << endl;
     mapSet["mean"].add( *m_mapSet["systematic_mass_common"] );
     mapSet["sigma"].add( *m_mapSet["systematic_sigma_common"] );
-    //    if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
-    if ( true ) {
+    if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
       mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
       mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
       mapSet["yield"].add( *m_mapSet["systematic_yield_common"] );

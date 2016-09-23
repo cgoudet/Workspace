@@ -1,6 +1,6 @@
 #ifndef CATEGORY_H
 #define CATEGORY_H
-
+#include "PlotFunctions/Arbre.h"
 #include <string>
 using std::string;
 #include <map>
@@ -101,5 +101,6 @@ class Category {
   vector<string> *m_categoriesNames;
   void readConstraintFile();
 
+  Arbre m_catProperties;
 };
 #endif

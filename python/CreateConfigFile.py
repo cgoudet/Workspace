@@ -51,7 +51,7 @@ def ConfigFile( inFileName ) :
     if  inFileName == '' : print( 'No input name for config file.' ); exit(1);
 
     coreName = StripString(inFileName,0, 1)
-    xmlObj = CreateNode( 'CreateWorkspace', { 'Name':'outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + coreName + '.root' } )    
+    xmlObj = CreateNode( 'CreateWorkspace', { 'Name':'/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + coreName + '.root' } )    
 
     processNode = CreateNode( 'processes' )
     processNode.text = ' '.join( processes+subProcesses )
@@ -61,8 +61,10 @@ def ConfigFile( inFileName ) :
         
 
     configFile = open( coreName + '.xml', 'w+' )
-    configFile.write( '<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/xmlCard.dtd">\n' )
-    configFile.write( prettify( xmlObj ) )
+    docTypeLine =  '<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/CreateWorkspace.dtd">'
+    stringToWrite = prettify( xmlObj ).split('\n')
+    stringToWrite.insert( 1, docTypeLine )
+    configFile.write( '\n'.join( stringToWrite ) )
 
     return inFileName
 
