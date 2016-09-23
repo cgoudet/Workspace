@@ -31,13 +31,13 @@ def CategoryNode( catName, mode = 0 ) :
 #Variables which have to be renamed
     varChanges = {}
     if mode == 0 :  
-        varChanges = {
-            'meanCB_all': 'muCB_SM_m125000_c'+str(catIndex),
-            'sigmaCB_all':'sigmaCB_SM_m125000_c'+str(catIndex),
-            'invMass':'m_yy_m125000_c'+str(catIndex),
-            'mHcomb': 'mResonnance'
-            }
-        for vVarName in varChanges :  xmlObj.append( CreateNode( 'changeVar', { 'outName':vVarName, 'inName':varChanges[vVarName] } ) )
+        varChanges = [
+            { 'outName':'meanCB_all', 'inName':'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
+            { 'outName':'sigmaCB_all', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
+            { 'outName':'invMass', 'inName':'m_yy_m125000_c'+str(catIndex)} ,
+            { 'outName':'mHcomb', 'inName':'mResonnance' }
+            ]
+        for vVarName in varChanges :  xmlObj.append( CreateNode( 'changeVar', vVarName ) )
 
 #Marc's asimove have been generated simulating 10fb of data but with luminosity of 13fb. Need to rescale luminosity to 10
         for year in [ '20015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )

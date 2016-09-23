@@ -90,7 +90,7 @@ class Category {
   RooWorkspace *m_workspace;
   bool m_debug;
 
-  void SelectInputWorkspace( vector<string> &infos );
+  void SelectInputWorkspace( string fileName );
 
   TFile *m_readInputFile;
   RooWorkspace *m_readInputWorkspace;

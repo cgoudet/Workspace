@@ -450,9 +450,9 @@ void Category::CreateBackgroundModel() {
 //##################################
 void Category::CreateSignalModel() {
 
-  if ( m_signalInput == 1 ) SignalFromParameters();
-  else if ( m_signalInput == 2 ) SignalFromPdf();
-
+  // if ( m_signalInput == 1 ) SignalFromParameters();
+  // else if ( m_signalInput == 2 ) 
+  SignalFromPdf();
   m_mapSet["yieldsSpurious"]->Print();
   m_mapSet["yieldsToAdd"]->Print();
 
@@ -498,8 +498,9 @@ void Category::CreateWS() {
   m_mapSet["globalObservables"] = new RooArgSet();
   m_mapSet["constraintPdf"] = new RooArgSet();
   m_mapSet["allConstraint"] = new RooArgSet();
-  
-  if ( m_systFileName.find( ".xml" ) != string::npos ) ReadNuisanceParametersXML();
+
+  string systFileName = m_catProperties.GetAttribute( "systFileName" );
+  if ( systFileName.find( ".xml" ) != string::npos ) ReadNuisanceParametersXML();
   else ReadNuisanceParameters();
   
   CreateSignalModel();
@@ -724,14 +725,14 @@ void Category::SetProcesses( vector<string> *processes ) {
 }
 
 //================================================
-void Category::SelectInputWorkspace( vector<string> &infos ) {
+void Category::SelectInputWorkspace( string &fileName ) {
 
-  if ( m_readInputFile && infos.front() == m_readInputFile->GetName() ) return;
+  if ( m_readInputFile && fileName == m_readInputFile->GetName() ) return;
   if ( m_readInputFile ) delete m_readInputFile; m_readInputFile=0; 
   if ( m_readInputWorkspace ) delete m_readInputWorkspace; m_readInputFile=0;
-  m_readInputFile = new TFile( infos.front().c_str() );
+  m_readInputFile = new TFile( fileName.front().c_str() );
   if ( !m_readInputFile ) {
-    cout << infos.front() << " does not exists" << endl;
+    cout << fileName.front() << " does not exists" << endl;
     exit(0);
   }
   m_readInputWorkspace = (RooWorkspace*) m_readInputFile->Get( FindDefaultTree( m_readInputFile, "RooWorkspace" ).c_str() );
@@ -835,13 +836,10 @@ void Category::SignalFromPdf() {
 
   vector<string> inputParamInfo;
   vector<string> varToEdit = { "meanCB", "sigmaCB" };
-  m_correlatedVar += "," + m_mapPdfInfo["mHcomb"] + "," + m_mapPdfInfo["invMass"];
-  
+  //  m_correlatedVar += "," + m_mapPdfInfo["mHcomb"] + "," + m_mapPdfInfo["invMass"];
   vector<string> processes  = *m_processes;
   processes.push_back( "all" );
 
-
-  
   for ( auto vProc : processes ) {
 
     RooWorkspace *dumWS = new RooWorkspace( "dumWS", "dumWS" );    
@@ -849,7 +847,6 @@ void Category::SignalFromPdf() {
 
 
     map<string,RooArgSet> mapSet;
-    cout << "sets : " << m_mapSet["systematic_mass_common"] << " " << m_mapSet["systematic_sigma_common"] << endl;
     mapSet["mean"].add( *m_mapSet["systematic_mass_common"] );
     mapSet["sigma"].add( *m_mapSet["systematic_sigma_common"] );
     if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
@@ -864,28 +861,31 @@ void Category::SignalFromPdf() {
       mapSet["yield"].add( *m_mapVar["mu_XS_" + vProc ] );//muXS
     }
 
-    if ( m_mapPdfInfo[name] != "" ) {
+    //Recovering pdf info in this process
+    vector<Arbre> vectNodes;
+    vector<string> vectPath = { "pdf", "category" };
+    vector<map<string,string>> vectOpt;
+    for ( unsigned int i = 0 ; i<vectPath.size(); ++i ) vectOpt.push_back( map<string,string>() );
+    vectOpt.front()["process"] = vProc;
+    Arbre::GetArbresPath( m_catProperties, vectNodes, vectPath , vectOpt );
+
+    if ( vectNodes.size() == 1 ) {
 
       //Get the workspace for the current process
-      ParseVector( m_mapPdfInfo[name], inputParamInfo );
-      SelectInputWorkspace( inputParamInfo );
-      if ( !m_readInputWorkspace->pdf( inputParamInfo.back().c_str() ) ) {
-	cout << "pdf not found : " << inputParamInfo.back().c_str() << endl;
+      SelectInputWorkspace( vectNode[0].GetAttribute( "inFileName" ) );
+      
+      //Retrieve the raw signal pdf
+      RooAbsPdf *tmpPdf = m_readInputWorkspace->pdf( vectNode[0].GetAttribute( "inVarName" ).c_str() );
+      if ( !tmpPdf ) {
+	cout << "pdf not found : " << vectNode[0].GetAttribute( "inVarName" ) << endl;
 	continue;
       }
-
-      //Retrieve the raw signal pdf
-      RooAbsPdf *tmpPdf = m_readInputWorkspace->pdf( inputParamInfo.back().c_str() );
       dumWS->import( *tmpPdf, Silence() );
 
-      cout << "pdfComponents : " << endl;
-      tmpPdf->getComponents()->Print();
-
       //Give the m-yy variables the proper properties
-      if ( !dumWS->var( m_mapPdfInfo["invMass"].c_str() ) ) { cout << m_mapPdfInfo["invMass"].c_str() << " does not exist in dumWS" << endl; exit(0);}
-      dumWS->var( m_mapPdfInfo["invMass"].c_str() )->setRange(105,160);
-      dumWS->var( m_mapPdfInfo["invMass"].c_str() )->SetName( m_mapVar["invMass"]->GetName() );
-      
+      //if ( !dumWS->var( m_mapPdfInfo["invMass"].c_str() ) ) { cout << m_mapPdfInfo["invMass"].c_str() << " does not exist in dumWS" << endl; exit(0);}
+      // dumWS->var( m_mapPdfInfo["invMass"].c_str() )->setRange(105,160);
+      // dumWS->var( m_mapPdfInfo["invMass"].c_str() )->SetName( m_mapVar["invMass"]->GetName() );
       
       //start the editing line for the new pdf
       stringstream editStr; 
@@ -978,7 +978,7 @@ void Category::SignalFromPdf() {
 	}
       }
       else {
-	SelectInputWorkspace( inputParamInfo );
+	//	SelectInputWorkspace( inputParamInfo );
 	yieldLumi = m_readInputWorkspace->function( inputParamInfo.back().c_str() );
       }
       
