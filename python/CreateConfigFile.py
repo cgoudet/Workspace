@@ -18,7 +18,6 @@ subProcesses = ['bbH', 'tHjb', 'tWH' ]
 
 inputsFile='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/'
 #inputsFile='/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/'
-newProcesses = [ 'bbH', 'tHjb', 'tWH' ]
 
 #====================================
 def CategoryNode( catName, mode = 0 ) : 
@@ -26,25 +25,38 @@ def CategoryNode( catName, mode = 0 ) :
     xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':inputsFile+'datacard_ICHEP.txt' } )
 
     for vProc in processes+subProcesses : xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':inputsFile+'workspace_signal_yields_categories.root', 'inVarName':'Yield_Signal_'+vProc+'_SM_'+catName } ) )
-    xmlObj.append( CreateNode( 'pdf', {'process':'All', 'inFileName':inputsFile+'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ) } ) )
+    xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':inputsFile+'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ) } ) )
 
 #Variables which have to be renamed
     varChanges = {}
     if mode == 0 :  
         varChanges = [
-            { 'outName':'meanCB_all', 'inName':'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
-            { 'outName':'sigmaCB_all', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
+            { 'outName':'meanCB', 'inName': 'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
+            { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
             { 'outName':'invMass', 'inName':'m_yy_m125000_c'+str(catIndex)} ,
-            { 'outName':'mHcomb', 'inName':'mResonnance' }
+            { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
             ]
+        varChanges +=  [ { 'inName' : 'Yield_Signal_'+vProc+'_SM_'+catName, 'outName': 'yieldSignal', 'systNP':'yield' } for vProc in processes+subProcesses ]
+
         for vVarName in varChanges :  xmlObj.append( CreateNode( 'changeVar', vVarName ) )
 
 #Marc's asimove have been generated simulating 10fb of data but with luminosity of 13fb. Need to rescale luminosity to 10
-        for year in [ '20015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )
+        for year in [ '2015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )
 
         dataNode = CreateNode( 'data' )
         dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
         xmlObj.append( dataNode )
+
+        correlatedVarNode = CreateNode( 'correlatedVar' )
+        correlatedVarNode.text = 'mHcomb,lumi_2015,lumi_2016,' + ','.join( [ 'XS13_' + vProc + '_yy' for vProc in processes+subProcesses ] )
+        xmlObj.append( correlatedVarNode )
+
+        # createMass = CreateNode( 'createVar', {"Name" : "dependentMean", "formula": 'muCB_SM_m125000_c'+str(catIndex) + '+(mHcomb-125)'} )
+        # createMass.text = 'mHcomb muCB_SM_m125000_c'+str(catIndex)
+
+        bkg = CreateNode( "bkg", {'form':'expPol2' if 'ggH' in catName else "exp" } );
+        xmlObj.append( bkg )
+
     return xmlObj
 #================================================================
 def ConfigFile( inFileName ) :
@@ -77,7 +89,7 @@ def ConfigFileBoost( inFileName ) :
     with open( inFileName, 'w+' ) as configFile :
         configFile.write( "[General]\n" )
         configFile.write( 'catNames=' + ' '.join( categoriesNames ) + '\n' )
-        configFile.write( 'process=' + ' '.join( processes + newProcesses) + '\n' )
+        configFile.write( 'process=' + ' '.join( processes + subProcesses) + '\n' )
 
  #
 #        configFile.write( 'systFileName=' + inFileName.replace('.boost', '.xml' ) + '\n' )
@@ -97,7 +109,7 @@ def ConfigFileBoost( inFileName ) :
             configFile.write( '\n' )
             configFile.write( '\n'.join( [ "yield_" + proc 
                                            +'=' + inputsFile + 'workspace_signal_yields_categories.root Yield_Signal_'+proc+'_SM_'+categoriesNames[iCat]
-                                           for proc in processes+newProcesses  ] ) )
+                                           for proc in processes+subProcesses  ] ) )
         
             configFile.write( '\n' )
             configFile.write( '\n'.join( [ param + form + '_' + proc 
@@ -146,14 +158,14 @@ def SystEffectNode( varName='yield', upVal=0, downVal=0, constraint='Gaus') :
     xmlObj.set( 'downVal', str(downVal) )
     xmlObj.set( 'upVal', str(upVal) )
     xmlObj.set( 'category', 'Common' )
-    xmlObj.set( 'process', 'All' )
+    xmlObj.set( 'process', 'all' )
 
 
     return xmlObj
 
 #=================================================
 def AppendProc( node ) :
-    for procName in ['All'] + processes + subProcesses : 
+    for procName in ['all'] + processes + subProcesses : 
         node.append( CreateNode( 'process', { 'Name' : procName } ) )
                      
     return node
@@ -172,7 +184,7 @@ def CreateXMLSystFromDataCard( inFileName, outFileName ) :
     xmlObj = ET.Element("NPCorrelation")
 
     lumi = CreateNode( 'systematic', { 'correlation':'All', 'centralValue':'1', 'constraint':'Gaus', 'Name':'ATLAS_LUMI' } )
-    lumi.append( CreateNode( 'systEffect', {'varName':'yield', 'upVal':'0.05', 'category':'Common', 'process':'All', 'constraint':'Gaus'} ) )
+    lumi.append( CreateNode( 'systEffect', {'varName':'yield', 'upVal':'0.05', 'category':'Common', 'process':'all', 'constraint':'Gaus'} ) )
     ET.dump( lumi )
 
     xmlObj.append( lumi )

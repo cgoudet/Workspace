@@ -3,7 +3,7 @@
 
 <!ELEMENT processes (#PCDATA) >
 
-<!ELEMENT category (yield*,pdf*,changeVar*,data)>
+<!ELEMENT category (yield*,pdf*,changeVar*,data, correlatedVar, bkg)>
 <!ATTLIST category Name CDATA #IMPLIED>
 <!ATTLIST category systFileName CDATA #IMPLIED>
 
@@ -12,6 +12,7 @@
 <!ATTLIST yield inFileName CDATA #IMPLIED>
 <!ATTLIST yield inVarName CDATA #IMPLIED>
 <!ATTLIST yield inWSName CDATA #IMPLIED>
+<!ATTLIST yield inCatIndex CDATA #IMPLIED>
 
 <!ELEMENT pdf (#PCDATA)>
 <!ATTLIST pdf process CDATA #IMPLIED>
@@ -35,3 +36,8 @@
 <!ATTLIST dataFile rooCategoryName CDATA #IMPLIED>
 <!ATTLIST dataFile rooCategoryIndex CDATA #IMPLIED>
 <!ATTLIST dataFile datasetName CDATA #IMPLIED>
+
+<!ELEMENT correlatedVar (#PCDATA) >
+
+<!ELEMENT bkg (#PCDATA)>
+<!ATTLIST bkg form CDATA #IMPLIED>
