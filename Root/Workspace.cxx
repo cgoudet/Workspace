@@ -97,6 +97,8 @@ void Workspace::CreateWS() {
 
     RooWorkspace *workspace = m_categories.back()->GetWorkspace();
     string pdfName = "model_" + vName;
+    workspace->pdf( pdfName.c_str() )->Print();
+    //    exit(0);
     pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
@@ -122,9 +124,10 @@ void Workspace::CreateWS() {
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap) ,WeightVar(wt ));
   cout << "obsData : " << obsData << endl;
   cout << obsData->GetName() << endl;
-  obsData->Print();
-
   m_workspace->import(*obsData, Silence());
+  obsData->Print();
+  pdf->Print();
+  //  exit(0);
 
   cout << "Creating dataset with ghosts..." << endl;
   RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));

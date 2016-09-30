@@ -25,7 +25,7 @@ def CategoryNode( catName, mode = 0 ) :
     xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':inputsFile+'datacard_ICHEP.txt' } )
 
     for vProc in processes+subProcesses : xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':inputsFile+'workspace_signal_yields_categories.root', 'inVarName':'Yield_Signal_'+vProc+'_SM_'+catName } ) )
-    xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':inputsFile+'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ) } ) )
+    xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':inputsFile+'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
 
 #Variables which have to be renamed
     varChanges = {}
@@ -33,7 +33,7 @@ def CategoryNode( catName, mode = 0 ) :
         varChanges = [
             { 'outName':'meanCB', 'inName': 'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
             { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
-            { 'outName':'invMass', 'inName':'m_yy_m125000_c'+str(catIndex)} ,
+#            { 'outName':'invMass', 'inName':'m_yy_m125000_c'+str(catIndex)} ,
             { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
             ]
         varChanges +=  [ { 'inName' : 'Yield_Signal_'+vProc+'_SM_'+catName, 'outName': 'yieldSignal', 'systNP':'yield' } for vProc in processes+subProcesses ]

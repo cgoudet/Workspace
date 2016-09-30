@@ -19,6 +19,7 @@
 <!ATTLIST pdf inFileName CDATA #IMPLIED>
 <!ATTLIST pdf inVarName CDATA #IMPLIED>
 <!ATTLIST pdf inWSName CDATA #IMPLIED>
+<!ATTLIST pdf invMass CDATA #IMPLIED>
 
 <!ELEMENT changeVar (#PCDATA)>
 <!ATTLIST changeVar inName CDATA #IMPLIED>
