@@ -25,7 +25,6 @@ class Category {
   Category( string name );
   ~Category();
 
-  //  void SetSDef( map<string, int> *sDef ) { m_sDef = sDef; }
   void SetProcesses( vector<string> *processes );
   void SetCategoriesNames( vector<string> *categoriesNames ) { m_categoriesNames = categoriesNames;}
   RooWorkspace *GetWorkspace() { return m_workspace; }
@@ -60,29 +59,21 @@ class Category {
   RooRealVar* defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
 
   /**
-     m_signalModel %10
+     m_signalModel
      0 : signal per process
      1 : common signal sum of processes
    */
-  unsigned int m_signalModel;
-  unsigned int m_signalInput;
 
   RooDataSet *m_dataset;
-  string m_dataFileName;
-  //  vector<string> m_dataFilesName;
   string m_dataCut;
 
   void CreateBackgroundModel();
-  void CreateSignalModel();
   void CreateSpurious();
   void ReadNuisanceParameters();
   void ReadNuisanceParametersXML();
   void GetData();
   void DefineSet( string set );
 
-  vector<string> m_coef;
-  vector<string> m_form;
-  vector<string> m_param;
   string m_systFileName;
   string m_outName;
   RooCategory* m_category;
@@ -94,12 +85,11 @@ class Category {
 
   TFile *m_readInputFile;
   RooWorkspace *m_readInputWorkspace;
-  void SignalFromParameters();
   void SignalFromPdf();
   map<string, string> m_mapPdfInfo;
   map<string, double> m_changeVar;
   vector<string> *m_categoriesNames;
-  void readConstraintFile();
+  void ReadConstraintFile();
 
   Arbre m_catProperties;
 };

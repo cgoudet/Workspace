@@ -1,14 +1,15 @@
 import os
 import subprocess
 
-input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge_h012_asimov.root'
+input_file='/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge013.root'
 
 variables = {}
-variables["mu_XS_ggH"] = [ 0, 2, 50]    
-variables["mu_XS_VBF"] = [ -0.5, 2.5, 50]    
-variables["mu_XS_WH"]  = [ -3, 3, 50]    
-variables["mu_XS_ZH"]  = [ -3, 3, 50]    
-variables["mu_XS_ttH"] = [ -3, 3, 50]    
+# variables["mu_XS_ggH"] = [ 0, 2, 50]    
+# variables["mu_XS_VBF"] = [ -0.5, 2.5, 50]    
+# variables["mu_XS_WH"]  = [ -3, 3, 50]    
+# variables["mu_XS_ZH"]  = [ -3, 3, 50]
+variables["mu_XS_VH"]  = [ 0, 3, 50]    
+#variables["mu_XS_ttH"] = [ -3, 3, 50]    
 #variables["mu"] = [ 0, 2]    
 
 
@@ -16,7 +17,7 @@ fitperjob=50
 options = {}
 options["justMin"]    = 0
 options['saveCsv']    = 1
-options['save_np']    = 1
+options['save_np']    = 0
 options['constraint'] = 0
 options['strategy']   = 1
 options['scheme']     = 4
@@ -60,7 +61,7 @@ commands = (
     )
 print commands
 
-pathResults='/sps/atlas/c/cgoudet/Hgam/Couplages/JobsOutput/'
+pathResults='/sps/atlas/c/cgoudet/Batch/'
 tag = subprocess.check_output(['date', '+%Y%m%d%H%M%S'])[0:-1]
 directory=pathResults + tag + '/'
 print directory

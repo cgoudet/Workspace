@@ -83,13 +83,10 @@ void Workspace::CreateWS() {
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest" };
 
   for ( auto vName : m_categoriesNames ) {
-    //    if ( vName != "ttHlep" ) continue;
     m_category->defineType( vName.c_str() );
     m_category->setLabel( vName.c_str() );
     m_categories.push_back( 0);
     m_categories.back() = new Category( vName );
-    //    m_categories.back()->SetSDef( &m_sDef );
-    //    m_categories.back()->SetSystFileName( m_systFileName );
     m_categories.back()->SetProcesses( &m_processes );
     m_categories.back()->SetCategoriesNames( &m_categoriesNames );
     m_categories.back()->LoadParameters( m_configFileName );
@@ -98,7 +95,6 @@ void Workspace::CreateWS() {
     RooWorkspace *workspace = m_categories.back()->GetWorkspace();
     string pdfName = "model_" + vName;
     workspace->pdf( pdfName.c_str() )->Print();
-    //    exit(0);
     pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
@@ -119,21 +115,17 @@ void Workspace::CreateWS() {
   RooRealVar wt( "weight", "weight", 1 );
   m_mapSet["observables"]->add( wt );
   m_mapSet["observables"]->Print();
-  cout << m_category << endl;
 
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap) ,WeightVar(wt ));
   cout << "obsData : " << obsData << endl;
   cout << obsData->GetName() << endl;
   m_workspace->import(*obsData, Silence());
-  obsData->Print();
-  pdf->Print();
-  //  exit(0);
 
   cout << "Creating dataset with ghosts..." << endl;
-  RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
-  newData->SetNameTitle("obsData_G","obsData_G");
-  m_workspace->import(*newData, Silence());
-  cout << "... sucessfully imported." << endl;
+  // RooDataSet* newData = addGhosts(obsData,m_workspace->set("observables"));
+  // newData->SetNameTitle("obsData_G","obsData_G");
+  // m_workspace->import(*newData, Silence());
+  // cout << "... sucessfully imported." << endl;
   
   cout << "fitted constrained" << endl;
 
@@ -150,16 +142,16 @@ void Workspace::CreateWS() {
 
 
   m_workspace->import(*mconfig);
-  //  mconfig->GetPdf()->fitTo( *obsData,SumW2Error(kFALSE) );
-  // RooDataSet* asimovData = MakeAsimovData();
-  // cout << "Saving workspace to file... '" << m_name << "'" << endl;
+  RooDataSet* asimovData = MakeAsimovData();
+  cout << "Saving workspace to file... '" << m_name << "'" << endl;
   m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
-
-  //  PlotPerCategory( { mconfig->GetPdf(), asimovData } , m_category );
-  //  m_workspace->pdf("combinedPdf")->fitTo( *newData, Constrained(),  );
-  //  mconfig->GetNuisanceParameters()->Print("v");
+  //  mconfig->GetPdf()->fitTo( *m_workspace->data( obsData->GetName() ), SumW2Error(kFALSE) );
+  // RooArgSet dumSet;
+  // dumSet.add( *mconfig->GetNuisanceParameters() );
+  // dumSet.add( *mconfig->GetParametersOfInterest() );
+  // m_workspace->saveSnapshot("miminum",dumSet);
 }
 
 
@@ -240,7 +232,6 @@ RooDataSet* Workspace::addGhosts(RooDataSet* orig,  const RooArgSet *observables
 
 
 //=================================
-// void Workspace::makeAsimovData( RooRealVar* mH, ModelConfig* mcInWs, bool doConditional, RooWorkspace* combWs, RooAbsPdf* combPdf, RooDataSet* combData, bool bkgOnly)
 RooDataSet* Workspace::MakeAsimovData() {
   
   cout << " Make Asimov Data Beginning " << endl; 

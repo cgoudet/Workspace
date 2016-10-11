@@ -4,7 +4,7 @@ import os
 import sys
 from xml.dom import minidom
 import xml.etree.cElementTree as ET
-sys.path.append(os.path.abspath("/afs/in2p3.fr/home/c/cgoudet/private/Calibration/PlotFunctions/python"))
+sys.path.append(os.path.abspath("/afs/in2p3.fr/home/c/cgoudet/private/Couplings/PlotFunctions/python"))
 from SideFunction import *
 
 categoriesNames = ['ggH_CenLow', 'ggH_CenHigh', "ggH_FwdLow", 'ggH_FwdHigh', "VBFloose", "VBFtight", "VHMET", "VHlep", "VHdilep", "VHhad_loose", "VHhad_tight",  "ttHhad", "ttHlep"]
@@ -44,7 +44,15 @@ def CategoryNode( catName, mode = 0 ) :
         for year in [ '2015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )
 
         dataNode = CreateNode( 'data' )
-        dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
+
+        for year in ['15','16'] : dataNode.append( CreateNode('dataFile', 
+                                      { 'inFileName':'/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data'+year+'/hist-data.root', 
+                                        'varName':'m_yy', 
+                                        'treeName':'tree_selected',
+                                        'selectionCut':'catCoup_dev=='+str(catIndex+1),
+                                        'selectionVars':'catCoup_dev'
+                                        } ) )
+#        dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
         xmlObj.append( dataNode )
 
         correlatedVarNode = CreateNode( 'correlatedVar' )
@@ -62,7 +70,7 @@ def CategoryNode( catName, mode = 0 ) :
 def ConfigFile( inFileName ) :
     if  inFileName == '' : print( 'No input name for config file.' ); exit(1);
 
-    coreName = StripString(inFileName,0, 1)
+    coreName = StripString(inFileName)
     xmlObj = CreateNode( 'CreateWorkspace', { 'Name':'/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + coreName + '.root' } )    
 
     processNode = CreateNode( 'processes' )
@@ -72,8 +80,8 @@ def ConfigFile( inFileName ) :
     for vCatName in categoriesNames : xmlObj.append( CategoryNode(vCatName ) )
         
 
-    configFile = open( coreName + '.xml', 'w+' )
-    docTypeLine =  '<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/CreateWorkspace.dtd">'
+    configFile = open( StripString(inFileName, 0, 1 ) + '.xml', 'w+' )
+    docTypeLine =  '<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/CreateWorkspace.dtd">'
     stringToWrite = prettify( xmlObj ).split('\n')
     stringToWrite.insert( 1, docTypeLine )
     configFile.write( '\n'.join( stringToWrite ) )
@@ -133,20 +141,6 @@ def ConfigFileBoost( inFileName ) :
 
     return inFileName
 
-
-#=================================================
-def prettify(elem):
-    """Return a pretty-printed XML string for the Element.
-    """
-
-    rough_string = ET.tostring(elem, 'utf-8')
-    reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="  ")
-#================================================
-def CreateNode( nodeName, options={} ) :
-    xmlObj = ET.Element( nodeName ) 
-    for opt in options : xmlObj.set( opt, options[opt] )
-    return xmlObj
 
 #=================================================
 def SystEffectNode( varName='yield', upVal=0, downVal=0, constraint='Gaus') :
@@ -284,7 +278,8 @@ def main():
     # Parsing the command line arguments
     args = parseArgs()
 
-    inFileName = 'StatChallenge013'
+#    inFileName = 'StatChallenge013'
+
 #    CreateXMLSystFromDataCard( '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt', args.outFileName + '.xml' )    
     print( ConfigFile( args.outFileName + '.boost' ) )
 

@@ -37,6 +37,9 @@
 <!ATTLIST dataFile rooCategoryName CDATA #IMPLIED>
 <!ATTLIST dataFile rooCategoryIndex CDATA #IMPLIED>
 <!ATTLIST dataFile datasetName CDATA #IMPLIED>
+<!ATTLIST dataFile treeName CDATA #IMPLIED>
+<!ATTLIST dataFile selectionCut CDATA #IMPLIED>
+<!ATTLIST dataFile selectionVars CDATA #IMPLIED>
 
 <!ELEMENT correlatedVar (#PCDATA) >
 

@@ -1,0 +1,31 @@
+inputType=1
+plotDirectory=/sps/atlas/c/cgoudet/Plots/
+
+rootFileName=/sps/atlas/c/cgoudet/Hgam/TestInitValueFit/testInit6.root
+rootFileName=/sps/atlas/c/cgoudet/Hgam/TestInitValueFit/testInit6.root
+rootFileName=/sps/atlas/c/cgoudet/Hgam/TestInitValueFit/testInit6.root
+rootFileName=/sps/atlas/c/cgoudet/Hgam/TestInitValueFit/testInit6.root
+objName=nll
+objName=nll
+objName=nll
+objName=nll
+
+varName = mu_XS_ggH
+varName = mu_XS_VBF
+varName = mu_XS_VH
+varName = mu_XS_ttH
+
+varMin=0.99
+varMax=1.01
+
+legend = ggH
+legend = VBF
+legend = VH
+legend = ttH
+
+rangeUserY = 0 0.99
+xTitle = __HASHTAGhat{__HASHTAGmu}
+
+latex=minimizePrecision : 1e-6
+latexOpt = 0.16 0.9
+
