@@ -437,8 +437,8 @@ void Category::CreateWS() {
   SignalFromPdf();
   m_mapSet["pdfToAdd"]->add( *m_mapSet["pdfProc"] );
   
-  //  m_mapVar["invMass"]->setRange( 105, 160);
-  m_mapVar["invMass"]->setRange( 110, 160);
+  m_mapVar["invMass"]->setRange( 105, 160);
+  //  m_mapVar["invMass"]->setRange( 110, 160);
   
   //If only the pdf all is available (or yield all)
   if ( ( m_mapSet["yieldsToAdd"]->getSize()==1 && m_mapSet["pdfToAdd"]->getSize()!=1  )

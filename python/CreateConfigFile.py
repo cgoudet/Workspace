@@ -7,7 +7,7 @@ import xml.etree.cElementTree as ET
 sys.path.append(os.path.abspath("/afs/in2p3.fr/home/c/cgoudet/private/Couplings/PlotFunctions/python"))
 from SideFunction import *
 
-categoriesNames = ['ggH_CenLow', 'ggH_CenHigh', "ggH_FwdLow", 'ggH_FwdHigh', "VBFloose", "VBFtight", "VHMET", "VHlep", "VHdilep", "VHhad_loose", "VHhad_tight",  "ttHhad", "ttHlep"]
+categoriesNames = ['ggH_CenLow', 'ggH_CenHigh', "ggH_FwdLow", 'ggH_FwdHigh', "VBFloose", "VBFtight", "VHhad_loose", "VHhad_tight", "VHMET", "VHlep", "VHdilep",   "ttHhad", "ttHlep"]
 
 coefNames=['a', 'b', 'c', 'd' ]
 paramNames=['mean', 'sigma' ]
@@ -45,14 +45,14 @@ def CategoryNode( catName, mode = 0 ) :
 
         dataNode = CreateNode( 'data' )
 
-        for year in ['15','16'] : dataNode.append( CreateNode('dataFile', 
-                                      { 'inFileName':'/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data'+year+'/hist-data.root', 
-                                        'varName':'m_yy', 
-                                        'treeName':'tree_selected',
-                                        'selectionCut':'catCoup_dev=='+str(catIndex+1),
-                                        'selectionVars':'catCoup_dev'
-                                        } ) )
-#        dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
+        # for year in ['15','16'] : dataNode.append( CreateNode('dataFile', 
+        #                               { 'inFileName':'/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data'+year+'/hist-data.root', 
+        #                                 'varName':'m_yy', 
+        #                                 'treeName':'tree_selected',
+        #                                 'selectionCut':'catCoup_dev=='+str(catIndex+1),
+        #                                 'selectionVars':'catCoup_dev'
+        #                                 } ) )
+        dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
         xmlObj.append( dataNode )
 
         correlatedVarNode = CreateNode( 'correlatedVar' )
@@ -163,13 +163,55 @@ def AppendProc( node ) :
         node.append( CreateNode( 'process', { 'Name' : procName } ) )
                      
     return node
-#=================================================
-def CreateStruct(node) :
-    for catName in ['Common', 'Inclusive' ]+ categoriesNames : 
-        catNode = ET.Element('category')
-        catNode.set( 'name', catName )
-        AppendProc( catNode )
-        node.append( catNode )
+#==============================================
+def FindProcInName( name ) : 
+    for vProc in processes+subProcesses : 
+        if vProc in name : return vProc
+    return 'all'
+#==============================================
+def ParseLine( line, mapSyst, currentCat ) :
+    line = line.replace( ' ', '' ).replace( '\n', '' )
+ #   print('line : ' + line)
+    name = line.split("=")[0]
+ #   print( 'name : ' + name )
+
+    systName = name.replace( currentCat, '' )
+    if systName not in name : print( 'category name has troubles : ' + name ); return
+
+#Check if the systematic 
+    process = 'all'
+    if 'ggH_ptH' in systName or 'ggH2in' in systName or 'ggH_m23' in systName : process = 'ggH'
+    else :
+        if 'ggH2j' in systName : process = 'VBF'
+        else : process = FindProcInName( systName )
+        systName = systName.replace( process, '' )
+
+    systName = systName.replace( '__', '_' )
+    while systName[-1]=='_' : systName = systName[:-1]
+    if systName not in name : print( 'category name has troubles for process : ' + systName + ' ' + name  ); return
+
+#Clean the name
+    
+#    print( 'systName : ' + systName )    
+    dictOptionsSystEffect = { 'category':currentCat, 'process':process }    
+    systValue = line.split('=')[1]
+    dictOptionsSystEffect['constraint'] = 'Asym' if '-100L' in systValue else 'Gauss'
+
+    if dictOptionsSystEffect['constraint'] != "Asym" : dictOptionsSystEffect['upVal'] = systValue
+    else :
+        systValue = systValue.replace( '-100L(', '' ).replace( ')', '' )
+        minusSplitted = systValue.split('-')
+        if systValue[0]=='-' : dictOptionsSystEffect['downVal'] = '-'+minusSplitted[1]
+        else : dictOptionsSystEffect['downVal'] = systValue.minusSplitted[0]
+
+        dictOptionsSystEffect['upVal'] = systValue.replace( dictOptionsSystEffect['downVal'], '' )[1:]
+
+    systEffectNode = CreateNode( 'systEffect', dictOptionsSystEffect )
+
+    if systName not in mapSyst : mapSyst[systName] = CreateNode( 'systematic', { 'Name':systName, 'centralValue': '0' if 'BIAS' in systName else '1' } )
+    mapSyst[systName].append( systEffectNode )
+
+    return 
 
 #=================================================
 def CreateXMLSystFromDataCard( inFileName, outFileName ) :
@@ -180,21 +222,22 @@ def CreateXMLSystFromDataCard( inFileName, outFileName ) :
     lumi = CreateNode( 'systematic', { 'correlation':'All', 'centralValue':'1', 'constraint':'Gaus', 'Name':'ATLAS_LUMI' } )
     lumi.append( CreateNode( 'systEffect', {'varName':'yield', 'upVal':'0.05', 'category':'Common', 'process':'all', 'constraint':'Gaus'} ) )
     ET.dump( lumi )
-
     xmlObj.append( lumi )
+
+    dictSystNodes = {}
 
     inFile = open( inFileName )
     currentCat = ''
-    for line in inFile :
+    for line in inFile : 
         if line[0]=='#' : continue 
         if '[' in line :
-            line = line[1:line.rfind(']')]
-            currentCat = line
+            currentCat = line[1:line.rfind(']')]
             continue
-        if '=' not in line : continue
+        if '=' not in line or 'bkg_model' in line : continue
+        ParseLine( line, dictSystNodes, currentCat )
+        
 
-        name = line.split("=")[0]
-
+    for syst in dictSystNodes : xmlObj.append( dictSystNodes[syst] )
 
     outFile=open( outFileName, 'w' )
     outFile.write( '<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/xmlCard.dtd">\n' )
@@ -204,82 +247,28 @@ def CreateXMLSystFromDataCard( inFileName, outFileName ) :
 
 #==========================================
 def parseArgs():
-    """
-    ArgumentParser.
-    Return
-    ------
-        args: the parsed arguments.
-    """
-    # First create a parser with a short description of the program.
-    # The parser will automatically handle the usual stuff like the --help messages.
     parser = argparse.ArgumentParser(
         description="This text will be displayed when the -h or --help option are given"
                     "It should contain a short description of what this program is doing.")
 
-    # Retrieve the optionnal arguments. Optional argument should start with '-' or '--'
-    # Simply give to the parser.add_argument() function the expected names 
-    # (one short '-' and/or one long '--')
-
-    # The parser can cast the given arguments to some usual types and will return 
-    # standard error message if the given argument is not of the good type.
-
-    # Integers
-    # Here I give the short and the long argument name
     parser.add_argument(
         '--doMode', help=( 'Tag for workspace mode\n' +
                            ' 0 : Marc asimov \n '+
                            ' 1 : ICHEP2016 data \n '
                            ),
         default=0, type=int )
-    # parser.add_argument(
-    #     '--doLatex', help='Tag for recreating plots',
-    #     default=1, type=int )
-    # parser.add_argument(
-    #     '--doSyst', help='Tag for recreating systematics histos and plots',
-    #     default=0, type=int )
-    # parser.add_argument(
-    #     '--doCorrection', help='Tag for recreating systematics histos and plots',
-    #     default=0, type=int )
-
-    # Floats
-    # Here I give only the long argument name
-
-    # Choices
-    # Here is illustrated the possibility of having to choose between several values
-    # Again help and error messages are automatically built.
-    # Moreover when you do not precise the dest= argument it choose in order of priority
-    # the long name and the short name (if the long one does not exist)
-    # parser.add_argument("--verbosity", "-v", type=int, choices=[0, 1, 2],
-    #                 help="increase output verbosity")
-
-    # Add an argument to handle the output file.  If we use argparse.FileType it will
-    # handle opening a writeable file (and ensuring we can write to it).
-    # (Note: the str argument follow teh standard names 
-    #   'w'=write, 'r'=read, 'r+'= read and write, 'a'=append,
-    # For Windows there is a distinction between text and binary files: use the 'b' option
-    #   'rb'=read binary, 'wb'=write binary, 'r+b'= read and write, etc)
-    # Note that the argument name 'file' does not beging with a '-' or '--'; this indicates
-    # to argparse that it is a *positional* argument
-    # Whoa 2 new things in a single example ! This is crazy !
-    # parser.add_argument('file', type=argparse.FileType('w'),
-    #                     help='the name of the output file')
-
     parser.add_argument('--outFileName', type=str, default='testConfig', help="Directory where all inputs are stored" )
-    # Now do your job and parse my command line !
     args = parser.parse_args()
 
     return args
 
 #========================================
 def main():
-    """
-    The main script
-    """
     # Parsing the command line arguments
     args = parseArgs()
-
-#    inFileName = 'StatChallenge013'
-
+    print( args.outFileName )
+    args.outFileName = StripString( args.outFileName, 0, 1 )
+    print( 'stripped' )
 #    CreateXMLSystFromDataCard( '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt', args.outFileName + '.xml' )    
     print( ConfigFile( args.outFileName + '.boost' ) )
 

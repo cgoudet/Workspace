@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/CreateWorkspace.dtd">
+<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/CreateWorkspace.dtd">
 <CreateWorkspace Name="/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge013.root">
   <processes>ggH VBF VH ttH bbH tHjb tWH</processes>
   <category Name="ggH_CenLow" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
@@ -164,87 +164,6 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VHMET" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHMET" process="ggH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHMET" process="VBF"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHMET" process="VH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ttH_SM_VHMET" process="ttH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHMET" process="bbH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHMET" process="tHjb"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHMET" process="tWH"/>
-    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c6" invMass="m_yy_m125000_c6" process="all"/>
-    <changeVar inName="muCB_SM_m125000_c6" outName="meanCB" systNP="mean"/>
-    <changeVar inName="sigmaCB_SM_m125000_c6" outName="sigmaCB" systNP="sigma"/>
-    <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
-    <changeVar inName="Yield_Signal_ggH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_VBF_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_VH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_ttH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_bbH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_tHjb_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_tWH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="lumi_2015" scale="0.753195809821"/>
-    <changeVar inName="lumi_2016" scale="0.753195809821"/>
-    <data>
-      <dataFile datasetName="absdata_data_VHMET" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHMET.root" varName="m_yy_VHMET" weightName="weight"/>
-    </data>
-    <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
-    <bkg form="exp"/>
-  </category>
-  <category Name="VHlep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHlep" process="ggH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHlep" process="VBF"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHlep" process="VH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ttH_SM_VHlep" process="ttH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHlep" process="bbH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHlep" process="tHjb"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHlep" process="tWH"/>
-    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c7" invMass="m_yy_m125000_c7" process="all"/>
-    <changeVar inName="muCB_SM_m125000_c7" outName="meanCB" systNP="mean"/>
-    <changeVar inName="sigmaCB_SM_m125000_c7" outName="sigmaCB" systNP="sigma"/>
-    <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
-    <changeVar inName="Yield_Signal_ggH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_VBF_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_VH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_ttH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_bbH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_tHjb_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_tWH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="lumi_2015" scale="0.753195809821"/>
-    <changeVar inName="lumi_2016" scale="0.753195809821"/>
-    <data>
-      <dataFile datasetName="absdata_data_VHlep" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHlep.root" varName="m_yy_VHlep" weightName="weight"/>
-    </data>
-    <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
-    <bkg form="exp"/>
-  </category>
-  <category Name="VHdilep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHdilep" process="ggH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHdilep" process="VBF"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHdilep" process="VH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ttH_SM_VHdilep" process="ttH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHdilep" process="bbH"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHdilep" process="tHjb"/>
-    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHdilep" process="tWH"/>
-    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c8" invMass="m_yy_m125000_c8" process="all"/>
-    <changeVar inName="muCB_SM_m125000_c8" outName="meanCB" systNP="mean"/>
-    <changeVar inName="sigmaCB_SM_m125000_c8" outName="sigmaCB" systNP="sigma"/>
-    <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
-    <changeVar inName="Yield_Signal_ggH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_VBF_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_VH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_ttH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_bbH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_tHjb_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="Yield_Signal_tWH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
-    <changeVar inName="lumi_2015" scale="0.753195809821"/>
-    <changeVar inName="lumi_2016" scale="0.753195809821"/>
-    <data>
-      <dataFile datasetName="absdata_data_VHdilep" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHdilep.root" varName="m_yy_VHdilep" weightName="weight"/>
-    </data>
-    <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
-    <bkg form="exp"/>
-  </category>
   <category Name="VHhad_loose" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHhad_loose" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHhad_loose" process="VBF"/>
@@ -253,9 +172,9 @@
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHhad_loose" process="bbH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHhad_loose" process="tHjb"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHhad_loose" process="tWH"/>
-    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c9" invMass="m_yy_m125000_c9" process="all"/>
-    <changeVar inName="muCB_SM_m125000_c9" outName="meanCB" systNP="mean"/>
-    <changeVar inName="sigmaCB_SM_m125000_c9" outName="sigmaCB" systNP="sigma"/>
+    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c6" invMass="m_yy_m125000_c6" process="all"/>
+    <changeVar inName="muCB_SM_m125000_c6" outName="meanCB" systNP="mean"/>
+    <changeVar inName="sigmaCB_SM_m125000_c6" outName="sigmaCB" systNP="sigma"/>
     <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
     <changeVar inName="Yield_Signal_ggH_SM_VHhad_loose" outName="yieldSignal" systNP="yield"/>
     <changeVar inName="Yield_Signal_VBF_SM_VHhad_loose" outName="yieldSignal" systNP="yield"/>
@@ -280,9 +199,9 @@
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHhad_tight" process="bbH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHhad_tight" process="tHjb"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHhad_tight" process="tWH"/>
-    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c10" invMass="m_yy_m125000_c10" process="all"/>
-    <changeVar inName="muCB_SM_m125000_c10" outName="meanCB" systNP="mean"/>
-    <changeVar inName="sigmaCB_SM_m125000_c10" outName="sigmaCB" systNP="sigma"/>
+    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c7" invMass="m_yy_m125000_c7" process="all"/>
+    <changeVar inName="muCB_SM_m125000_c7" outName="meanCB" systNP="mean"/>
+    <changeVar inName="sigmaCB_SM_m125000_c7" outName="sigmaCB" systNP="sigma"/>
     <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
     <changeVar inName="Yield_Signal_ggH_SM_VHhad_tight" outName="yieldSignal" systNP="yield"/>
     <changeVar inName="Yield_Signal_VBF_SM_VHhad_tight" outName="yieldSignal" systNP="yield"/>
@@ -295,6 +214,87 @@
     <changeVar inName="lumi_2016" scale="0.753195809821"/>
     <data>
       <dataFile datasetName="absdata_data_VHhad_tight" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHhad_tight.root" varName="m_yy_VHhad_tight" weightName="weight"/>
+    </data>
+    <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
+    <bkg form="exp"/>
+  </category>
+  <category Name="VHMET" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHMET" process="ggH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHMET" process="VBF"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHMET" process="VH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ttH_SM_VHMET" process="ttH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHMET" process="bbH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHMET" process="tHjb"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHMET" process="tWH"/>
+    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c8" invMass="m_yy_m125000_c8" process="all"/>
+    <changeVar inName="muCB_SM_m125000_c8" outName="meanCB" systNP="mean"/>
+    <changeVar inName="sigmaCB_SM_m125000_c8" outName="sigmaCB" systNP="sigma"/>
+    <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
+    <changeVar inName="Yield_Signal_ggH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_VBF_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_VH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_ttH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_bbH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_tHjb_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_tWH_SM_VHMET" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="lumi_2015" scale="0.753195809821"/>
+    <changeVar inName="lumi_2016" scale="0.753195809821"/>
+    <data>
+      <dataFile datasetName="absdata_data_VHMET" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHMET.root" varName="m_yy_VHMET" weightName="weight"/>
+    </data>
+    <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
+    <bkg form="exp"/>
+  </category>
+  <category Name="VHlep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHlep" process="ggH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHlep" process="VBF"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHlep" process="VH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ttH_SM_VHlep" process="ttH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHlep" process="bbH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHlep" process="tHjb"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHlep" process="tWH"/>
+    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c9" invMass="m_yy_m125000_c9" process="all"/>
+    <changeVar inName="muCB_SM_m125000_c9" outName="meanCB" systNP="mean"/>
+    <changeVar inName="sigmaCB_SM_m125000_c9" outName="sigmaCB" systNP="sigma"/>
+    <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
+    <changeVar inName="Yield_Signal_ggH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_VBF_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_VH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_ttH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_bbH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_tHjb_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_tWH_SM_VHlep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="lumi_2015" scale="0.753195809821"/>
+    <changeVar inName="lumi_2016" scale="0.753195809821"/>
+    <data>
+      <dataFile datasetName="absdata_data_VHlep" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHlep.root" varName="m_yy_VHlep" weightName="weight"/>
+    </data>
+    <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
+    <bkg form="exp"/>
+  </category>
+  <category Name="VHdilep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHdilep" process="ggH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHdilep" process="VBF"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHdilep" process="VH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ttH_SM_VHdilep" process="ttH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_bbH_SM_VHdilep" process="bbH"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tHjb_SM_VHdilep" process="tHjb"/>
+    <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_tWH_SM_VHdilep" process="tWH"/>
+    <pdf inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root" inVarName="sigPdf_SM_m125000_c10" invMass="m_yy_m125000_c10" process="all"/>
+    <changeVar inName="muCB_SM_m125000_c10" outName="meanCB" systNP="mean"/>
+    <changeVar inName="sigmaCB_SM_m125000_c10" outName="sigmaCB" systNP="sigma"/>
+    <changeVar inName="mResonance" outName="mHcomb" outVal="125.09"/>
+    <changeVar inName="Yield_Signal_ggH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_VBF_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_VH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_ttH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_bbH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_tHjb_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="Yield_Signal_tWH_SM_VHdilep" outName="yieldSignal" systNP="yield"/>
+    <changeVar inName="lumi_2015" scale="0.753195809821"/>
+    <changeVar inName="lumi_2016" scale="0.753195809821"/>
+    <data>
+      <dataFile datasetName="absdata_data_VHdilep" inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/PseudoData/ws_challenge_pseudo_data_VHdilep.root" varName="m_yy_VHdilep" weightName="weight"/>
     </data>
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
