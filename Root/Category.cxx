@@ -93,7 +93,7 @@ Category::~Category() {
 
 //=========================================
 void Category::LoadParameters( string configFileName ) {
-  cout << "LoadParameters" << endl;
+  //  cout << "LoadParameters" << endl;
   //Read xml configuration file
   Arbre wsProperties = Arbre::ParseXML( configFileName );
 
@@ -125,16 +125,11 @@ void Category::ReadNuisanceParameters() {
     m_mapVar[name] = new RooRealVar(name.c_str(),name.c_str(),0); // initialize to 0                  
     m_mapSet["systematicValues"]->add(*m_mapVar[name]);
   }
-  m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,"Common_2015");
-  m_mapSet["systematicValues"]->readFromFile(m_systFileName.c_str(),0,m_name.c_str()); // read values corresponding to channelname section only.                     
 
-  vector<string> processes( *m_processes );
-  processes.push_back( "common" );
-  for ( auto vProc = processes.begin(); vProc != processes.end(); vProc++ ) {
-    m_mapSet["systematic_yield_"+*vProc] = new RooArgSet();
-    m_mapSet["systematic_mass_"+*vProc] = new RooArgSet();
-    m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
-  }
+  string systFileName = m_catProperties.GetAttribute( "systFileName" );;
+  m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,"Common_2015");
+  m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,m_name.c_str()); // read values corresponding to channelname section only.                     
+
   
   for( auto iter : m_sDef ) {
 
@@ -429,6 +424,13 @@ void Category::CreateWS() {
   m_mapSet["globalObservables"] = new RooArgSet();
   m_mapSet["constraintPdf"] = new RooArgSet();
   m_mapSet["allConstraint"] = new RooArgSet();
+  vector<string> processes( *m_processes );
+  processes.push_back( "common" );
+  for ( auto vProc = processes.begin(); vProc != processes.end(); vProc++ ) {
+    m_mapSet["systematic_yield_"+*vProc] = new RooArgSet();
+    m_mapSet["systematic_mass_"+*vProc] = new RooArgSet();
+    m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
+  }
 
   string systFileName = m_catProperties.GetAttribute( "systFileName" );
   if ( systFileName.find( ".xml" ) != string::npos ) ReadNuisanceParametersXML();
@@ -446,7 +448,7 @@ void Category::CreateWS() {
        ) { cout << "ToAdd's sizes do not match" << endl; exit(0); }
   if ( m_mapSet["pdfToAdd"]->getSize()==1 && m_mapSet["yieldsToAdd"]->getSize()>1 ) {
     RooAddition *sumYieldCateg = new RooAddition( "sumYieldCateg", "sumYieldCateg",  *m_mapSet["yieldsToAdd"] );
-      m_mapSet["yieldsToAdd"] = new RooArgSet( "yieldsToAdd" );
+    m_mapSet["yieldsToAdd"] = new RooArgSet( "yieldsToAdd" );
     m_mapSet["yieldsToAdd"]->add( *sumYieldCateg );
     m_mapSet["yieldsSpurious"] = new RooArgSet( "yieldsSpurious" );
     m_mapSet["yieldsSpurious"]->add( *sumYieldCateg );
@@ -514,7 +516,6 @@ void Category::GetData() {
   vector<string> vectNodeNames;
   vector<Arbre> vectNodes;
   Arbre::GetArbresPath( m_catProperties, vectNodes, { "dataFile", "data", "category" } );
-  cout << "nNodes : " << vectNodes.size() << endl;
   vectNodes.front().Dump();
 
   for ( auto vDataArbre : vectNodes ) {
@@ -725,13 +726,13 @@ void Category::SignalFromPdf() {
       if ( mass ) mass->SetName( m_mapVar["invMass"]->GetName() );
       RooAbsPdf *pdf = (RooAbsPdf*) m_readInputWorkspace->pdf( vArbre.GetAttribute( "inVarName" ).c_str() );
       if ( pdf ) {
-	m_workspace->import( *pdf, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ) );
+	m_workspace->import( *pdf, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
 	editStr[proc] << "EDIT::" << editedPdfName + "_" + proc << "(" << pdf->GetName() << "_" << proc;
       }
     }
     else {
       RooAbsReal *absReal = (RooAbsReal*) m_readInputWorkspace->obj( vArbre.GetAttribute( "inVarName" ).c_str() );
-      if ( absReal ) m_workspace->import( *absReal, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ) );
+      if ( absReal ) m_workspace->import( *absReal, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
     }
 
   }
@@ -760,24 +761,26 @@ void Category::SignalFromPdf() {
   }
 
   //SEcond loop to change name and parametrization of functions
-    map<string,RooArgSet> mapSet;
-    mapSet["mean"].add( *m_mapSet["systematic_mass_common"] );
-    mapSet["sigma"].add( *m_mapSet["systematic_sigma_common"] );
-    for ( auto vProc  : processes ) {
-      if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
-	mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
-	mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
-	mapSet["yield"].add( *m_mapSet["systematic_yield_common"] );
-      }
-      if ( vProc != "all"  ) {
-	mapSet["mean_"+vProc].add(*m_mapSet["systematic_mass_" + vProc] );
-	mapSet["sigma_"+vProc].add( *m_mapSet["systematic_sigma_" + vProc] );
-	mapSet["yield_"+vProc].add( *m_mapSet["systematic_yield_" + vProc] );
-	mapSet["yield_"+vProc].add( *m_mapVar["mu_XS_" + vProc ] );//muXS
-      }
+  cout << "mapSet" << endl;
+  map<string,RooArgSet> mapSet;
+  if ( m_mapSet["systematic_mean_all"] ) mapSet["mean"].add( *m_mapSet["systematic_mean_all"] );
+  if ( m_mapSet["systematic_sigma_all"] ) mapSet["sigma"].add( *m_mapSet["systematic_sigma_all"] );
+  
+  for ( auto vProc  : processes ) {
+    cout << vProc << endl;
+    if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
+      mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
+      mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
+      if ( m_mapSet["systematic_yield_all"] ) mapSet["yield"].add( *m_mapSet["systematic_yield_all"] );
     }
-
-
+    if ( vProc != "all"  ) {
+      if ( m_mapSet["systematic_mean_" + vProc] ) mapSet["mean_"+vProc].add(*m_mapSet["systematic_mean_" + vProc] );
+      if ( m_mapSet["systematic_sigma_" + vProc] ) mapSet["sigma_"+vProc].add( *m_mapSet["systematic_sigma_" + vProc] );
+      if ( m_mapSet["systematic_yield_" + vProc] ) mapSet["yield_"+vProc].add( *m_mapSet["systematic_yield_" + vProc] );
+      mapSet["yield_"+vProc].add( *m_mapVar["mu_XS_" + vProc ] );//muXS
+    }
+  }
+  
   for ( auto vArbre : vectNodes ) {
     string varName = vArbre.GetAttribute( "inName" );
     RooAbsReal *funct = m_workspace->function( varName.c_str() );
@@ -820,7 +823,6 @@ void Category::SignalFromPdf() {
   //Close the editStr 
   for ( map<string,stringstream>::iterator it = editStr.begin(); it != editStr.end(); ++it ) {
     it->second << ")";
-    cout << it->second.str() << endl;
     m_workspace->factory(it->second.str().c_str());      
   }
 
@@ -849,7 +851,7 @@ void Category::ReadNuisanceParametersXML() {
 
   TDOMParser xmlparser;
   //Check if the xml file is ok                                                                                                                                                                      
-  xmlparser.ParseFile( m_systFileName.c_str() );
+  xmlparser.ParseFile( m_catProperties.GetAttribute( "systFileName" ).c_str() );
   TXMLDocument* xmldoc = xmlparser.GetXMLDocument();
   TXMLNode *rootNode  = xmldoc->GetRootNode();
   TXMLNode *systNode = rootNode->GetChildren();
@@ -865,6 +867,7 @@ void Category::ReadNuisanceParametersXML() {
     	mapAttr[attr->GetName()] = attr->GetValue();
       }
     }
+
     TXMLNode *systEffectNode = systNode->GetChildren();
     systNode = systNode->GetNextNode();
 
@@ -873,20 +876,16 @@ void Category::ReadNuisanceParametersXML() {
     if ( m_debug ) cout << "systName : " << mapAttr["Name"] << endl;
     //Deal with empty attributes
     if ( mapAttr["correlation"]=="" ) mapAttr["correlation"] = "All";
-
-    int constraint = GAUSS_CONSTRAINT;
-    if (  mapAttr["constraint"]=="LogNorm" ) constraint = LOGNORM_CONSTRAINT;
-    else if ( mapAttr["constraint"]=="Asym" ) constraint = ASYM_CONSTRAINT;
+    if ( mapAttr["varName"]=="" ) mapAttr["varName"] = "yield";
 
     //Loop over all effect in all categories and processes of the current systematic
-
     while ( systEffectNode != 0 ) {
       map<string,string> mapSystEffect;
       TList *systEffectAttr = systEffectNode->GetAttributes();
       if(systEffectAttr!=0) {
 	TIterator *it = systEffectAttr->MakeIterator();
 	for ( auto attr = (TXMLAttr*) it->Next(); attr!=0; attr=(TXMLAttr*)it->Next() ) {
-	  cout << attr->GetName() << " " << attr->GetValue() << endl;
+	  //	  cout << attr->GetName() << " " << attr->GetValue() << endl;
 	  mapSystEffect[attr->GetName()] = attr->GetValue();
 	}
       }
@@ -899,20 +898,24 @@ void Category::ReadNuisanceParametersXML() {
 
 	  
       //Dealing with empty parameters
-      if ( mapAttr["process"]=="" ) mapAttr["process"] = "All";
-      if ( mapAttr["varName"]=="" ) mapAttr["varName"] = "yield";
+      if ( mapSystEffect["process"]=="" ) mapSystEffect["process"] = "all";
+
+
+      int constraint = GAUSS_CONSTRAINT;
+      cout << "mapConstraint : " << mapSystEffect["constraint"] << endl;
+      if (  mapSystEffect["constraint"]=="LogNorm" ) constraint = LOGNORM_CONSTRAINT;
+      else if ( mapSystEffect["constraint"]=="Asym" ) constraint = ASYM_CONSTRAINT;
       
       //Create the name of the nuisance parameter
       string NPName = mapAttr["Name"];
       if ( (mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Category") && mapSystEffect["process"]!="All" ) NPName += "_" + mapSystEffect["process"];
       if ( mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Process" )  NPName += "_" + m_name;
-      cout << NPName << endl;
-	  
-      RooRealVar *currentSyst = GetCurrentSyst( constraint, NPName, std::stod( mapSystEffect["upVal"] ) , std::stod( mapSystEffect["downVal"] ) );
+
+      RooRealVar *currentSyst = GetCurrentSyst( constraint, NPName, std::stod( mapSystEffect["upVal"] ) , mapSystEffect["downVal"]=="" ? 0 : std::stod( mapSystEffect["downVal"] ) );
       
       if (mapAttr["Name"].find("spurious") != string::npos || mapAttr["Name"].find("BIAS") != string::npos ) m_mapVar["spurious"]  = currentSyst; // the systematics value is the spurious signal
       else {
-	string setName = "systematic_" + mapSystEffect["varName"] + "_" + mapSystEffect["process"];
+	string setName = "systematic_" + mapAttr["varName"] + "_" + mapSystEffect["process"];
 	cout << "setName : " << setName << endl;
 	if ( !m_mapSet[setName] )  m_mapSet[setName] = new RooArgSet();
 	m_mapSet[setName]->add( *currentSyst );
@@ -927,7 +930,6 @@ void Category::ReadNuisanceParametersXML() {
 
 //===========================================================
 RooRealVar *Category::GetCurrentSyst( int constraint, string NPName, double upVal, double downVal ) {
-
   string processForName = "common";
 
   RooRealVar *currentSyst = 0;

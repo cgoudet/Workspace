@@ -22,7 +22,8 @@ inputsFile='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/
 #====================================
 def CategoryNode( catName, mode = 0 ) : 
     catIndex = categoriesNames.index( catName ) 
-    xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':inputsFile+'datacard_ICHEP.txt' } )
+#    xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':inputsFile+'datacard_ICHEP.txt' } )
+    xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':'/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml' } )
 
     for vProc in processes+subProcesses : xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':inputsFile+'workspace_signal_yields_categories.root', 'inVarName':'Yield_Signal_'+vProc+'_SM_'+catName } ) )
     xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':inputsFile+'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
@@ -204,7 +205,8 @@ def ParseLine( line, mapSyst, currentCat ) :
         if systValue[0]=='-' : dictOptionsSystEffect['downVal'] = '-'+minusSplitted[1]
         else : dictOptionsSystEffect['downVal'] = systValue.minusSplitted[0]
 
-        dictOptionsSystEffect['upVal'] = systValue.replace( dictOptionsSystEffect['downVal'], '' )[1:]
+        dictOptionsSystEffect['upVal'] = systValue[len(dictOptionsSystEffect['downVal'])+1:]
+
 
     systEffectNode = CreateNode( 'systEffect', dictOptionsSystEffect )
 
@@ -240,7 +242,7 @@ def CreateXMLSystFromDataCard( inFileName, outFileName ) :
     for syst in dictSystNodes : xmlObj.append( dictSystNodes[syst] )
 
     outFile=open( outFileName, 'w' )
-    outFile.write( '<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/python/xmlCard.dtd">\n' )
+    outFile.write( '<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/xmlCard.dtd">\n' )
     outFile.write( prettify( xmlObj ) )
     outFile.close()
 
@@ -269,8 +271,8 @@ def main():
     print( args.outFileName )
     args.outFileName = StripString( args.outFileName, 0, 1 )
     print( 'stripped' )
-#    CreateXMLSystFromDataCard( '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt', args.outFileName + '.xml' )    
-    print( ConfigFile( args.outFileName + '.boost' ) )
+    CreateXMLSystFromDataCard( '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt', args.outFileName + '.xml' )    
+    #print( ConfigFile( args.outFileName + '.boost' ) )
 
 
 # The program entrance

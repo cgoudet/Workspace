@@ -147,6 +147,7 @@ void Workspace::CreateWS() {
   m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
+  m_workspace->Print();
   //  mconfig->GetPdf()->fitTo( *m_workspace->data( obsData->GetName() ), SumW2Error(kFALSE) );
   // RooArgSet dumSet;
   // dumSet.add( *mconfig->GetNuisanceParameters() );
@@ -486,10 +487,10 @@ RooDataSet* Workspace::MakeAsimovData() {
     cout << "nBins : " << thisObs->numBins() << endl;
     for(int jj=0; jj<thisObs->numBins(); ++jj) {
       thisObs->setBin(jj);
-      thisObs->Print();
+      //      thisObs->Print();
       //	cout << "pdf = "<<pdftmp->getVal(obstmp) <<endl;
       thisNorm = pdftmp->getVal(obstmp)*thisObs->getBinWidth(jj);
-      cout << "thisNorm : " << thisNorm*expectedEvents << endl;
+      //      cout << "thisNorm : " << thisNorm*expectedEvents << endl;
       //      if (thisNorm*expectedEvents > pow(10., -2) && thisNorm*expectedEvents < pow(10., 9)) 
       obsDataUnbinned->add(*mc->GetObservables(), thisNorm*expectedEvents);
     }

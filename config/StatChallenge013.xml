@@ -2,7 +2,7 @@
 <!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/CreateWorkspace.dtd">
 <CreateWorkspace Name="/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/StatChallenge013.root">
   <processes>ggH VBF VH ttH bbH tHjb tWH</processes>
-  <category Name="ggH_CenLow" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="ggH_CenLow" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ggH_CenLow" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_ggH_CenLow" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_ggH_CenLow" process="VH"/>
@@ -29,7 +29,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="expPol2"/>
   </category>
-  <category Name="ggH_CenHigh" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="ggH_CenHigh" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ggH_CenHigh" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_ggH_CenHigh" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_ggH_CenHigh" process="VH"/>
@@ -56,7 +56,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="expPol2"/>
   </category>
-  <category Name="ggH_FwdLow" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="ggH_FwdLow" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ggH_FwdLow" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_ggH_FwdLow" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_ggH_FwdLow" process="VH"/>
@@ -83,7 +83,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="expPol2"/>
   </category>
-  <category Name="ggH_FwdHigh" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="ggH_FwdHigh" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ggH_FwdHigh" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_ggH_FwdHigh" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_ggH_FwdHigh" process="VH"/>
@@ -110,7 +110,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="expPol2"/>
   </category>
-  <category Name="VBFloose" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VBFloose" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VBFloose" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VBFloose" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VBFloose" process="VH"/>
@@ -137,7 +137,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VBFtight" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VBFtight" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VBFtight" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VBFtight" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VBFtight" process="VH"/>
@@ -164,7 +164,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VHhad_loose" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VHhad_loose" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHhad_loose" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHhad_loose" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHhad_loose" process="VH"/>
@@ -191,7 +191,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VHhad_tight" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VHhad_tight" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHhad_tight" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHhad_tight" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHhad_tight" process="VH"/>
@@ -218,7 +218,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VHMET" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VHMET" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHMET" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHMET" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHMET" process="VH"/>
@@ -245,7 +245,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VHlep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VHlep" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHlep" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHlep" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHlep" process="VH"/>
@@ -272,7 +272,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="VHdilep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="VHdilep" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_VHdilep" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_VHdilep" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_VHdilep" process="VH"/>
@@ -299,7 +299,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="ttHhad" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="ttHhad" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ttHhad" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_ttHhad" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_ttHhad" process="VH"/>
@@ -326,7 +326,7 @@
     <correlatedVar>mHcomb,lumi_2015,lumi_2016,XS13_ggH_yy,XS13_VBF_yy,XS13_VH_yy,XS13_ttH_yy,XS13_bbH_yy,XS13_tHjb_yy,XS13_tWH_yy</correlatedVar>
     <bkg form="exp"/>
   </category>
-  <category Name="ttHlep" systFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt">
+  <category Name="ttHlep" systFileName="/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml">
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_ggH_SM_ttHlep" process="ggH"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VBF_SM_ttHlep" process="VBF"/>
     <yield inFileName="/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root" inVarName="Yield_Signal_VH_SM_ttHlep" process="VH"/>
