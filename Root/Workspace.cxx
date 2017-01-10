@@ -1,29 +1,35 @@
 #include "Workspace/Workspace.h"
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
+#include "PlotFunctions/SideFunctions.h"
+#include "PlotFunctions/SideFunctionsTpp.h"
+#include "PlotFunctions/DrawPlot.h"
+#include "PlotFunctions/Arbre.h"
+using namespace ChrisLib;
+
 #include "RooSimultaneous.h"
 #include "RooDataSet.h"
-using namespace RooFit;
-#include <iostream>
-using std::cout;
-using std::endl;
 #include <RooStats/ModelConfig.h>
-using namespace RooStats;
-using std::stringstream;
 #include "TCanvas.h"
 #include "RooPlot.h"
 #include "TAxis.h"
 #include "TLatex.h"
-#include "PlotFunctions/SideFunctions.h"
-using std::ifstream;
-#include "PlotFunctions/DrawPlot.h"
 #include "RooFitResult.h"
 #include "TDOMParser.h"
 #include "TXMLDocument.h"
 #include "TXMLNode.h"
 #include "TXMLAttr.h"
 #include "TIterator.h"
-using namespace ChrisLib;
+using namespace RooFit;
+using namespace RooStats;
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+
+#include <iostream>
+using std::cout;
+using std::endl;
+using std::stringstream;
+using std::ifstream;
+using std::list;
 
 Workspace::Workspace() : m_debug(0)
 {
@@ -53,24 +59,14 @@ void Workspace::Configure( string configFileName ) {
   if ( m_debug ) cout << "Workspace::Configure" << endl;
   m_configFileName = configFileName;
 
+  Arbre arbre( Arbre::ParseXML(configFileName) );
+  m_name = arbre.GetNodeName();
 
-  TDOMParser xmlparser;
-  //Check if the xml file is ok                                                                                                                                                                      
-  xmlparser.ParseFile( configFileName.c_str() );
-  TXMLDocument* xmldoc = xmlparser.GetXMLDocument();
-  TXMLNode *rootNode  = xmldoc->GetRootNode();
-  TXMLNode *catNode = rootNode->GetChildren();
-
-
-  m_name = MapAttrNode( rootNode )["Name"];
-
-  while ( catNode!=0 ) {
-    if ( string(catNode->GetNodeName()) == "processes" ) {
-      string dumString = catNode->GetText();
-      ParseVector( dumString, m_processes );
-    }
-    else if ( string(catNode->GetNodeName()) == "category" ) m_categoriesNames.push_back( MapAttrNode( catNode )["Name"] );
-    catNode = catNode->GetNextNode();
+  list<Arbre> children = arbre.GetChildren();
+  for ( list<Arbre>::const_iterator it=children.begin(); it!=children.end(); ++it ) {
+    string nodeName = it->GetNodeName();
+    if ( nodeName == "processes" ) ParseVector( it->GetAttribute( "text" ), m_processes );
+    else if ( nodeName == "category" ) m_categoriesNames.push_back( it->GetAttribute("Name") );
   }
   if ( m_debug ) cout << "Workspace::Configure Done" << endl;
 }

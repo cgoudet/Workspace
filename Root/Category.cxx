@@ -528,19 +528,25 @@ void Category::GetData() {
 
   for ( auto vDataArbre : vectNodes ) {
 
-    if ( vDataArbre.GetAttribute( "varName" ) == "" ) throw runtime_error( "Category::GetData : Variable of interest (data.dataFile.varName) not specified" );
-    string varName = vDataArbre.GetAttribute( "varName" );
+    string varName, inFileName, weightName;
+    try { 
+      varName = vDataArbre.GetAttribute( "varName" );
+      inFileName = vDataArbre.GetAttribute( "inFileName" );
+      weightName = vDataArbre.GetAttribute( "weightName" );
+    }
+    catch ( ... ) {
+      if ( varName=="" ) throw runtime_error( "Category::GetData : Unknown varName." );
+      else if ( inFileName =="" ) throw runtime_error( "Category::GetData : Unknown inFileName." );
+    }
+
+
     m_mapVar["invMass"]->SetName( varName.c_str() );
     m_mapVar["invMass"]->setRange( 105, 160);
 
     if ( m_correlatedVar.find( varName ) == string::npos ) m_correlatedVar += "," + string( m_mapVar["invMass"]->GetName() );
 
-    if ( vDataArbre.GetAttribute( "inFileName" ) == "" ) throw runtime_error( "Category::GetData : Variable of interest (data.dataFile.inFileName) not specified" );
-    string inFileName = vDataArbre.GetAttribute( "inFileName" );
-    string weightName = vDataArbre.GetAttribute( "weightName" );
-
     RooDataSet *dumDataset = 0;
-    if ( TString(inFileName).Contains( ".txt" ) ) {
+    if ( inFileName.find(".txt")!=string::npos ) {
       RooDataSet *newData = RooDataSet::read(inFileName.c_str(), *m_mapSet["observables"]);
       dumDataset = newData;
       continue;
@@ -569,9 +575,11 @@ void Category::GetData() {
       ParseVector( vDataArbre.GetAttribute( "selectionVars" ), selectionVars, ',');
       for ( auto vVar : selectionVars ) {
 	RooRealVar *selectionVar = new RooRealVar( vVar.c_str(), vVar.c_str(), 0 );
-	m_mapSet["observables"]->add( *selectionVar );
+	if ( !m_mapSet["observables"]->find( selectionVar->GetName() ) ) m_mapSet["observables"]->add( *selectionVar );
       }
-      dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *m_mapSet["observables"], selectionCut.c_str(), weightName.c_str() );
+      
+      if ( weightName != "" ) dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *m_mapSet["observables"], selectionCut.c_str(), weightName.c_str() );
+      else dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *m_mapSet["observables"], selectionCut.c_str() );
 
       delete inTree; inTree=0;
     }

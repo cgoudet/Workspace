@@ -2,8 +2,6 @@ import argparse
 import subprocess as sub
 import os
 import sys
-from xml.dom import minidom
-import xml.etree.cElementTree as ET
 sys.path.append(os.path.abspath("/afs/in2p3.fr/home/c/cgoudet/private/Couplings/PlotFunctions/python"))
 from SideFunction import *
 
