@@ -14,7 +14,7 @@ class Workspace {
 
   void Configure( string configFileName );
   void CreateWS();
-
+  void SetDebug( int debug ) { m_debug=debug; }
  private :
 
   RooWorkspace *m_workspace;
@@ -28,7 +28,7 @@ class Workspace {
   RooDataSet* addGhosts(RooDataSet* orig, const RooArgSet *observables );
   map<string, RooArgSet*> m_mapSet;
   string m_name;
-  bool m_debug;
+  int m_debug;
 
   RooDataSet* MakeAsimovData();
 

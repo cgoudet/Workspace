@@ -23,6 +23,7 @@ using std::ifstream;
 #include "TXMLNode.h"
 #include "TXMLAttr.h"
 #include "TIterator.h"
+using namespace ChrisLib;
 
 Workspace::Workspace() : m_debug(0)
 {
@@ -60,18 +61,17 @@ void Workspace::Configure( string configFileName ) {
   TXMLNode *rootNode  = xmldoc->GetRootNode();
   TXMLNode *catNode = rootNode->GetChildren();
 
+
   m_name = MapAttrNode( rootNode )["Name"];
 
   while ( catNode!=0 ) {
     if ( string(catNode->GetNodeName()) == "processes" ) {
       string dumString = catNode->GetText();
       ParseVector( dumString, m_processes );
-      PrintVector( m_processes );
     }
     else if ( string(catNode->GetNodeName()) == "category" ) m_categoriesNames.push_back( MapAttrNode( catNode )["Name"] );
     catNode = catNode->GetNextNode();
   }
-  PrintVector( m_categoriesNames );
   if ( m_debug ) cout << "Workspace::Configure Done" << endl;
 }
 
@@ -87,6 +87,7 @@ void Workspace::CreateWS() {
     m_category->setLabel( vName.c_str() );
     m_categories.push_back( 0);
     m_categories.back() = new Category( vName );
+    if ( m_debug ) m_categories.back()->SetDebug( m_debug );
     m_categories.back()->SetProcesses( &m_processes );
     m_categories.back()->SetCategoriesNames( &m_categoriesNames );
     m_categories.back()->LoadParameters( m_configFileName );
@@ -98,11 +99,8 @@ void Workspace::CreateWS() {
     pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
-    for ( auto vSet : sets )  {
-      m_mapSet[vSet]->add( *workspace->set(vSet.c_str()) );
-    }
+    for ( auto vSet : sets ) m_mapSet[vSet]->add( *workspace->set(vSet.c_str()) );
     string dataName = "obsData_" + vName;
-    workspace->Print();
     datasetMap[vName] = (RooDataSet*) workspace->data( dataName.c_str() );
     if ( !datasetMap[vName] ) { cout << "Null dataset : " << vName << endl; exit(0);}
   }

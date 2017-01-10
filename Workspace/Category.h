@@ -34,6 +34,7 @@ class Category {
 
   void LoadParameters( string configFileName );
   void CreateWS();
+  void SetDebug( int debug ) { m_debug=debug; }
 
  private : 
   /**
@@ -79,7 +80,7 @@ class Category {
   RooCategory* m_category;
   RooRealVar *GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss );
   RooWorkspace *m_workspace;
-  bool m_debug;
+  int m_debug;
 
   void SelectInputWorkspace( string fileName );
 
@@ -91,6 +92,6 @@ class Category {
   vector<string> *m_categoriesNames;
   void ReadConstraintFile();
 
-  Arbre m_catProperties;
+  ChrisLib::Arbre m_catProperties;
 };
 #endif

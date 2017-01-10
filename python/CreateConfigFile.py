@@ -20,10 +20,13 @@ inputsFile='/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/
 #inputsFile='/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/'
 
 #====================================
-def CategoryNode( catName, mode = 0 ) : 
+def CategoryNode( catName, systFileName, mode = 0 ) : 
+    """
+    Create the content of a category. Release is hardcoded
+    """
     catIndex = categoriesNames.index( catName ) 
 #    xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':inputsFile+'datacard_ICHEP.txt' } )
-    xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':'/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/DataICHEP2016_syst.xml' } )
+    xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName':systFileName } )
 
     for vProc in processes+subProcesses : xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':inputsFile+'workspace_signal_yields_categories.root', 'inVarName':'Yield_Signal_'+vProc+'_SM_'+catName } ) )
     xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':inputsFile+'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
@@ -42,18 +45,18 @@ def CategoryNode( catName, mode = 0 ) :
         for vVarName in varChanges :  xmlObj.append( CreateNode( 'changeVar', vVarName ) )
 
 #Marc's asimove have been generated simulating 10fb of data but with luminosity of 13fb. Need to rescale luminosity to 10
-        for year in [ '2015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )
+#        for year in [ '2015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )
 
         dataNode = CreateNode( 'data' )
 
-        # for year in ['15','16'] : dataNode.append( CreateNode('dataFile', 
-        #                               { 'inFileName':'/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data'+year+'/hist-data.root', 
-        #                                 'varName':'m_yy', 
-        #                                 'treeName':'tree_selected',
-        #                                 'selectionCut':'catCoup_dev=='+str(catIndex+1),
-        #                                 'selectionVars':'catCoup_dev'
-        #                                 } ) )
-        dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
+        for year in ['15','16'] : dataNode.append( CreateNode('dataFile', 
+                                      { 'inFileName':'/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/ICHEP_backup/data'+year+'/hist-data.root', 
+                                        'varName':'m_yy', 
+                                        'treeName':'tree_selected',
+                                        'selectionCut':'catCoup_dev=='+str(catIndex+1),
+                                        'selectionVars':'catCoup_dev'
+                                        } ) )
+#        dataNode.append( CreateNode('dataFile', { 'inFileName':inputsFile+'PseudoData/ws_challenge_pseudo_data_'+catName+'.root', 'varName':'m_yy_'+catName, 'weightName':'weight', 'datasetName':'absdata_data_'+catName} ) )
         xmlObj.append( dataNode )
 
         correlatedVarNode = CreateNode( 'correlatedVar' )
@@ -69,7 +72,15 @@ def CategoryNode( catName, mode = 0 ) :
     return xmlObj
 #================================================================
 def ConfigFile( inFileName ) :
+    """
+    Create a xml workspace config file for the current release.
+    Calls CategoryNode for category description
+    Defines the systFileName as the systematic file in the ouput directory.
+    """
     if  inFileName == '' : print( 'No input name for config file.' ); exit(1);
+
+    systFileName = inFileName.replace( StripString( inFileName,1,0 ), '' )
+    systFileName += 'SystVariation_datacard.xml'
 
     coreName = StripString(inFileName)
     xmlObj = CreateNode( 'CreateWorkspace', { 'Name':'/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + coreName + '.root' } )    
@@ -78,9 +89,8 @@ def ConfigFile( inFileName ) :
     processNode.text = ' '.join( processes+subProcesses )
     xmlObj.append( processNode )
 
-    for vCatName in categoriesNames : xmlObj.append( CategoryNode(vCatName ) )
+    [ xmlObj.append( CategoryNode(vCatName, systFileName ) ) for vCatName in categoriesNames ]
         
-
     configFile = open( StripString(inFileName, 0, 1 ) + '.xml', 'w+' )
     docTypeLine =  '<!DOCTYPE CreateWorkspace  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/CreateWorkspace.dtd">'
     stringToWrite = prettify( xmlObj ).split('\n')
@@ -88,60 +98,6 @@ def ConfigFile( inFileName ) :
     configFile.write( '\n'.join( stringToWrite ) )
 
     return inFileName
-
-#================================================================
-def ConfigFileBoost( inFileName ) :
-    if inFileName == '' : 
-        print( 'ConfigFile is missing name' )
-        exit(0)
-
-    with open( inFileName, 'w+' ) as configFile :
-        configFile.write( "[General]\n" )
-        configFile.write( 'catNames=' + ' '.join( categoriesNames ) + '\n' )
-        configFile.write( 'process=' + ' '.join( processes + subProcesses) + '\n' )
-
- #
-#        configFile.write( 'systFileName=' + inFileName.replace('.boost', '.xml' ) + '\n' )
-        configFile.write( 'outName=/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + inFileName.replace('.boost', '.root' )+'\n' )    
-#        configFile.write( 'yieldScale=' + str( 10/13.27676 ) )
-        
-        for iCat in range( 0, len( categoriesNames ) ) : 
-            configFile.write( '\n' )
-            configFile.write( '[' + categoriesNames[iCat] + ']\n' )
-            configFile.write( 'systFileName=/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/ICHEP_2016/config/category_run2_'+ categoriesNames[iCat] + '.xml\n' )            
-#           configFile.write( 'systFileName=' + inputsFile + 'datacard_ICHEP.txt\n' )
-            #            configFile.write( 'signalModel=0\n' )
-            
-            configFile.write( '\n'.join( [ "signal_" + proc 
-                                           +'=' + inputsFile + 'ModelSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM/res_SM_DoubleCB_workspace.root sigPdf_SM_m125000_c' + str( iCat)
-                                           for proc in ['all']  ] ) )
-            configFile.write( '\n' )
-            configFile.write( '\n'.join( [ "yield_" + proc 
-                                           +'=' + inputsFile + 'workspace_signal_yields_categories.root Yield_Signal_'+proc+'_SM_'+categoriesNames[iCat]
-                                           for proc in processes+subProcesses  ] ) )
-        
-            configFile.write( '\n' )
-            configFile.write( '\n'.join( [ param + form + '_' + proc 
-                                           +'=' + (param if param != "mean" else 'mu')  + form + '_SM_m125000_c' + str( iCat )
-                                           for param in paramNames for form in formNames for proc in ['all' ] ] ) )
-            
-            configFile.write( '\n' )
-            configFile.write( 'invMass=m_yy_m125000_c' + str(iCat) )
-            configFile.write( '\n' )
-            configFile.write( 'mHcomb=mResonance' )
-            configFile.write( '\n' )
-        
-            configFile.write( '\n' )
- #           configFile.write( 'dataFileName ='+ inputsFile + 'PseudoData/ws_challenge_pseudo_data_' + categoriesNames[iCat] + '.root ws_challenge_pseudo_data_' + categoriesNames[iCat] + ' absdata_data_' + categoriesNames[iCat] + ' m_yy_' + categoriesNames[iCat] +'\n' )
-            configFile.write( 'dataFileName =/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data15/data15/hist-data.root tree_selected m_yy\n' )
-            configFile.write( 'dataFileName =/sps/atlas/e/escalier/HGamma/ProductionModes/FromMxAOD/h013/data15/data16/hist-data.root tree_selected m_yy\n' )
-            configFile.write( 'dataWeight=weight\n' )
-
-            configFile.write( 'changeVarName=' + ' '.join( ['lumi_2015', 'lumi_2016' ] ) +'\n')
-            configFile.write( 'changeVarVal=' + ' '.join( ['2.42', '7.58'] ) +'\n')
-
-    return inFileName
-
 
 #=================================================
 def SystEffectNode( varName='yield', upVal=0, downVal=0, constraint='Gaus') :
@@ -166,15 +122,13 @@ def AppendProc( node ) :
     return node
 #==============================================
 def FindProcInName( name ) : 
-    for vProc in processes+subProcesses : 
+    for vProc in processes+subProcesses+['WH','ZH'] : 
         if vProc in name : return vProc
     return 'all'
 #==============================================
 def ParseLine( line, mapSyst, currentCat ) :
     line = line.replace( ' ', '' ).replace( '\n', '' )
- #   print('line : ' + line)
     name = line.split("=")[0]
- #   print( 'name : ' + name )
 
     systName = name.replace( currentCat, '' )
     if systName not in name : print( 'category name has troubles : ' + name ); return
@@ -193,8 +147,10 @@ def ParseLine( line, mapSyst, currentCat ) :
 
 #Clean the name
     
-#    print( 'systName : ' + systName )    
+    print( 'systName : ' + systName )    
+
     dictOptionsSystEffect = { 'category':currentCat, 'process':process }    
+
     systValue = line.split('=')[1]
     dictOptionsSystEffect['constraint'] = 'Asym' if '-100L' in systValue else 'Gauss'
 
@@ -210,7 +166,14 @@ def ParseLine( line, mapSyst, currentCat ) :
 
     systEffectNode = CreateNode( 'systEffect', dictOptionsSystEffect )
 
-    if systName not in mapSyst : mapSyst[systName] = CreateNode( 'systematic', { 'Name':systName, 'centralValue': '0' if 'BIAS' in systName else '1' } )
+    varName = "yield"
+    if systName in ['ATLAS_MSS_EM_PES', 'ATLAS_lhcMass'] : varName = "mean"
+    elif systName == 'ATLAS_MRES_EM_PER' : varName = "sigma"
+
+    correlation='All'
+    if systName in ['ATLAS_QCDscale'] : correlation = 'Process'
+
+    if systName not in mapSyst : mapSyst[systName] = CreateNode( 'systematic', { 'Name':systName, 'centralValue': '0' if 'BIAS' in systName else '1', 'varName':varName, 'correlation':correlation } )
     mapSyst[systName].append( systEffectNode )
 
     return 
@@ -221,10 +184,10 @@ def CreateXMLSystFromDataCard( inFileName, outFileName ) :
 
     xmlObj = ET.Element("NPCorrelation")
 
-    lumi = CreateNode( 'systematic', { 'correlation':'All', 'centralValue':'1', 'constraint':'Gaus', 'Name':'ATLAS_LUMI' } )
-    lumi.append( CreateNode( 'systEffect', {'varName':'yield', 'upVal':'0.05', 'category':'Common', 'process':'all', 'constraint':'Gaus'} ) )
-    ET.dump( lumi )
-    xmlObj.append( lumi )
+    # lumi = CreateNode( 'systematic', { 'correlation':'All', 'centralValue':'1', 'constraint':'Gaus', 'Name':'ATLAS_LUMI' } )
+    # lumi.append( CreateNode( 'systEffect', {'varName':'yield', 'upVal':'0.05', 'category':'Common', 'process':'all', 'constraint':'Gaus'} ) )
+    # ET.dump( lumi )
+    # xmlObj.append( lumi )
 
     dictSystNodes = {}
 
@@ -234,16 +197,19 @@ def CreateXMLSystFromDataCard( inFileName, outFileName ) :
         if line[0]=='#' : continue 
         if '[' in line :
             currentCat = line[1:line.rfind(']')]
+            currentCat = currentCat.replace( "Common_2015", "common" )
             continue
         if '=' not in line or 'bkg_model' in line : continue
         ParseLine( line, dictSystNodes, currentCat )
         
-
-    for syst in dictSystNodes : xmlObj.append( dictSystNodes[syst] )
+    [ xmlObj.append( dictSystNodes[syst] ) for syst in dictSystNodes ]
 
     outFile=open( outFileName, 'w' )
-    outFile.write( '<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/xmlCard.dtd">\n' )
-    outFile.write( prettify( xmlObj ) )
+    print( 'outFileName : ' + outFileName )
+    docTypeLine =  '<!DOCTYPE NPCorrelation  SYSTEM "/afs/in2p3.fr/home/c/cgoudet/private/Couplings/Workspace/config/xmlCard.dtd">'
+    stringToWrite = prettify( xmlObj ).split('\n')
+    stringToWrite.insert( 1, docTypeLine )
+    outFile.write( '\n'.join( stringToWrite ) )
     outFile.close()
 
 
@@ -268,12 +234,8 @@ def parseArgs():
 def main():
     # Parsing the command line arguments
     args = parseArgs()
-    print( args.outFileName )
-    args.outFileName = StripString( args.outFileName, 0, 1 )
-    print( 'stripped' )
-    CreateXMLSystFromDataCard( '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/datacard_ICHEP.txt', args.outFileName + '.xml' )    
-    #print( ConfigFile( args.outFileName + '.boost' ) )
-
+#    CreateXMLSystFromDataCard( args.outFileName, StripString(args.outFileName, 0, 1) + '.xml' )    
+    print( ConfigFile(args.outFileName) )
 
 # The program entrance
 if __name__ == '__main__':

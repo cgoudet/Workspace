@@ -1,13 +1,11 @@
 #include "Workspace/Category.h"
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/ini_parser.hpp>
+#include "PlotFunctions/SideFunctions.h"
+#include "PlotFunctions/SideFunctionsTpp.h"
+#include "PlotFunctions/DrawPlot.h"
+using namespace ChrisLib;
+
 #include "RooExponential.h"
 #include "RooGaussian.h"
-#include <iostream>
-using std::cout;
-using std::endl;
-#include "PlotFunctions/SideFunctions.h"
-#include "PlotFunctions/DrawPlot.h"
 #include "RooProduct.h"
 #include "RooBernstein.h"
 #include "RooAddition.h"
@@ -33,11 +31,19 @@ using std::endl;
 #include "TXMLNode.h"
 #include "TXMLAttr.h"
 #include "TIterator.h"
-using std::ifstream;
-using std::stringstream;
 using namespace RooStats;
 using namespace RooFit;
-#include <boost/algorithm/string.hpp>
+
+//#include <boost/algorithm/string.hpp>
+
+#include <iostream>
+using std::cout;
+using std::endl;
+#include <exception>
+using std::runtime_error;
+using std::ifstream;
+using std::stringstream;
+
 
 Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
 {
@@ -93,7 +99,7 @@ Category::~Category() {
 
 //=========================================
 void Category::LoadParameters( string configFileName ) {
-  //  cout << "LoadParameters" << endl;
+  if ( m_debug )  cout << "Category::LoadParameters" << endl;
   //Read xml configuration file
   Arbre wsProperties = Arbre::ParseXML( configFileName );
 
@@ -110,7 +116,7 @@ void Category::LoadParameters( string configFileName ) {
   vectNodeNames = { "correlatedVar", "category" };
   Arbre::GetArbresPath( m_catProperties, vectNodes, vectNodeNames );
   for ( auto vArbre : vectNodes ) m_correlatedVar += "," + vArbre.GetAttribute( "text" );
-
+  if ( m_debug ) cout << "Category::LoadParameters done\n";
 }
 
 //=========================================
@@ -179,7 +185,7 @@ void Category::ReadNuisanceParameters() {
     fullName.ReplaceAll( "2015", "" );
     fullName.ReplaceAll( "2016", "" );
 
-    CleanName( fullName );
+    //    CleanName( fullName );
     //Do correlation model
     TString NPName = fullName;
     cout << "NPName : " << NPName << endl;
@@ -209,7 +215,7 @@ void Category::ReadNuisanceParameters() {
     else if ( NPName == "DeltaPhi_jj" ) iter.second = LOGNORM_CONSTRAINT;
     else if ( NPName == "EtaStar" ) iter.second = LOGNORM_CONSTRAINT;
 
-    CleanName( NPName );
+    //    CleanName( NPName );
 
     //This int is the functional form of the constraint
     int current_constraint = iter.second;
@@ -330,11 +336,7 @@ void Category::CreateBackgroundModel() {
   int bkg_model = BKG_MODEL_EXPO;
   if ( vectNodes.front().GetAttribute( "form" ) == "expPol2" ) bkg_model = BKG_MODEL_EXPO_POL2;
 
-  // ((RooRealVar*)m_mapSet["systematicValues"]->find("bkg_model"))->getVal();
-  cout << "invMass : " << m_mapVar["invMass"] << endl;
   RooFormulaVar *x = new RooFormulaVar("x","x", "(@0-100.)/100.", *m_mapVar["invMass"]);  
-  x->Print();
-  m_mapVar["invMass"]->Print();
   switch (bkg_model ) {
   case  BKG_MODEL_EXPO : {
     RooRealVar *slope = new RooRealVar("slope", "slope", -2e-2, -1, 0.);
@@ -382,7 +384,7 @@ void Category::CreateBackgroundModel() {
     break;
   }
   }
-
+  cout << "defined function" << endl;
   RooRealVar *nbkg = new RooRealVar( "nbkg", "nbkg", m_dataset ? m_dataset->sumEntries() : 1 , 0, 1e9 );
   nbkg->setConstant(0);
   m_mapPdf["bkg"]->SetNameTitle( "bkg", "bkg" );
@@ -390,12 +392,16 @@ void Category::CreateBackgroundModel() {
   m_mapSet["pdfToAdd"]->add( *m_mapPdf["bkg"] );
   m_mapSet["modelParameters"]->add(*nbkg);
   m_mapSet["nuisanceParameters"]->add(*nbkg);
+  cout << "sumEntries" << endl;
   if ( m_dataset && m_dataset->sumEntries() > 3  ) {
+    m_dataset->Print();
+    m_dataset->get()->Print();
     m_mapPdf["bkg"]->fitTo( *m_dataset, SumW2Error(kFALSE) );
     nbkg->setRange( nbkg->getVal()/2., nbkg->getVal()*2);
   }
-
+  cout << "Drawplot" << endl;
   DrawPlot( m_mapVar["invMass"], {m_dataset, m_mapPdf["bkg"] }, "/sps/atlas/c/cgoudet/Plots/HgamBkg_"+m_name, {"nComparedEvents=55"} );
+  cout << "end drawplot" << endl;
   cout << "DefineBackground done" << endl;
 }
 
@@ -416,6 +422,7 @@ void Category::CreateSpurious() {
 
 //====================================
 void Category::CreateWS() {
+  if ( m_debug ) cout << "Category::CreateWS\n";
 
   GetData();
 
@@ -439,8 +446,8 @@ void Category::CreateWS() {
   SignalFromPdf();
   m_mapSet["pdfToAdd"]->add( *m_mapSet["pdfProc"] );
   
-  m_mapVar["invMass"]->setRange( 105, 160);
-  //  m_mapVar["invMass"]->setRange( 110, 160);
+  //  m_mapVar["invMass"]->setRange( 105, 160);
+  //m_mapVar["invMass"]->setRange( 110, 160);
   
   //If only the pdf all is available (or yield all)
   if ( ( m_mapSet["yieldsToAdd"]->getSize()==1 && m_mapSet["pdfToAdd"]->getSize()!=1  )
@@ -506,32 +513,31 @@ void Category::CreateWS() {
   for ( auto set : sets ) DefineSet( set );
 
   m_workspace->importClassCode();
-  cout << "end CreateWS" << endl;
+  if ( m_debug ) cout << "Category::CreateWS done" << endl;
 
 }
 
 //=========================================
 void Category::GetData() {
+  if ( m_debug ) cout << "Category::GetData\n";
 
   vector<string> vectNodeNames;
   vector<Arbre> vectNodes;
   Arbre::GetArbresPath( m_catProperties, vectNodes, { "dataFile", "data", "category" } );
-  vectNodes.front().Dump();
+  if ( m_debug ) vectNodes.front().Dump();
 
   for ( auto vDataArbre : vectNodes ) {
 
-    if ( vDataArbre.GetAttribute( "varName" ) == "" ) { cout << "Variable of interest (data.dataFile.varName) not specified" << endl; exit(0); }
+    if ( vDataArbre.GetAttribute( "varName" ) == "" ) throw runtime_error( "Category::GetData : Variable of interest (data.dataFile.varName) not specified" );
     string varName = vDataArbre.GetAttribute( "varName" );
     m_mapVar["invMass"]->SetName( varName.c_str() );
-    //    if ( m_correlatedVar.find( varName ) == string::npos && varName.find( m_name ) != string::npos )  
+    m_mapVar["invMass"]->setRange( 105, 160);
+
     if ( m_correlatedVar.find( varName ) == string::npos ) m_correlatedVar += "," + string( m_mapVar["invMass"]->GetName() );
 
-    if ( vDataArbre.GetAttribute( "inFileName" ) == "" ) { cout << "Variable of interest (data.dataFile.inFileName) not specified" << endl; exit(0); }
+    if ( vDataArbre.GetAttribute( "inFileName" ) == "" ) throw runtime_error( "Category::GetData : Variable of interest (data.dataFile.inFileName) not specified" );
     string inFileName = vDataArbre.GetAttribute( "inFileName" );
-    
     string weightName = vDataArbre.GetAttribute( "weightName" );
-
-
 
     RooDataSet *dumDataset = 0;
     if ( TString(inFileName).Contains( ".txt" ) ) {
@@ -542,26 +548,25 @@ void Category::GetData() {
     
     //Get the root file
     TFile *inFile = new TFile( inFileName.c_str() );
-    if ( !inFile ) { cout << inFileName << " does not exist." << endl; exit(0);}
-    
+    if ( !inFile ) throw runtime_error( "Category::GetData : " + inFileName + " does not exist." );
+    if ( m_debug ) cout << "inFileName : " << inFileName << endl;    
     //Get the TTree or the workspace
     if (  vDataArbre.GetAttribute( "treeName" ) != ""  ) {
-      cout << "Reading TTree" << endl;
-      TTree *inTree = (TTree*) inFile->Get( vDataArbre.GetAttribute( "treeName" ).c_str() );
-      if ( !inTree ) { cout << vDataArbre.GetAttribute( "treeName" ) << " not found in " << inFile->GetName() << endl; exit(0); }
+      TTree *inTree = static_cast<TTree*>(inFile->Get( vDataArbre.GetAttribute( "treeName" ).c_str()) );
+      if ( !inTree ) throw runtime_error( "Category::GetData : " + vDataArbre.GetAttribute( "treeName" ) + " not found in " + inFile->GetName() );
 
       RooRealVar m_yy( varName.c_str(), varName.c_str(), 125 );
-      m_mapSet["observables"]->add( m_yy );
+      if ( !m_mapSet["observables"]->find( m_yy.GetName() ) ) m_mapSet["observables"]->add( m_yy );
       RooRealVar weight;
       if ( weightName != "" ) {
 	weight = RooRealVar( weightName.c_str(), weightName.c_str(), 1 );
 	m_mapSet["observables"]->add( weight );
       }
+      if ( m_debug ) cout << "WeightName :  " << weight.GetName() << endl;
+
       string selectionCut = vDataArbre.GetAttribute( "selectionCut" );
-      cout << "selectionCut : " << selectionCut << endl;
-      cout << vDataArbre.GetAttribute( "selectionVars" ) << endl;;
       vector<string> selectionVars;
-      SplitString( vDataArbre.GetAttribute( "selectionVars" ), ',', selectionVars );
+      ParseVector( vDataArbre.GetAttribute( "selectionVars" ), selectionVars, ',');
       for ( auto vVar : selectionVars ) {
 	RooRealVar *selectionVar = new RooRealVar( vVar.c_str(), vVar.c_str(), 0 );
 	m_mapSet["observables"]->add( *selectionVar );
@@ -573,21 +578,12 @@ void Category::GetData() {
     else if ( vDataArbre.GetAttribute( "datasetName" ) != "" ) {
       string datasetName = vDataArbre.GetAttribute( "datasetName" );
       RooWorkspace *inWS = (RooWorkspace*) inFile->Get( FindDefaultTree( inFile, "RooWorkspace" ).c_str() );
-      if ( !inWS ) { cout << "TTree and Workspace failed." << endl; exit(0); }
+      if ( !inWS ) throw runtime_error(  "Category::GetData : TTree and Workspace failed." );
       
-      dumDataset = (RooDataSet*) inWS->data( datasetName.c_str() );
-      if ( !dumDataset ) { cout << "dataset failed." << endl; }
+      dumDataset = static_cast<RooDataSet*>( inWS->data( datasetName.c_str() ));
+      if ( !dumDataset ) throw runtime_error( "Category::GetData : dataset failed.");
       
       m_mapSet["observables"]->add( *m_mapVar["invMass"] );
-      
-      
-      // if ( weightName != "" ) {
-      // 	m_mapVar["dataWeight"] = inWS->var(  weightName.c_str() );
-      // 	m_mapVar["dataWeight"]->SetName( "dataWeight" );
-      // 	m_mapSet["observables"]->add( *m_mapVar["dataWeight"] );
-      // }
-      
-      
 
       string catVarName = vDataArbre.GetAttribute( "catName" );
       string catIndex = vDataArbre.GetAttribute( "catIndex" );
@@ -616,7 +612,7 @@ void Category::GetData() {
   m_dataset->SetName( ("obsData_"+m_name).c_str());
   m_dataset->Print();
 
-  cout << "end GetData" << endl;
+  if ( m_debug ) cout << "Category::GetData done" << endl;
 }
 
 //================
@@ -885,7 +881,6 @@ void Category::ReadNuisanceParametersXML() {
       if(systEffectAttr!=0) {
 	TIterator *it = systEffectAttr->MakeIterator();
 	for ( auto attr = (TXMLAttr*) it->Next(); attr!=0; attr=(TXMLAttr*)it->Next() ) {
-	  //	  cout << attr->GetName() << " " << attr->GetValue() << endl;
 	  mapSystEffect[attr->GetName()] = attr->GetValue();
 	}
       }
@@ -902,21 +897,19 @@ void Category::ReadNuisanceParametersXML() {
 
 
       int constraint = GAUSS_CONSTRAINT;
-      cout << "mapConstraint : " << mapSystEffect["constraint"] << endl;
       if (  mapSystEffect["constraint"]=="LogNorm" ) constraint = LOGNORM_CONSTRAINT;
       else if ( mapSystEffect["constraint"]=="Asym" ) constraint = ASYM_CONSTRAINT;
       
       //Create the name of the nuisance parameter
       string NPName = mapAttr["Name"];
-      if ( (mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Category") && mapSystEffect["process"]!="All" ) NPName += "_" + mapSystEffect["process"];
-      if ( mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Process" )  NPName += "_" + m_name;
+      if ( (mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Process") && mapSystEffect["process"]!="All" ) NPName += "_" + mapSystEffect["process"];
+      if ( mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Category" )  NPName += "_" + m_name;
 
       RooRealVar *currentSyst = GetCurrentSyst( constraint, NPName, std::stod( mapSystEffect["upVal"] ) , mapSystEffect["downVal"]=="" ? 0 : std::stod( mapSystEffect["downVal"] ) );
       
       if (mapAttr["Name"].find("spurious") != string::npos || mapAttr["Name"].find("BIAS") != string::npos ) m_mapVar["spurious"]  = currentSyst; // the systematics value is the spurious signal
       else {
 	string setName = "systematic_" + mapAttr["varName"] + "_" + mapSystEffect["process"];
-	cout << "setName : " << setName << endl;
 	if ( !m_mapSet[setName] )  m_mapSet[setName] = new RooArgSet();
 	m_mapSet[setName]->add( *currentSyst );
 	m_mapSet[setName]->Print();
