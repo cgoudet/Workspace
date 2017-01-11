@@ -43,7 +43,7 @@ using std::endl;
 using std::runtime_error;
 using std::ifstream;
 using std::stringstream;
-
+using std::to_string;
 
 Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
 {
@@ -110,7 +110,7 @@ void Category::LoadParameters( string configFileName ) {
   vector<Arbre> vectNodes;
   Arbre::GetArbresPath( wsProperties, vectNodes, vectNodeNames,  vectOptions );
   if ( vectNodes.size() == 1 ) m_catProperties = vectNodes.front();
-  else  { cout << "No or too many nodes for the given category : " << m_name << " " << vectNodes.size() << endl; exit(0); }
+  else throw runtime_error( "Category::LoadParameters : No or too many nodes for the given category : " + m_name + " " + to_string(vectNodes.size()) );
 
   vectNodes.clear();
   vectNodeNames = { "correlatedVar", "category" };
@@ -142,15 +142,15 @@ void Category::ReadNuisanceParameters() {
     TString fullName = iter.first;
     if (fullName == "bkg_model") continue;
 
-    double current_value =  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->getVal();
+    double current_value = static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(fullName))->getVal();
     // do not add systematics at 0 (surcharge the workspace without valid reason)
     if (current_value==0) continue; 
 
-    double current_err_lo =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
-    double current_err_hi =  ((RooRealVar*)m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
+    double current_err_lo =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
+    double current_err_hi =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
 
 
-    if ( fullName == "dumVar" )  ((RooRealVar*)m_mapSet["systematicValues"]->find(fullName))->Print();
+    if ( fullName == "dumVar" ) static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(fullName))->Print();
     cout << "systFullName : " << fullName << " " << current_value << endl;   
 
     //Impose all np to be correlated between categories (same name)    
@@ -242,7 +242,7 @@ void Category::ReadNuisanceParameters() {
 
 RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process, double sigmaRightBifurGauss) //, bool useBifurGauss=false) 
 {
-  
+  cout << "DefineGauss" << endl;
   RooRealVar *nui = GetNuisanceParameter(name, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
   
   TString suffix;
@@ -297,6 +297,7 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
   /***************************************************************************************************/
   RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process, double sigmaRightBifurGauss) //, bool useBifurGauss=false)
   {
+    cout << "DefineAsumetric" << endl;
     TString suffix;
     if (process=="common") 
       suffix = name;
@@ -384,7 +385,6 @@ void Category::CreateBackgroundModel() {
     break;
   }
   }
-  cout << "defined function" << endl;
   RooRealVar *nbkg = new RooRealVar( "nbkg", "nbkg", m_dataset ? m_dataset->sumEntries() : 1 , 0, 1e9 );
   nbkg->setConstant(0);
   m_mapPdf["bkg"]->SetNameTitle( "bkg", "bkg" );
@@ -392,17 +392,11 @@ void Category::CreateBackgroundModel() {
   m_mapSet["pdfToAdd"]->add( *m_mapPdf["bkg"] );
   m_mapSet["modelParameters"]->add(*nbkg);
   m_mapSet["nuisanceParameters"]->add(*nbkg);
-  cout << "sumEntries" << endl;
   if ( m_dataset && m_dataset->sumEntries() > 3  ) {
-    m_dataset->Print();
-    m_dataset->get()->Print();
-    m_mapPdf["bkg"]->fitTo( *m_dataset, SumW2Error(kFALSE) );
+    m_mapPdf["bkg"]->fitTo( *m_dataset, SumW2Error(kFALSE), Verbose(0) );
     nbkg->setRange( nbkg->getVal()/2., nbkg->getVal()*2);
   }
-  cout << "Drawplot" << endl;
-  DrawPlot( m_mapVar["invMass"], {m_dataset, m_mapPdf["bkg"] }, "/sps/atlas/c/cgoudet/Plots/HgamBkg_"+m_name, {"nComparedEvents=55"} );
-  cout << "end drawplot" << endl;
-  cout << "DefineBackground done" << endl;
+  //DrawPlot( m_mapVar["invMass"], {m_dataset, m_mapPdf["bkg"] }, "/sps/atlas/c/cgoudet/Plots/HgamBkg_"+m_name, {"nComparedEvents=55"} );
 }
 
 
@@ -433,7 +427,7 @@ void Category::CreateWS() {
   m_mapSet["allConstraint"] = new RooArgSet();
   vector<string> processes( *m_processes );
   processes.push_back( "common" );
-  for ( auto vProc = processes.begin(); vProc != processes.end(); vProc++ ) {
+  for ( auto vProc = processes.begin(); vProc != processes.end(); ++vProc ) {
     m_mapSet["systematic_yield_"+*vProc] = new RooArgSet();
     m_mapSet["systematic_mass_"+*vProc] = new RooArgSet();
     m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
@@ -476,7 +470,7 @@ void Category::CreateWS() {
   }
 
   m_workspace->import( *m_dataset );
-  m_dataset = (RooDataSet*) m_workspace->data( m_dataset->GetName() );
+  m_dataset = static_cast<RooDataSet*>( m_workspace->data( m_dataset->GetName() ) );
 
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
   m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()), Silence() );
@@ -852,7 +846,6 @@ void Category::ReadNuisanceParametersXML() {
   //Define variable which will contain the spurious signal
   m_mapVar["spurious"] = 0;
 
-
   TDOMParser xmlparser;
   //Check if the xml file is ok                                                                                                                                                                      
   xmlparser.ParseFile( m_catProperties.GetAttribute( "systFileName" ).c_str() );
@@ -913,8 +906,9 @@ void Category::ReadNuisanceParametersXML() {
       if ( (mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Process") && mapSystEffect["process"]!="All" ) NPName += "_" + mapSystEffect["process"];
       if ( mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Category" )  NPName += "_" + m_name;
 
+
       RooRealVar *currentSyst = GetCurrentSyst( constraint, NPName, std::stod( mapSystEffect["upVal"] ) , mapSystEffect["downVal"]=="" ? 0 : std::stod( mapSystEffect["downVal"] ) );
-      
+      cout << "NPValues : " << mapAttr["correlation"] << " " << NPName << " " << currentSyst->GetName() << endl;      
       if (mapAttr["Name"].find("spurious") != string::npos || mapAttr["Name"].find("BIAS") != string::npos ) m_mapVar["spurious"]  = currentSyst; // the systematics value is the spurious signal
       else {
 	string setName = "systematic_" + mapAttr["varName"] + "_" + mapSystEffect["process"];

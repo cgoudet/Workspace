@@ -60,7 +60,7 @@ void Workspace::Configure( string configFileName ) {
   m_configFileName = configFileName;
 
   Arbre arbre( Arbre::ParseXML(configFileName) );
-  m_name = arbre.GetNodeName();
+  m_name = arbre.GetAttribute( "Name" );
 
   list<Arbre> children = arbre.GetChildren();
   for ( list<Arbre>::const_iterator it=children.begin(); it!=children.end(); ++it ) {
@@ -141,7 +141,7 @@ void Workspace::CreateWS() {
   m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
-  m_workspace->Print();
+  //  m_workspace->Print();
   //  mconfig->GetPdf()->fitTo( *m_workspace->data( obsData->GetName() ), SumW2Error(kFALSE) );
   // RooArgSet dumSet;
   // dumSet.add( *mconfig->GetNuisanceParameters() );

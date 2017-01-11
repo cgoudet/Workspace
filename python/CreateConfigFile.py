@@ -81,7 +81,7 @@ def ConfigFile( inFileName ) :
     systFileName += 'SystVariation_datacard.xml'
 
     coreName = StripString(inFileName)
-    xmlObj = CreateNode( 'CreateWorkspace', { 'Name':'/sps/atlas/c/cgoudet/Hgam/Couplages/Outputs/' + coreName + '.root' } )    
+    xmlObj = CreateNode( 'CreateWorkspace', { 'Name': inFileName } )    
 
     processNode = CreateNode( 'processes' )
     processNode.text = ' '.join( processes+subProcesses )
