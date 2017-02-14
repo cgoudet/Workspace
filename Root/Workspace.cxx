@@ -95,7 +95,7 @@ void Workspace::CreateWS() {
     pdf->addPdf( *workspace->pdf( pdfName.c_str() ), m_category->getLabel() );
 
 
-    for ( auto vSet : sets ) m_mapSet[vSet]->add( *workspace->set(vSet.c_str()) );
+    for ( auto vSet : sets ) m_mapSet[vSet]->add( *workspace->set(vSet.c_str()), 1 );
     string dataName = "obsData_" + vName;
     datasetMap[vName] = (RooDataSet*) workspace->data( dataName.c_str() );
     if ( !datasetMap[vName] ) { cout << "Null dataset : " << vName << endl; exit(0);}
@@ -107,8 +107,7 @@ void Workspace::CreateWS() {
   cout << "importedPdf" << endl;
   for ( auto vSet  : sets ) m_workspace->defineSet( vSet.c_str(), *m_mapSet[vSet], kTRUE );
   RooRealVar wt( "weight", "weight", 1 );
-  m_mapSet["observables"]->add( wt );
-  m_mapSet["observables"]->Print();
+  m_mapSet["observables"]->add( wt, 1 );
 
   RooDataSet* obsData = new RooDataSet("obsData","combined data ",*m_mapSet["observables"], Index(*m_category), Import(datasetMap) ,WeightVar(wt ));
   cout << "obsData : " << obsData << endl;

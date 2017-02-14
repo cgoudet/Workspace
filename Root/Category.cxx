@@ -2,6 +2,7 @@
 #include "PlotFunctions/SideFunctions.h"
 #include "PlotFunctions/SideFunctionsTpp.h"
 #include "PlotFunctions/DrawPlot.h"
+#include "PlotFunctions/Foncteurs.h"
 using namespace ChrisLib;
 
 #include "RooExponential.h"
@@ -252,13 +253,10 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
   
   RooRealVar *value = new RooRealVar("value_"+suffix, "value_"+suffix, sigma_value);  
   RooProduct *prod = new RooProduct("prod_"+suffix, "prod_"+suffix, RooArgSet(*nui,*value));  // use the nuisance parameter here
-  double central_val = 1.;
+  double central_val = 1.; 
   if (name.Contains("spurious") || name.Contains("BIAS") )   central_val = 0.;
   TString oneName = central_val ? "one" : "zero";
   RooRealVar *one = new RooRealVar(oneName, oneName, central_val);
-  // cout << "oneName : " << one->GetName() << endl;
-  // cout << channel_correlated_np << endl;
-  // exit(0);
   RooAddition *systematic = new RooAddition("systematic_"+suffix, "systematic_"+suffix, RooArgSet(*one, *prod));
   return (RooRealVar*) systematic;
 }
@@ -295,24 +293,32 @@ RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, R
   /***************************************************************************************************/
   /***************************************************************************************************/
   /***************************************************************************************************/
-  RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process, double sigmaRightBifurGauss) //, bool useBifurGauss=false)
+RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process, double sigmaRightBifurGauss) //, bool useBifurGauss=false)
   {
-    cout << "DefineAsumetric" << endl;
     TString suffix;
-    if (process=="common") 
-      suffix = name;
-    else 
-      suffix = name+"_"+process;// the name of the systematics needs to take into account its process dependance, so add a suffix to it. E.g. JES_ggH
-
+    if (process=="common") suffix = name;
+    else suffix = name+"_"+process;// the name of the systematics needs to take into account its process dependance, so add a suffix to it. E.g. JES_ggH
+    cout << "sigmaValues : " << sigma_value_up << " " << sigma_value_down << endl;
     vector<double> vals_up, vals_down; 
     double pdf_mean = 1.; 
     vals_up.push_back(1+(sigma_value_up/100.)); 
-    vals_down.push_back(1/(1-(sigma_value_down/100.))); 
-    RooRealVar* nui = GetNuisanceParameter(name, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
+    vals_down.push_back(1/(1-(sigma_value_down/100.)));
+    // vals_up.push_back(1+sigma_value_up/100.);
+    // vals_down.push_back(1-sigma_value_down/100.);
+    TString NPName = name;
+    NPName.ReplaceAll( "_mean", "" );
+    NPName.ReplaceAll( "_sigma", "" );
+    RooRealVar* nui = GetNuisanceParameter( NPName, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
     RooArgList fix;  
     fix.add(*nui);
 
     HistFactory::FlexibleInterpVar *special_value = new HistFactory::FlexibleInterpVar("asymParam_"+suffix,"asymParam_"+suffix,fix,pdf_mean,vals_down,vals_up); // value that will be asymmetric
+    cout << "nominal Value : " << special_value->getVal() << endl;
+    nui->setVal(1);
+    cout << "upValue : " << special_value->getVal() << endl;
+    nui->setVal(-1);
+    cout << "downValue : " << special_value->getVal() << endl;
+    nui->setVal(0);
     // special_value->Print();
     // see http://www.usatlas.bnl.gov/~fisyak/star/root/roofit/histfactory/src/FlexibleInterpVar.cxx
     //  special_value->setAllInterpCodes(1);
@@ -473,7 +479,14 @@ void Category::CreateWS() {
   m_dataset = static_cast<RooDataSet*>( m_workspace->data( m_dataset->GetName() ) );
 
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
-  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()), Silence() );
+  //  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()), Silence() );
+  cout << m_correlatedVar << endl;
+  vector<string> parsed;
+  ParseVector(m_correlatedVar, parsed, ',' );
+  cout << "parsedSize : " << parsed.size() << endl;
+  copy( parsed.begin(), parsed.end(), std::ostream_iterator<string>(cout,"\n"));
+  cout << endl;
+  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()) );
   string wsName = string(m_mapPdf["modelSB"]->GetName()) + "_" + m_name;
   m_mapPdf["modelSB"] = m_workspace->pdf( wsName.c_str() );
   cout << "imported SB" << endl;
@@ -639,7 +652,7 @@ void Category::DefineSet( string set ) {
 RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss ) //bool useBifurGauss=false) 2
   {
     cout << "Category::GetNuisanceParameter " << name << endl;
-    RooRealVar *nui = ((RooRealVar*)nuisance_parameters->find(name));
+    RooRealVar *nui = static_cast<RooRealVar*>(nuisance_parameters->find(name));
     if (!nui) { // if the np does not exist yet in this channel
       RooRealVar* glob_nui = new RooRealVar("glob_nui_"+name, "glob_nui_"+name, 0, -5, 5);
       glob_nui->setConstant();
@@ -649,7 +662,8 @@ RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_par
 
       // (Re)create the constraint
       RooRealVar *sigma_gauss_constraint = new RooRealVar("sigma_"+name, "sigma_"+name, 1);
-      channel_correlated_np += "," + string(nui->GetName()) + "," + string(glob_nui->GetName()) +"," +string(sigma_gauss_constraint->GetName());
+      channel_correlated_np += "," + string(nui->GetName()) + "," + string(glob_nui->GetName());
+      //+"," +string(sigma_gauss_constraint->GetName());
       RooAbsPdf *constraint;
       if (sigmaRightBifurGauss>0) {
 	RooRealVar *sigma_gauss_constraint_right = new RooRealVar("sigma_right_"+name, "sigma_right_"+name, sigmaRightBifurGauss);
@@ -906,10 +920,10 @@ void Category::ReadNuisanceParametersXML() {
       if ( (mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Process") && mapSystEffect["process"]!="All" ) NPName += "_" + mapSystEffect["process"];
       if ( mapAttr["correlation"] == "None" || mapAttr["correlation"] == "Category" )  NPName += "_" + m_name;
 
-
       RooRealVar *currentSyst = GetCurrentSyst( constraint, NPName, std::stod( mapSystEffect["upVal"] ) , mapSystEffect["downVal"]=="" ? 0 : std::stod( mapSystEffect["downVal"] ) );
       cout << "NPValues : " << mapAttr["correlation"] << " " << NPName << " " << currentSyst->GetName() << endl;      
       if (mapAttr["Name"].find("spurious") != string::npos || mapAttr["Name"].find("BIAS") != string::npos ) m_mapVar["spurious"]  = currentSyst; // the systematics value is the spurious signal
+
       else {
 	string setName = "systematic_" + mapAttr["varName"] + "_" + mapSystEffect["process"];
 	if ( !m_mapSet[setName] )  m_mapSet[setName] = new RooArgSet();
