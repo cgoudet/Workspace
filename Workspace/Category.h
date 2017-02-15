@@ -74,6 +74,7 @@ class Category {
   void ReadNuisanceParametersXML();
   void GetData();
   void DefineSet( string set );
+  void GetPdfFromWS( const ChrisLib::Arbre &arbre, std::map<std::string, std::stringstream> &editStr );
 
   string m_systFileName;
   string m_outName;
