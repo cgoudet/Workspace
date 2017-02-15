@@ -563,8 +563,9 @@ void Category::GetData() {
     TFile *inFile = new TFile( inFileName.c_str() );
     if ( !inFile ) throw runtime_error( "Category::GetData : " + inFileName + " does not exist." );
     if ( m_debug ) cout << "inFileName : " << inFileName << endl;    
+
     //Get the TTree or the workspace
-    if (  vDataArbre.GetAttribute( "treeName" ) != ""  ) {
+    if (  vDataArbre.IsAttribute( "treeName" )  ) {
       TTree *inTree = static_cast<TTree*>(inFile->Get( vDataArbre.GetAttribute( "treeName" ).c_str()) );
       if ( !inTree ) throw runtime_error( "Category::GetData : " + vDataArbre.GetAttribute( "treeName" ) + " not found in " + inFile->GetName() );
 
@@ -590,9 +591,10 @@ void Category::GetData() {
 
       delete inTree; inTree=0;
     }
-    else if ( vDataArbre.GetAttribute( "datasetName" ) != "" ) {
+    else if ( vDataArbre.IsAttribute( "datasetName" ) ) {
       string datasetName = vDataArbre.GetAttribute( "datasetName" );
-      RooWorkspace *inWS = (RooWorkspace*) inFile->Get( FindDefaultTree( inFile, "RooWorkspace" ).c_str() );
+      cout << "datasetName : " << datasetName << endl;
+      RooWorkspace *inWS = static_cast<RooWorkspace*>(inFile->Get( FindDefaultTree( inFile, "RooWorkspace" ).c_str() ));
       if ( !inWS ) throw runtime_error(  "Category::GetData : TTree and Workspace failed." );
       
       dumDataset = static_cast<RooDataSet*>( inWS->data( datasetName.c_str() ));
@@ -600,9 +602,10 @@ void Category::GetData() {
       
       m_mapSet["observables"]->add( *m_mapVar["invMass"] );
 
-      string catVarName = vDataArbre.GetAttribute( "catName" );
-      string catIndex = vDataArbre.GetAttribute( "catIndex" );
-      if ( catVarName != "" && catIndex!="") {
+      string catVarName = vDataArbre.IsAttribute( "catName" ) ? vDataArbre.GetAttribute( "catName" ) : "";
+      string catIndex = vDataArbre.IsAttribute( "catIndex" ) ? vDataArbre.GetAttribute( "catIndex" ) : "";
+
+      if ( catVarName!="" && catIndex!="") {
 	RooDataSet *dumDataSet=dumDataset;
 	RooCategory *eventCateg = (RooCategory*) inWS->cat( catVarName.c_str() );
 	m_mapSet["observables"]->add( *eventCateg );
@@ -612,10 +615,7 @@ void Category::GetData() {
 				     catIndex.c_str() );
       }
     }
-    else {
-      cout << "No datasetName or treeName given : data could not be read" << endl;
-      exit(1);
-    }
+    else throw runtime_error( "Category::GetData() : No datasetName or treeName given : data could not be read." );
 
     if ( !m_dataset ) {
       m_dataset = dumDataset;
