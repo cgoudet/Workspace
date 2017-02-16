@@ -25,7 +25,7 @@ def CategoryNode( catIndex, modeProps, mode = 0 ) :
     catName=modeProps['catsNames'][catIndex]
     xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName': modeProps['datacard'] } )
 
-    procs = [ 'all' ]
+    procs = ['all']
     if catName!='Inclusive' : procs = processes+subProcesses
     [ xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':AddSlash(modeProps['pdfDir'])+'resonance_yieldList.txt' } ) ) for vProc in procs ]
     xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':AddSlash(modeProps['pdfDir']) +'res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
@@ -78,6 +78,7 @@ def GetModelsProperties() :
         ,'datacard' : '/sps/atlas/c/cgoudet/Hgam/FrameWork/Results/h013_ALL/h013_ALL_SystVariation_datacard.txt'
         ,'dataDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/PseudoData'
         ,'pdfDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/ModelShapeSignal/RAW/SigSimple_all_shape_inclusive_DBCB/Individual/SM'
+        ,'yieldDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/'
         ,'bkg' : [ 'expPol2']
         }
 

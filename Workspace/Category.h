@@ -75,7 +75,7 @@ class Category {
   void GetData();
   void DefineSet( string set );
   void GetPdfFromWS( const ChrisLib::Arbre &arbre, std::map<std::string, std::stringstream> &editStr );
-
+  void GetYieldFromWS( const ChrisLib::Arbre &arbre );
   string m_systFileName;
   string m_outName;
   RooCategory* m_category;
@@ -83,7 +83,7 @@ class Category {
   RooWorkspace *m_workspace;
   int m_debug;
 
-  void SelectInputWorkspace( string fileName );
+  void SelectInputWorkspace( const std::string &fileName );
 
   TFile *m_readInputFile;
   RooWorkspace *m_readInputWorkspace;

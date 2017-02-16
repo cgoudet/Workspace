@@ -46,6 +46,12 @@ using std::ifstream;
 using std::stringstream;
 using std::to_string;
 
+#include <algorithm>
+using std::copy;
+#include <iterator>
+using std::ostream_iterator;
+using std::distance;
+
 Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
 {
 
@@ -54,7 +60,8 @@ Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
 
   m_mapVar["lumi"] = new RooRealVar( "lumi_dum", "lumi_dum", 3.21296+10.0638 );
   m_mapVar["lumi"]->setConstant(1);
-  m_mapVar["invMass"] = new RooRealVar ("invariant_mass","invariant_mass",126.5, 110.,160.); 
+  m_mapVar["invMass"] = new RooRealVar ("m_yy","m_yy",126.5, 110.,160.); 
+  m_mapVar["invMass"]->setRange( 105, 160);
   m_mapVar["mHcomb"] = new RooRealVar("mHcomb","mHcomb",125.09, 110, 160); // reference is mH = 125 GeV
   m_mapFormula["mHRen"] = new RooFormulaVar("mHRen","mHRen","(@0-100)/100.", RooArgList(*m_mapVar["mHcomb"])); 
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1, -10, 10 );
@@ -122,7 +129,7 @@ void Category::LoadParameters( string configFileName ) {
 
 //=========================================
 void Category::ReadNuisanceParameters() {
-  cout << "ReadNuisanceParameter" << endl;
+  if ( m_debug ) cout << "Category::ReadNuisanceParameter\n";
 
   ReadConstraintFile();
 
@@ -134,62 +141,57 @@ void Category::ReadNuisanceParameters() {
   }
 
   string systFileName = m_catProperties.GetAttribute( "systFileName" );;
+  if ( m_debug ) cout << "systFileName : " << systFileName << endl;
   m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,"Common_2015");
   m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,m_name.c_str()); // read values corresponding to channelname section only.                     
 
   
   for( auto iter : m_sDef ) {
 
-    TString fullName = iter.first;
+    string fullName = iter.first;
     if (fullName == "bkg_model") continue;
 
-    double current_value = static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(fullName))->getVal();
+    double current_value = static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(fullName.c_str()))->getVal();
     // do not add systematics at 0 (surcharge the workspace without valid reason)
     if (current_value==0) continue; 
 
     double current_err_lo =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
     double current_err_hi =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
 
-
-    if ( fullName == "dumVar" ) static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(fullName))->Print();
-    cout << "systFullName : " << fullName << " " << current_value << endl;   
+    cout << "systFullName : " << fullName << " " << current_value << " " << current_err_lo << " " << current_err_hi << endl;   
 
     //Impose all np to be correlated between categories (same name)    
-    bool containsCategory= TString( fullName ).Contains( m_name );
-    cout << "containsCategory : " << containsCategory << endl;
-    fullName.ReplaceAll( m_name, "" );
-    for ( auto vCatName : *m_categoriesNames ) fullName.ReplaceAll( vCatName, "" );
+    bool containsCategory= fullName.find(m_name)!=string::npos;
+    if ( m_debug ) cout << "containsCategory : " << containsCategory << endl;
+    if ( containsCategory ) fullName = ReplaceString( "_"+m_name)( fullName);
+    for ( auto vCatName : *m_categoriesNames ) fullName = ReplaceString( "_"+vCatName)(fullName);
 
 
     bool containsPROCESS = false;
-    cout << "containsProcess : " << containsPROCESS << endl;
     TString process = "common";
     vector<string> processes = *m_processes;
     processes.push_back( "WH" );
     processes.push_back( "ZH" );
     for ( auto vProc : processes ) {
-      if ( !fullName.Contains( vProc ) ) continue;
+      if ( fullName.find(vProc)==string::npos ) continue;
       containsPROCESS = true;
       process = vProc;
       break;
     }
-    fullName.ReplaceAll( process, "" );
+    fullName = ReplaceString("_"+string(process))(fullName);
     if ( process == "WH" || process =="ZH" ) process = "VH";
     //this line imposes all processes to be correlated
     //Its a shortcut for a non needed possilitu of definesystematic
     string processForName = string(process);
-    cout << "process : " << process << endl;
+    if ( m_debug ) cout << "process : " << process << endl;
 
     //This imposes all NP from different years to be correlated
-    bool containsYear = fullName.Contains( "2015" )  || fullName.Contains( "2016" );
-    cout << "contains Year : " << containsYear << endl;
-    fullName.ReplaceAll( "2015", "" );
-    fullName.ReplaceAll( "2016", "" );
+    bool containsYear = fullName.find("2015")!=string::npos  || fullName.find("2016" )!=string::npos;
+    if ( m_debug ) cout << "contains Year : " << containsYear << endl;
+    fullName = ReplaceString("_2015")( ReplaceString("_2016")(fullName));;
 
-    //    CleanName( fullName );
     //Do correlation model
     TString NPName = fullName;
-    cout << "NPName : " << NPName << endl;
     if ( NPName == "ATLAS_MET" ) {
       if ( process == "VH" || process == "WH" || process == "ZH" ) NPName+="_VH";
       else NPName+="_nonVH";
@@ -223,27 +225,23 @@ void Category::ReadNuisanceParameters() {
     RooRealVar *current_syst=0;
     if ( current_constraint == ASYM_CONSTRAINT ) current_syst = GetCurrentSyst( current_constraint, string(NPName), current_err_hi, current_err_lo );
     else current_syst = GetCurrentSyst(  current_constraint, string(NPName), current_value );
-    cout << "current constraint : " << current_constraint << endl;
 
     if (NPName.Contains("spurious") || NPName.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
     else if ( NPName.Contains("MSS" ) ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
     else if ( NPName.Contains("MRES" ) ) m_mapSet["systematic_sigma_"+string(process)]->add(*current_syst);
     else if ( NPName.Contains("lhcMass") ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
     else { // means that type == YIELD
-      cout << "mapSet : " << m_mapSet[string("systematic_yield_"+process)] << endl;
       m_mapSet[string("systematic_yield_"+process)]->add(*current_syst);    
-      cout << "adding" << endl;
     }
 
   } // end loop on systematics 
 
-  cout << "end nuisanceParameters" << endl;
+  if ( m_debug ) cout << "Category::ReadNuisanceParameter end\n";
 }//end ReadNuisanceParameter
 
-
+//===========================================
 RooRealVar* Category::defineSystematic_Gauss(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process, double sigmaRightBifurGauss) //, bool useBifurGauss=false) 
 {
-  cout << "DefineGauss" << endl;
   RooRealVar *nui = GetNuisanceParameter(name, nuisance_parameters, global_parameters, constraints_pdf_list, channel_correlated_np, allConstraints, sigmaRightBifurGauss);
   
   TString suffix;
@@ -531,26 +529,13 @@ void Category::GetData() {
   vector<string> vectNodeNames;
   vector<Arbre> vectNodes;
   Arbre::GetArbresPath( m_catProperties, vectNodes, { "dataFile", "data", "category" } );
-  if ( m_debug ) vectNodes.front().Dump();
+  //  if ( m_debug ) vectNodes.front().Dump();
 
   for ( auto vDataArbre : vectNodes ) {
 
-    string varName, inFileName, weightName;
-    try { 
-      varName = vDataArbre.GetAttribute( "varName" );
-      inFileName = vDataArbre.GetAttribute( "inFileName" );
-      weightName = vDataArbre.GetAttribute( "weightName" );
-    }
-    catch ( ... ) {
-      if ( varName=="" ) throw runtime_error( "Category::GetData : Unknown varName." );
-      else if ( inFileName =="" ) throw runtime_error( "Category::GetData : Unknown inFileName." );
-    }
-
-
-    m_mapVar["invMass"]->SetName( varName.c_str() );
-    m_mapVar["invMass"]->setRange( 105, 160);
-
-    if ( m_correlatedVar.find( varName ) == string::npos ) m_correlatedVar += "," + string( m_mapVar["invMass"]->GetName() );
+    string varName = vDataArbre.GetAttribute( "varName" );
+    string inFileName = vDataArbre.GetAttribute( "inFileName" );
+    string weightName = vDataArbre.IsAttribute( "weightName" ) ? vDataArbre.GetAttribute( "weightName" ) : "";
 
     RooDataSet *dumDataset = 0;
     if ( inFileName.find(".txt")!=string::npos ) {
@@ -562,7 +547,6 @@ void Category::GetData() {
     //Get the root file
     TFile *inFile = new TFile( inFileName.c_str() );
     if ( !inFile ) throw runtime_error( "Category::GetData : " + inFileName + " does not exist." );
-    if ( m_debug ) cout << "inFileName : " << inFileName << endl;    
 
     //Get the TTree or the workspace
     if (  vDataArbre.IsAttribute( "treeName" )  ) {
@@ -593,26 +577,20 @@ void Category::GetData() {
     }
     else if ( vDataArbre.IsAttribute( "datasetName" ) ) {
       string datasetName = vDataArbre.GetAttribute( "datasetName" );
-      cout << "datasetName : " << datasetName << endl;
       RooWorkspace *inWS = static_cast<RooWorkspace*>(inFile->Get( FindDefaultTree( inFile, "RooWorkspace" ).c_str() ));
       if ( !inWS ) throw runtime_error(  "Category::GetData : TTree and Workspace failed." );
       
       dumDataset = static_cast<RooDataSet*>( inWS->data( datasetName.c_str() ));
       if ( !dumDataset ) throw runtime_error( "Category::GetData : dataset failed.");
-      
-      m_mapSet["observables"]->add( *m_mapVar["invMass"] );
+      dumDataset->get()->first()->SetName(m_mapVar["invMass"]->GetName());
 
       string catVarName = vDataArbre.IsAttribute( "catName" ) ? vDataArbre.GetAttribute( "catName" ) : "";
       string catIndex = vDataArbre.IsAttribute( "catIndex" ) ? vDataArbre.GetAttribute( "catIndex" ) : "";
-
       if ( catVarName!="" && catIndex!="") {
 	RooDataSet *dumDataSet=dumDataset;
 	RooCategory *eventCateg = (RooCategory*) inWS->cat( catVarName.c_str() );
 	m_mapSet["observables"]->add( *eventCateg );
-	dumDataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(),  
-				     dumDataSet, 
-				     *m_mapSet["observables"],
-				     catIndex.c_str() );
+	dumDataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(), dumDataSet, *m_mapSet["observables"], catIndex.c_str() );
       }
     }
     else throw runtime_error( "Category::GetData() : No datasetName or treeName given : data could not be read." );
@@ -623,7 +601,7 @@ void Category::GetData() {
     }
     else m_dataset->append( *dumDataset );
 
-    }//end for dataFile
+  }//end for dataFile
   m_dataset->SetName( ("obsData_"+m_name).c_str());
   m_dataset->Print();
 
@@ -696,33 +674,59 @@ void Category::SetProcesses( vector<string> *processes ) {
 }
 
 //================================================
-void Category::SelectInputWorkspace( string fileName ) {
+void Category::SelectInputWorkspace( const string &fileName ) {
 
   if ( m_readInputFile && fileName == m_readInputFile->GetName() ) return;
   if ( m_readInputFile ) delete m_readInputFile; m_readInputFile=0; 
   if ( m_readInputWorkspace ) delete m_readInputWorkspace; m_readInputFile=0;
   m_readInputFile = new TFile( fileName.c_str() );
-  if ( !m_readInputFile ) {
-    cout << fileName.front() << " does not exists" << endl;
-    exit(0);
-  }
-  m_readInputWorkspace = (RooWorkspace*) m_readInputFile->Get( FindDefaultTree( m_readInputFile, "RooWorkspace" ).c_str() );
+  if ( !m_readInputFile ) throw runtime_error( "Category::SelectInputWorkspace : " + fileName + " does not exists.");
+  m_readInputWorkspace = static_cast<RooWorkspace*>(m_readInputFile->Get( FindDefaultTree( m_readInputFile, "RooWorkspace" ).c_str() ));
 }
 //=========================================
 void Category::GetPdfFromWS( const Arbre &arbre, map<string, stringstream> &editStr ) {
   if ( m_debug ) cout << "Category::GetPdfFromWS\n";
   if ( arbre.GetNodeName() != "pdf" ) throw runtime_error( "Category:GetPdfFromWS : wrong arbre type." );
+  cout << "inFileName : " << arbre.GetAttribute( "inFileName" ) << endl;
   SelectInputWorkspace( arbre.GetAttribute( "inFileName" ) );
   string proc = arbre.GetAttribute( "process" );
   RooRealVar *mass = m_readInputWorkspace->var( arbre.GetAttribute( "invMass" ).c_str() );
+  cout << "mass : " << mass << endl;
+  mass->Print();
+
   if ( mass ) mass->SetName( m_mapVar["invMass"]->GetName() );
-  RooAbsPdf *pdf = (RooAbsPdf*) m_readInputWorkspace->pdf( arbre.GetAttribute( "inVarName" ).c_str() );
+  RooAbsPdf *pdf = static_cast<RooAbsPdf*>(m_readInputWorkspace->pdf( arbre.GetAttribute( "inVarName" ).c_str() ));
   if ( !pdf ) throw runtime_error( "Category::GetPdfFromWS : pdf not found.");
+  pdf->Print();
   m_workspace->import( *pdf, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
   editStr[proc] << "EDIT::signal_" + proc << "(" << pdf->GetName() << "_" << proc;
   if ( m_debug ) cout << "Category::GetPdfFromWS end\n";
 }
 
+//=========================================
+void Category::GetYieldFromWS( const Arbre &arbre ) {
+  if ( m_debug ) cout << "Category::GetYieldFromWS\n";
+  string inFileName = arbre.IsAttribute( "inFileName" ) ? arbre.GetAttribute( "inFileName" ) : "";
+  string proc = arbre.GetAttribute( "process" );
+  if ( inFileName.find(".root")!=string::npos ) { 
+    SelectInputWorkspace( arbre.GetAttribute( "inFileName" ) );
+    RooAbsReal *absReal = static_cast<RooAbsReal*>(m_readInputWorkspace->obj( arbre.GetAttribute( "inVarName" ).c_str() ));
+    if ( absReal ) m_workspace->import( *absReal, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
+  }
+  else if ( inFileName.find(".txt")!=string::npos ) { 
+    fstream stream( inFileName.c_str() );
+    if ( !stream.is_open() ) throw runtime_error( "Category::FetYieldFromWS : Unknow file " + inFileName );
+    double mass{-99}, yield{-99};
+    int cat{-1};
+    int nCat = distance(m_categoriesNames->begin(), find( m_categoriesNames->begin(), m_categoriesNames->end(), m_name ) );
+    while ( stream >> mass >> cat >> yield && cat!=nCat ) {}
+    if ( cat!=nCat ) throw runtime_error( "Category::GetYiedFromWS : category not found in file " + inFileName );
+
+    RooRealVar *yieldVar = new RooRealVar( "yieldSignal","yieldSignal", yield );
+    m_workspace->import( *yieldVar, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), Silence() );
+  }
+  if ( m_debug ) cout << "Category::GetYieldFromWS end\n";
+}
 //=========================================
 void Category::SignalFromPdf() { 
   if ( m_debug ) cout << "Category::SignalFromPdf()" <<endl;
@@ -745,26 +749,12 @@ void Category::SignalFromPdf() {
   
   for ( auto vArbre : vectNodes ) { //list over all input files
     string inFileName = vArbre.IsAttribute( "inFileName" ) ? vArbre.GetAttribute( "inFileName" ) : "";
-    cout << "inFileName : " << inFileName << endl;
     if ( inFileName == "" ) continue;
-    string proc = vArbre.GetAttribute( "process" );
-
     if ( vArbre.GetNodeName() == "pdf" ) GetPdfFromWS( vArbre, editStr );
-    else {
-      if ( inFileName.find(".root")!=string::npos ) { 
-	SelectInputWorkspace( vArbre.GetAttribute( "inFileName" ) );
-	RooAbsReal *absReal = (RooAbsReal*) m_readInputWorkspace->obj( vArbre.GetAttribute( "inVarName" ).c_str() );
-	if ( absReal ) m_workspace->import( *absReal, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
-      }
-      else {
-	cout << ".txt" << endl;
-	exit(0);
-      }
-
+    else GetYieldFromWS( vArbre );
   }
-  }
-  cout << "end test" << endl;
 
+  cout << "passed yield" << endl;
   //First loop over ched variables to change value and names
   vectPath.front() = "changeVar";
   vectNodes.clear();
@@ -870,7 +860,7 @@ void Category::SignalFromPdf() {
  
 //=============================================================
 void Category::ReadNuisanceParametersXML() {
-  if ( m_debug ) cout << "ReadNuisanceParameterXML" << endl;
+  if ( m_debug ) cout << "Category::ReadNuisanceParameterXML" << endl;
 
   //Define variable which will contain the spurious signal
   m_mapVar["spurious"] = 0;
@@ -948,7 +938,7 @@ void Category::ReadNuisanceParametersXML() {
       
     }//end systEffectNode
   }//end systNode
-
+  if ( m_debug ) cout << "Category::ReadNuisanceParameterXML end" << endl;
 }//end ReadNuisanceParameter
 
 
@@ -993,8 +983,8 @@ RooRealVar *Category::GetCurrentSyst( int constraint, string NPName, double upVa
 }
 
 //=======================================================
-void Category::ReadConstraintFile()
-{
+void Category::ReadConstraintFile() {
+  if ( m_debug ) cout << "Category::ReadConstraintFile\n";
   ifstream current_file(m_catProperties.GetAttribute( "systFileName" ).c_str());
   do 
     {
@@ -1023,4 +1013,5 @@ void Category::ReadConstraintFile()
 
       m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
     } while(!current_file.eof());
+  if ( m_debug ) cout << "Category::ReadConstraintFile end\n";
 }

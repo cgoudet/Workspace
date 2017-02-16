@@ -417,7 +417,6 @@ RooDataSet* Workspace::MakeAsimovData() {
   const char* weightName="weightVar";
   RooArgSet obsAndWeight;
   obsAndWeight.add(*mc->GetObservables());
-  cout << "adding weight" << endl;
   
   RooRealVar* weightVar = NULL;
   if (!(weightVar = m_workspace->var(weightName))) {
