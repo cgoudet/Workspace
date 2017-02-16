@@ -10,24 +10,24 @@ class Workspace {
 
   Workspace();
   ~Workspace();
-  Workspace( string name );
+  Workspace( std::string name );
 
-  void Configure( string configFileName );
+  void Configure( std::string configFileName );
   void CreateWS();
   void SetDebug( int debug ) { m_debug=debug; }
  private :
 
   RooWorkspace *m_workspace;
-  vector<Category*> m_categories;
-  string m_configFileName;
-  vector<string> m_categoriesNames;
-  vector<string> m_processes;
-  //  map<string, int> m_sDef;
-  string m_systFileName;
+  std::vector<Category*> m_categories;
+  std::string m_configFileName;
+  std::vector<std::string> m_categoriesNames;
+  std::vector<std::string> m_processes;
+  //  std::map<std::string, int> m_sDef;
+  std::string m_systFileName;
   RooCategory *m_category;
   RooDataSet* addGhosts(RooDataSet* orig, const RooArgSet *observables );
-  map<string, RooArgSet*> m_mapSet;
-  string m_name;
+  std::map<std::string, RooArgSet*> m_mapSet;
+  std::string m_name;
   int m_debug;
 
   RooDataSet* MakeAsimovData();

@@ -31,6 +31,10 @@ using std::stringstream;
 using std::ifstream;
 using std::list;
 
+using std::string;
+using std::vector;
+using std::map;
+
 Workspace::Workspace() : m_debug(0)
 {
   m_workspace=0;
@@ -140,7 +144,7 @@ void Workspace::CreateWS() {
   m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
-  //  m_workspace->Print();
+  m_workspace->Print();
   //  mconfig->GetPdf()->fitTo( *m_workspace->data( obsData->GetName() ), SumW2Error(kFALSE) );
   // RooArgSet dumSet;
   // dumSet.add( *mconfig->GetNuisanceParameters() );

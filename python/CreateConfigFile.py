@@ -31,15 +31,15 @@ def CategoryNode( catIndex, modeProps, mode = 0 ) :
     xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':AddSlash(modeProps['pdfDir']) +'res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
 
 #Variables which have to be renamed
-    # varChanges = {}
-    # if mode == 0 :  
-    #     varChanges = [
-    #         { 'outName':'meanCB', 'inName': 'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
-    #         { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
-    #         { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
-    #         ]
-        # varChanges +=  [ { 'inName' : 'Yield_Signal_'+vProc+'_SM_'+catName, 'outName': 'yieldSignal', 'systNP':'yield' } for vProc in processes+subProcesses ]
-        # [ xmlObj.append( CreateNode( 'changeVar', vVarName ) ) for vVarName in varChanges ]
+    varChanges = {}
+    if mode == 0 :  
+        varChanges = [
+            { 'outName':'meanCB', 'inName': 'muCBNom_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
+            { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
+            { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
+            ]
+#        varChanges +=  [ { 'inName' : 'Yield_Signal_'+vProc+'_SM_'+catName, 'outName': 'yieldSignal', 'systNP':'yield' } for vProc in processes+subProcesses ]
+    [ xmlObj.append( CreateNode( 'changeVar', vVarName ) ) for vVarName in varChanges ]
 
 #Marc's asimov have been generated simulating 10fb of data but with luminosity of 13fb. Need to rescale luminosity to 10
 #        for year in [ '2015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )

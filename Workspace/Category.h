@@ -2,15 +2,13 @@
 #define CATEGORY_H
 #include "PlotFunctions/Arbre.h"
 #include <string>
-using std::string;
 #include <map>
-using std::map;
+
 #include "RooRealVar.h"
 #include "RooFormulaVar.h"
 #include "RooAbsPdf.h"
 #include "RooArgSet.h"
 #include <vector>
-using std::vector;
 #include "RooWorkspace.h"
 #include "RooDataSet.h"
 
@@ -22,17 +20,17 @@ class Category {
 
  public :
   Category();
-  Category( string name );
+  Category( std::string name );
   ~Category();
 
-  void SetProcesses( vector<string> *processes );
-  void SetCategoriesNames( vector<string> *categoriesNames ) { m_categoriesNames = categoriesNames;}
+  void SetProcesses( std::vector<std::string> *processes );
+  void SetCategoriesNames( std::vector<std::string> *categoriesNames ) { m_categoriesNames = categoriesNames;}
   RooWorkspace *GetWorkspace() { return m_workspace; }
 
-  string GetName() { return m_name; }
-  void SetSystFileName( string systFileName ) { m_systFileName = systFileName; }
+  std::string GetName() { return m_name; }
+  void SetSystFileName( std::string systFileName ) { m_systFileName = systFileName; }
 
-  void LoadParameters( string configFileName );
+  void LoadParameters( std::string configFileName );
   void CreateWS();
   void SetDebug( int debug ) { m_debug=debug; }
 
@@ -40,24 +38,24 @@ class Category {
   /**
      Name of the Category, related to the label of the roocategory.
    */
-  string m_name;
+  std::string m_name;
 
-  string m_correlatedVar;
+  std::string m_correlatedVar;
   /**
      Map containing the the roorealvar necessary for signal parametrization
    */
-  map<string, RooRealVar*> m_mapVar;
-  map<string, RooFormulaVar*> m_mapFormula;
-  map<string, RooAbsPdf*> m_mapPdf;
-  map<string, RooArgSet*> m_mapSet;
+  std::map<std::string, RooRealVar*> m_mapVar;
+  std::map<std::string, RooFormulaVar*> m_mapFormula;
+  std::map<std::string, RooAbsPdf*> m_mapPdf;
+  std::map<std::string, RooArgSet*> m_mapSet;
 
-  map<string, int> m_sDef;
-  vector<string> *m_processes;
+  std::map<std::string, int> m_sDef;
+  std::vector<std::string> *m_processes;
 
-  RooRealVar *GetCurrentSyst( int constraint, string NPName, double upVal, double downVal=0 );
-  RooRealVar* defineSystematic_Gauss(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
-  RooRealVar* defineSystematic_LogNorm(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
-  RooRealVar* defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
+  RooRealVar *GetCurrentSyst( int constraint, std::string NPName, double upVal, double downVal=0 );
+  RooRealVar* defineSystematic_Gauss(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, std::string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
+  RooRealVar* defineSystematic_LogNorm(TString name, double sigma_value, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, std::string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
+  RooRealVar* defineSystematic_asymmetric(TString name, double sigma_value_up, double sigma_value_down, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, std::string &channel_correlated_np, RooArgSet  *allConstraints, TString process="common", double sigmaRightBifurGauss=0);
 
   /**
      m_signalModel
@@ -66,20 +64,21 @@ class Category {
    */
 
   RooDataSet *m_dataset;
-  string m_dataCut;
+  std::string m_dataCut;
 
   void CreateBackgroundModel();
   void CreateSpurious();
   void ReadNuisanceParameters();
   void ReadNuisanceParametersXML();
   void GetData();
-  void DefineSet( string set );
+  void DefineSet( std::string set );
   void GetPdfFromWS( const ChrisLib::Arbre &arbre, std::map<std::string, std::stringstream> &editStr );
   void GetYieldFromWS( const ChrisLib::Arbre &arbre );
-  string m_systFileName;
-  string m_outName;
+  void ChangeVars( const ChrisLib::Arbre &arbre );
+  std::string m_systFileName;
+  std::string m_outName;
   RooCategory* m_category;
-  RooRealVar *GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss );
+  RooRealVar *GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, std::string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss );
   RooWorkspace *m_workspace;
   int m_debug;
 
@@ -88,9 +87,9 @@ class Category {
   TFile *m_readInputFile;
   RooWorkspace *m_readInputWorkspace;
   void SignalFromPdf();
-  map<string, string> m_mapPdfInfo;
-  map<string, double> m_changeVar;
-  vector<string> *m_categoriesNames;
+  std::map<std::string, std::string> m_mapPdfInfo;
+  std::map<std::string, double> m_changeVar;
+  std::vector<std::string> *m_categoriesNames;
   void ReadConstraintFile();
 
   ChrisLib::Arbre m_catProperties;

@@ -36,6 +36,9 @@ using namespace RooStats;
 using namespace RooFit;
 
 //#include <boost/algorithm/string.hpp>
+using std::string;
+using std::vector;
+using std::map;
 
 #include <iostream>
 using std::cout;
@@ -337,7 +340,7 @@ void Category::CreateBackgroundModel() {
   vector<Arbre> vectNodes;
   vector<string> vectPath = { "bkg", "category" };
   Arbre::GetArbresPath( m_catProperties, vectNodes, vectPath );
-  if ( vectNodes.size() != 1 ) { cout << "too many or too few bkg descriptions : " << vectNodes.size() << endl;exit(0); }
+  if ( vectNodes.size() != 1 ) throw runtime_error( "Category::CreateBackgroundModel : too many or too few bkg descriptions "+ vectNodes.size());
   int bkg_model = BKG_MODEL_EXPO;
   if ( vectNodes.front().GetAttribute( "form" ) == "expPol2" ) bkg_model = BKG_MODEL_EXPO_POL2;
 
@@ -450,7 +453,7 @@ void Category::CreateWS() {
   //If only the pdf all is available (or yield all)
   if ( ( m_mapSet["yieldsToAdd"]->getSize()==1 && m_mapSet["pdfToAdd"]->getSize()!=1  )
        || ( m_mapSet["yieldsToAdd"]->getSize()!=m_mapSet["pdfToAdd"]->getSize() && m_mapSet["pdfToAdd"]->getSize()>1  )
-       ) { cout << "ToAdd's sizes do not match" << endl; exit(0); }
+       ) throw runtime_error( "Category::CreateWS : ToAdd's sizes do not match");
   if ( m_mapSet["pdfToAdd"]->getSize()==1 && m_mapSet["yieldsToAdd"]->getSize()>1 ) {
     RooAddition *sumYieldCateg = new RooAddition( "sumYieldCateg", "sumYieldCateg",  *m_mapSet["yieldsToAdd"] );
     m_mapSet["yieldsToAdd"] = new RooArgSet( "yieldsToAdd" );
@@ -687,17 +690,14 @@ void Category::SelectInputWorkspace( const string &fileName ) {
 void Category::GetPdfFromWS( const Arbre &arbre, map<string, stringstream> &editStr ) {
   if ( m_debug ) cout << "Category::GetPdfFromWS\n";
   if ( arbre.GetNodeName() != "pdf" ) throw runtime_error( "Category:GetPdfFromWS : wrong arbre type." );
-  cout << "inFileName : " << arbre.GetAttribute( "inFileName" ) << endl;
+
   SelectInputWorkspace( arbre.GetAttribute( "inFileName" ) );
   string proc = arbre.GetAttribute( "process" );
   RooRealVar *mass = m_readInputWorkspace->var( arbre.GetAttribute( "invMass" ).c_str() );
-  cout << "mass : " << mass << endl;
-  mass->Print();
-
   if ( mass ) mass->SetName( m_mapVar["invMass"]->GetName() );
+
   RooAbsPdf *pdf = static_cast<RooAbsPdf*>(m_readInputWorkspace->pdf( arbre.GetAttribute( "inVarName" ).c_str() ));
   if ( !pdf ) throw runtime_error( "Category::GetPdfFromWS : pdf not found.");
-  pdf->Print();
   m_workspace->import( *pdf, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
   editStr[proc] << "EDIT::signal_" + proc << "(" << pdf->GetName() << "_" << proc;
   if ( m_debug ) cout << "Category::GetPdfFromWS end\n";
@@ -728,6 +728,31 @@ void Category::GetYieldFromWS( const Arbre &arbre ) {
   if ( m_debug ) cout << "Category::GetYieldFromWS end\n";
 }
 //=========================================
+void Category::ChangeVars( const Arbre &arbre ) {
+  vector<string> processes  = *m_processes;
+  processes.insert( processes.begin(), "all" );
+  
+  string varName = arbre.GetAttribute( "inName" );
+  RooRealVar *var = m_workspace->var( varName.c_str() );
+  vector<string> dumVect  ={ "" };
+  if ( !var ) dumVect = processes;
+  cout << "varName : " << varName << endl;
+
+  for ( auto vProc : dumVect ) {
+    string varNameProc = varName + "_" + vProc;
+    if ( vProc != "" ) var = m_workspace->var( varNameProc.c_str() );
+    if ( !var ) continue;
+
+    if ( arbre.IsAttribute( "outName" ) ) {
+      string outVarName = arbre.GetAttribute( "outName" ) + ( vProc!="" ? "_"+vProc:"" );
+      var->SetName( outVarName.c_str() );
+    }
+    if ( arbre.IsAttribute( "scale" ) ) static_cast<RooRealVar*>(var)->setVal( var->getVal() * stod(arbre.GetAttribute( "scale" )) );
+    else if ( arbre.IsAttribute( "outVal" ) ) static_cast<RooRealVar*>(var)->setVal( stod(arbre.GetAttribute( "outVal" )) );
+  }
+
+}
+//=========================================
 void Category::SignalFromPdf() { 
   if ( m_debug ) cout << "Category::SignalFromPdf()" <<endl;
 
@@ -754,37 +779,17 @@ void Category::SignalFromPdf() {
     else GetYieldFromWS( vArbre );
   }
 
-  cout << "passed yield" << endl;
-  //First loop over ched variables to change value and names
+  //First loop over changed variables to change value and names
   vectPath.front() = "changeVar";
   vectNodes.clear();
   Arbre::GetArbresPath( m_catProperties, vectNodes, vectPath );
-  for ( auto vArbre : vectNodes ) {
-    string varName = vArbre.GetAttribute( "inName" );
-    RooRealVar *var = m_workspace->var( varName.c_str() );
-    vector<string> dumVect  ={ "" };
-    if ( !var ) dumVect = processes;
-    
-    for ( auto vProc : dumVect ) {
-      string tmpName = varName + "_" + vProc;
-      if ( vProc != "" ) var = m_workspace->var( tmpName.c_str() );
-      if ( !var ) continue;
-      tmpName = vArbre.GetAttribute( "outName" );
-      if ( vProc!="" ) tmpName += "_" + vProc;
-      if ( vArbre.GetAttribute( "outName" ) != "" ) var->SetName( tmpName.c_str() );
-      if ( vArbre.GetAttribute( "scale" ) != "" ) ((RooRealVar*) var)->setVal( var->getVal() * stod(vArbre.GetAttribute( "scale" )) );
-      else if ( vArbre.GetAttribute( "outVal" ) != "" ) ((RooRealVar*) var)->setVal( stod(vArbre.GetAttribute( "outVal" )) );
-    }
-  }
+  for ( auto vArbre : vectNodes ) ChangeVars( vArbre );
 
-  //SEcond loop to change name and parametrization of functions
-  cout << "mapSet" << endl;
+
   map<string,RooArgSet> mapSet;
   if ( m_mapSet["systematic_mean_all"] ) mapSet["mean"].add( *m_mapSet["systematic_mean_all"] );
   if ( m_mapSet["systematic_sigma_all"] ) mapSet["sigma"].add( *m_mapSet["systematic_sigma_all"] );
-  
   for ( auto vProc  : processes ) {
-    cout << vProc << endl;
     if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
       mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
       mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
@@ -797,7 +802,9 @@ void Category::SignalFromPdf() {
       mapSet["yield_"+vProc].add( *m_mapVar["mu_XS_" + vProc ] );//muXS
     }
   }
-  
+
+
+  //SEcond loop to change name and parametrization of functions
   for ( auto vArbre : vectNodes ) {
     string varName = vArbre.GetAttribute( "inName" );
     RooAbsReal *funct = m_workspace->function( varName.c_str() );
@@ -836,6 +843,8 @@ void Category::SignalFromPdf() {
     } 
   }
   cout << "editing" << endl;
+  m_workspace->Print();
+  exit(0);  
 
   //Close the editStr 
   for ( map<string,stringstream>::iterator it = editStr.begin(); it != editStr.end(); ++it ) {

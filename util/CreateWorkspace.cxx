@@ -2,7 +2,7 @@
 #include <iostream>
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
-
+using std::string;
 using std::cout;
 using std::endl;
 
