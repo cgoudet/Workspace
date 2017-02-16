@@ -748,27 +748,20 @@ void Category::SignalFromPdf() {
     cout << "inFileName : " << inFileName << endl;
     if ( inFileName == "" ) continue;
     string proc = vArbre.GetAttribute( "process" );
-    if ( inFileName.find(".root")!=string::npos ) { 
-      SelectInputWorkspace( vArbre.GetAttribute( "inFileName" ) );
-      if ( vArbre.GetNodeName() == "pdf" ) {
-	RooRealVar *mass = m_readInputWorkspace->var( vArbre.GetAttribute( "invMass" ).c_str() );
-	if ( mass ) mass->SetName( m_mapVar["invMass"]->GetName() );
-	RooAbsPdf *pdf = (RooAbsPdf*) m_readInputWorkspace->pdf( vArbre.GetAttribute( "inVarName" ).c_str() );
-	if ( pdf ) {
-	  m_workspace->import( *pdf, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
-	  editStr[proc] << "EDIT::" << editedPdfName + "_" + proc << "(" << pdf->GetName() << "_" << proc;
-	}
-      }
-      else { 
+
+    if ( vArbre.GetNodeName() == "pdf" ) GetPdfFromWS( vArbre, editStr );
+    else {
+      if ( inFileName.find(".root")!=string::npos ) { 
+	SelectInputWorkspace( vArbre.GetAttribute( "inFileName" ) );
 	RooAbsReal *absReal = (RooAbsReal*) m_readInputWorkspace->obj( vArbre.GetAttribute( "inVarName" ).c_str() );
 	if ( absReal ) m_workspace->import( *absReal, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
       }
-    }
-    else {
-      cout << ".txt" << endl;
-      exit(0);
-    }
+      else {
+	cout << ".txt" << endl;
+	exit(0);
+      }
 
+  }
   }
   cout << "end test" << endl;
 
