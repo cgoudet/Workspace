@@ -61,7 +61,8 @@ Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
   m_dataset = 0;
   m_processes = 0;
 
-  m_mapVar["lumi"] = new RooRealVar( "lumi_dum", "lumi_dum", 3.21296+10.0638 );
+  //  m_mapVar["lumi"] = new RooRealVar( "lumi_dum", "lumi_dum", 3.21296+10.0638 );
+  m_mapVar["lumi"] = new RooRealVar( "lumi_dum", "lumi_dum", 10.0 );
   m_mapVar["lumi"]->setConstant(1);
   m_mapVar["invMass"] = new RooRealVar ("m_yy","m_yy",126.5, 110.,160.); 
   m_mapVar["invMass"]->setRange( 105, 160);
@@ -69,12 +70,12 @@ Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
   m_mapFormula["mHRen"] = new RooFormulaVar("mHRen","mHRen","(@0-100)/100.", RooArgList(*m_mapVar["mHcomb"])); 
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1, -10, 10 );
   m_mapVar["mu_BR_yy"] = new RooRealVar( "mu_BR_yy", "mu_BR_yy", 1 );
-  m_correlatedVar = "mHRen,mu,mu_BR_yy,one,zero";
+  m_correlatedVar = "mHRen,mu,mu_BR_yy,one,zero,m_yy";
 
   vector<string> setsToDefine = { "pdfProc", "pdfToAdd", "yieldsToAdd", "yieldsSpurious", "observables", "parametersOfInterest", "modelParameters" };
   for ( auto vSet : setsToDefine )   m_mapSet[vSet] = new RooArgSet(vSet.c_str());
 
-  m_mapSet["observables"]->add( *m_mapVar["invMass"] );
+  //  m_mapSet["observables"]->add( *m_mapVar["invMass"] );
   m_mapSet["parametersOfInterest"]->add( *m_mapVar["mu"] );
   m_mapSet["parametersOfInterest"]->add( *m_mapVar["mu_BR_yy"] );
   m_mapSet["parametersOfInterest"]->add( *m_mapVar["mHcomb"] );
@@ -230,9 +231,8 @@ void Category::ReadNuisanceParameters() {
     else current_syst = GetCurrentSyst(  current_constraint, string(NPName), current_value );
 
     if (NPName.Contains("spurious") || NPName.Contains("BIAS") ) m_mapVar["spurious"]  = current_syst; // the systematics value is the spurious signal
-    else if ( NPName.Contains("MSS" ) ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
-    else if ( NPName.Contains("MRES" ) ) m_mapSet["systematic_sigma_"+string(process)]->add(*current_syst);
-    else if ( NPName.Contains("lhcMass") ) m_mapSet["systematic_mass_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("MSS" ) || NPName.Contains("SCALE") || NPName.Contains("lhcMass") ) m_mapSet["systematic_mean_"+string(process)]->add(*current_syst);
+    else if ( NPName.Contains("MRES" ) || NPName.Contains("RESOLUTION") ) m_mapSet["systematic_sigma_"+string(process)]->add(*current_syst);
     else { // means that type == YIELD
       m_mapSet[string("systematic_yield_"+process)]->add(*current_syst);    
     }
@@ -403,7 +403,6 @@ void Category::CreateBackgroundModel() {
     m_mapPdf["bkg"]->fitTo( *m_dataset, SumW2Error(kFALSE), Verbose(0) );
     nbkg->setRange( nbkg->getVal()/2., nbkg->getVal()*2);
   }
-  //DrawPlot( m_mapVar["invMass"], {m_dataset, m_mapPdf["bkg"] }, "/sps/atlas/c/cgoudet/Plots/HgamBkg_"+m_name, {"nComparedEvents=55"} );
 }
 
 
@@ -436,7 +435,7 @@ void Category::CreateWS() {
   processes.push_back( "common" );
   for ( auto vProc = processes.begin(); vProc != processes.end(); ++vProc ) {
     m_mapSet["systematic_yield_"+*vProc] = new RooArgSet();
-    m_mapSet["systematic_mass_"+*vProc] = new RooArgSet();
+    m_mapSet["systematic_mean_"+*vProc] = new RooArgSet();
     m_mapSet["systematic_sigma_"+*vProc] = new RooArgSet();
   }
 
@@ -509,12 +508,6 @@ void Category::CreateWS() {
   m_workspace->import( *m_mapPdf["model"], RecycleConflictNodes(), Silence() );
   m_mapPdf["model"] = m_workspace->pdf( m_mapPdf["model"]->GetName() );
   cout << "importing model" << endl;
-  // cout << m_workspace->var( "mHcomb" ) << endl;
-  // m_workspace->var( "mHcomb" )->setConstant(1);
-  // m_workspace->var( "mHcomb" )->setVal(125.09);
-  // cout << m_workspace->var( "mu" ) << endl;
-  // m_workspace->var( "mu" )->setConstant(0);
-  // m_workspace->var( "mu" )->setVal(0);
 
   cout << "seting sets" << endl;
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest", "modelParameters" };
@@ -533,7 +526,7 @@ void Category::GetData() {
   vector<Arbre> vectNodes;
   Arbre::GetArbresPath( m_catProperties, vectNodes, { "dataFile", "data", "category" } );
   //  if ( m_debug ) vectNodes.front().Dump();
-
+  RooArgSet *observables = m_mapSet["observables"];
   for ( auto vDataArbre : vectNodes ) {
 
     string varName = vDataArbre.GetAttribute( "varName" );
@@ -542,7 +535,7 @@ void Category::GetData() {
 
     RooDataSet *dumDataset = 0;
     if ( inFileName.find(".txt")!=string::npos ) {
-      RooDataSet *newData = RooDataSet::read(inFileName.c_str(), *m_mapSet["observables"]);
+      RooDataSet *newData = RooDataSet::read(inFileName.c_str(), *observables);
       dumDataset = newData;
       continue;
     }
@@ -557,11 +550,11 @@ void Category::GetData() {
       if ( !inTree ) throw runtime_error( "Category::GetData : " + vDataArbre.GetAttribute( "treeName" ) + " not found in " + inFile->GetName() );
 
       RooRealVar m_yy( varName.c_str(), varName.c_str(), 125 );
-      if ( !m_mapSet["observables"]->find( m_yy.GetName() ) ) m_mapSet["observables"]->add( m_yy );
+      if ( !observables->find( m_yy.GetName() ) ) observables->add( m_yy );
       RooRealVar weight;
       if ( weightName != "" ) {
 	weight = RooRealVar( weightName.c_str(), weightName.c_str(), 1 );
-	m_mapSet["observables"]->add( weight );
+	observables->add( weight );
       }
       if ( m_debug ) cout << "WeightName :  " << weight.GetName() << endl;
 
@@ -570,11 +563,11 @@ void Category::GetData() {
       ParseVector( vDataArbre.GetAttribute( "selectionVars" ), selectionVars, ',');
       for ( auto vVar : selectionVars ) {
 	RooRealVar *selectionVar = new RooRealVar( vVar.c_str(), vVar.c_str(), 0 );
-	if ( !m_mapSet["observables"]->find( selectionVar->GetName() ) ) m_mapSet["observables"]->add( *selectionVar );
+	if ( !observables->find( selectionVar->GetName() ) ) observables->add( *selectionVar );
       }
       
-      if ( weightName != "" ) dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *m_mapSet["observables"], selectionCut.c_str(), weightName.c_str() );
-      else dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *m_mapSet["observables"], selectionCut.c_str() );
+      if ( weightName != "" ) dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *observables, selectionCut.c_str(), weightName.c_str() );
+      else dumDataset = new RooDataSet( "dumDataset", "dumDataset", inTree, *observables, selectionCut.c_str() );
 
       delete inTree; inTree=0;
     }
@@ -585,15 +578,16 @@ void Category::GetData() {
       
       dumDataset = static_cast<RooDataSet*>( inWS->data( datasetName.c_str() ));
       if ( !dumDataset ) throw runtime_error( "Category::GetData : dataset failed.");
-      dumDataset->get()->first()->SetName(m_mapVar["invMass"]->GetName());
-
+      RooRealVar *dataInvMass = static_cast<RooRealVar*>(dumDataset->get()->first());
+      dataInvMass->SetName(m_mapVar["invMass"]->GetName());
+      if ( !observables->find( dataInvMass->GetName() ) ) observables->add( *dataInvMass );
       string catVarName = vDataArbre.IsAttribute( "catName" ) ? vDataArbre.GetAttribute( "catName" ) : "";
       string catIndex = vDataArbre.IsAttribute( "catIndex" ) ? vDataArbre.GetAttribute( "catIndex" ) : "";
       if ( catVarName!="" && catIndex!="") {
 	RooDataSet *dumDataSet=dumDataset;
 	RooCategory *eventCateg = (RooCategory*) inWS->cat( catVarName.c_str() );
-	m_mapSet["observables"]->add( *eventCateg );
-	dumDataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(), dumDataSet, *m_mapSet["observables"], catIndex.c_str() );
+	observables->add( *eventCateg );
+	dumDataset = new RooDataSet( datasetName.c_str(), datasetName.c_str(), dumDataSet, *observables, catIndex.c_str() );
       }
     }
     else throw runtime_error( "Category::GetData() : No datasetName or treeName given : data could not be read." );
@@ -601,20 +595,25 @@ void Category::GetData() {
     if ( !m_dataset ) {
       m_dataset = dumDataset;
       m_dataset->SetName( ("obsData_" + m_name).c_str() );
+      if ( m_mapVar["invMass"] ) delete m_mapVar["invMass"];
+      m_mapVar["invMass"] =  static_cast<RooRealVar*>(m_dataset->get()->first());
+
     }
     else m_dataset->append( *dumDataset );
 
   }//end for dataFile
   m_dataset->SetName( ("obsData_"+m_name).c_str());
   m_dataset->Print();
-
   if ( m_debug ) cout << "Category::GetData done" << endl;
 }
 
 //================
 void Category::DefineSet( string set ) {
+  cout << "set : " << set << endl;
+  cout << m_mapSet[set] << endl;
+  if (m_mapSet[set])  m_mapSet[set]->Print();
   RooArgSet dumSet( *m_mapSet[set] );
-  delete m_mapSet[set];
+  if ( m_mapSet.find(set)!=m_mapSet.end() ) delete m_mapSet[set];
   m_mapSet[set] = new RooArgSet( set.c_str() );
 
   TIterator* iter_observable = dumSet.createIterator();
@@ -715,28 +714,36 @@ void Category::GetYieldFromWS( const Arbre &arbre ) {
   }
   else if ( inFileName.find(".txt")!=string::npos ) { 
     fstream stream( inFileName.c_str() );
-    if ( !stream.is_open() ) throw runtime_error( "Category::FetYieldFromWS : Unknow file " + inFileName );
+    if ( !stream.is_open() ) throw runtime_error( "Category::GetYieldFromWS : Unknow file " + inFileName );
     double mass{-99}, yield{-99};
     int cat{-1};
     int nCat = distance(m_categoriesNames->begin(), find( m_categoriesNames->begin(), m_categoriesNames->end(), m_name ) );
     while ( stream >> mass >> cat >> yield && cat!=nCat ) {}
     if ( cat!=nCat ) throw runtime_error( "Category::GetYiedFromWS : category not found in file " + inFileName );
 
-    RooRealVar *yieldVar = new RooRealVar( "yieldSignal","yieldSignal", yield );
-    m_workspace->import( *yieldVar, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), Silence() );
+    string yieldName = "yieldPerFb_" + proc;
+    RooRealVar *yieldVar = new RooRealVar( yieldName.c_str(), yieldName.c_str(), yield );
+
+    RooArgSet yieldLumiSet(*m_mapVar["lumi"] );
+    yieldLumiSet.add( *yieldVar);
+    yieldName = "yield_"+proc;
+    RooProduct *prodYield = new RooProduct( yieldName.c_str(), yieldName.c_str(), yieldLumiSet );
+
+    m_workspace->import( *prodYield, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), Silence() );
   }
   if ( m_debug ) cout << "Category::GetYieldFromWS end\n";
 }
 //=========================================
 void Category::ChangeVars( const Arbre &arbre ) {
+  if ( m_debug ) cout << "Category::ChangeVars\n";
+  if ( arbre.IsAttribute("systNP") || arbre.IsAttribute("replace") ) return;
   vector<string> processes  = *m_processes;
-  processes.insert( processes.begin(), "all" );
+  processes.insert( processes.begin(), "common" );
   
   string varName = arbre.GetAttribute( "inName" );
   RooRealVar *var = m_workspace->var( varName.c_str() );
   vector<string> dumVect  ={ "" };
   if ( !var ) dumVect = processes;
-  cout << "varName : " << varName << endl;
 
   for ( auto vProc : dumVect ) {
     string varNameProc = varName + "_" + vProc;
@@ -750,14 +757,77 @@ void Category::ChangeVars( const Arbre &arbre ) {
     if ( arbre.IsAttribute( "scale" ) ) static_cast<RooRealVar*>(var)->setVal( var->getVal() * stod(arbre.GetAttribute( "scale" )) );
     else if ( arbre.IsAttribute( "outVal" ) ) static_cast<RooRealVar*>(var)->setVal( stod(arbre.GetAttribute( "outVal" )) );
   }
+  if ( m_debug ) cout << "Category::ChangeVars end\n";
+}
+//=========================================
+void Category::ChangeFunctions( const Arbre &arbre, map<string, stringstream> &editStr, const map<string,RooArgSet> &mapSet ) {
+  if ( m_debug ) cout << "Category::ChangeFunctions\n";
+  vector<string> processes  = *m_processes;
+  processes.insert( processes.begin(), "common" );
 
+  string varName = arbre.GetAttribute( "inName" );
+  RooAbsReal *funct = static_cast<RooAbsReal*>(m_workspace->obj( varName.c_str() ));
+  vector<string> dumVect  ={ "" };
+
+  if ( !funct ) dumVect = processes;
+    
+  for ( auto vProc : dumVect ) {
+    string tmpName = varName + "_" + vProc;
+    if ( vProc != "" ) funct = m_workspace->function( tmpName.c_str() );
+    if ( !funct ) continue;
+    string outName = arbre.IsAttribute( "outName" ) ? arbre.GetAttribute( "outName" ) : "";
+    if ( outName!="" && vProc!="" ) outName += "_" + vProc;
+
+    bool isSyst =  arbre.IsAttribute("systNP");
+    bool isReplace =  arbre.IsAttribute("replace");
+
+    string editLine="";
+    if ( !isSyst && outName!="" ) funct->SetName( outName.c_str() );
+    else if ( !isSyst && isReplace ) editLine = "," + tmpName  + "=" + arbre.GetAttribute("replace");
+    else if ( isSyst ) {
+      if ( isReplace ) {
+	string repName = ReplaceString(varName,arbre.GetAttribute("replace"))(tmpName);
+	funct = static_cast<RooAbsReal*>(m_workspace->obj( repName.c_str()));
+	if ( !funct ) throw runtime_error( "Category::ChangeFunctions : replacing variable does not exist " + repName );
+      }
+
+      string systNP = arbre.GetAttribute("systNP");
+      if ( systNP == "mean" ) {
+	string depName = "dependentMean";
+	if ( vProc != "" ) depName += "_" + vProc;
+	RooRealVar *mass  = m_workspace->var( "mHcomb" );
+	if ( !mass ) mass = new RooRealVar( "mHcomb", "mHcomb", 125.09 );
+	RooFormulaVar *depMean = new RooFormulaVar( depName.c_str(), depName.c_str(), "@0+(@1-125)", RooArgSet( *funct, *mass ) );
+	funct = depMean;
+      }
+
+      RooArgSet setForProd;
+      setForProd.add( *funct );
+
+      auto it = mapSet.find( systNP );
+      if ( it != mapSet.end() ) setForProd.add(it->second);
+      it = mapSet.find( systNP+"_"+vProc );
+      if ( it != mapSet.end() ) setForProd.add(it->second);
+      PrintMapKeys( mapSet);
+      RooProduct *prod = new RooProduct( outName.c_str(), outName.c_str(), setForProd );
+      prod->Print();
+      m_workspace->import( *prod, Silence(), RecycleConflictNodes() );
+
+      editLine = "," + tmpName  + "=" + outName;
+    }
+
+    if ( vProc == "" ) for ( map<string,stringstream>::iterator it = editStr.begin(); it != editStr.end(); ++it ) it->second << editLine;
+    else if ( editStr.find(vProc) != editStr.end() ) editStr[vProc] << editLine;
+  } 
+
+  if ( m_debug ) cout << "Category::ChangeFunctions end\n";
 }
 //=========================================
 void Category::SignalFromPdf() { 
   if ( m_debug ) cout << "Category::SignalFromPdf()" <<endl;
 
   vector<string> processes  = *m_processes;
-  processes.insert( processes.begin(), "all" );
+  processes.insert( processes.begin(), "common" );
 
   //Get alll the Arbres nodes wich refer to  pdf and yield
   map<string, stringstream> editStr; 
@@ -787,15 +857,16 @@ void Category::SignalFromPdf() {
 
 
   map<string,RooArgSet> mapSet;
-  if ( m_mapSet["systematic_mean_all"] ) mapSet["mean"].add( *m_mapSet["systematic_mean_all"] );
-  if ( m_mapSet["systematic_sigma_all"] ) mapSet["sigma"].add( *m_mapSet["systematic_sigma_all"] );
+  if ( m_mapSet["systematic_mean_common"] ) mapSet["mean"].add( *m_mapSet["systematic_mean_common"] );
+  if ( m_mapSet["systematic_sigma_common"] ) mapSet["sigma"].add( *m_mapSet["systematic_sigma_common"] );
   for ( auto vProc  : processes ) {
     if ( vProc != "tWH" && vProc != "bbH" && vProc != "tHjb" ) {
       mapSet["yield"].add( *m_mapVar["mu"] );//globalMu
       mapSet["yield"].add( *m_mapVar["mu_BR_yy"] );//muBR
-      if ( m_mapSet["systematic_yield_all"] ) mapSet["yield"].add( *m_mapSet["systematic_yield_all"] );
+      if ( m_mapSet["systematic_yield_common"] ) mapSet["yield"].add( *m_mapSet["systematic_yield_common"] );
     }
-    if ( vProc != "all"  ) {
+
+    if ( vProc != "common"  ) {
       if ( m_mapSet["systematic_mean_" + vProc] ) mapSet["mean_"+vProc].add(*m_mapSet["systematic_mean_" + vProc] );
       if ( m_mapSet["systematic_sigma_" + vProc] ) mapSet["sigma_"+vProc].add( *m_mapSet["systematic_sigma_" + vProc] );
       if ( m_mapSet["systematic_yield_" + vProc] ) mapSet["yield_"+vProc].add( *m_mapSet["systematic_yield_" + vProc] );
@@ -803,50 +874,11 @@ void Category::SignalFromPdf() {
     }
   }
 
-
-  //SEcond loop to change name and parametrization of functions
-  for ( auto vArbre : vectNodes ) {
-    string varName = vArbre.GetAttribute( "inName" );
-    RooAbsReal *funct = m_workspace->function( varName.c_str() );
-    vector<string> dumVect  ={ "" };
-    if ( !funct ) dumVect = processes;
-    
-    for ( auto vProc : dumVect ) {
-      string tmpName = varName + "_" + vProc;
-      if ( vProc != "" ) funct = m_workspace->function( tmpName.c_str() );
-      if ( !funct ) continue;
-      if ( string(funct->ClassName() ) == "RooRealVar" ) continue;
-      string outName = vArbre.GetAttribute( "outName" );
-      if ( vProc!="" ) outName += "_" + vProc;
-
-      if ( vArbre.GetAttribute("systNP") == "" && vArbre.GetAttribute("outName") != "" ) funct->SetName( outName.c_str() );
-      else {
-	if ( vArbre.GetAttribute("systNP") == "mean" ) {
-	  string depName = "dependentMean";
-	  if ( vProc != "" ) depName += "_" + vProc;
-	  RooRealVar *mass  = m_workspace->var( "mHcomb" );
-	  if ( !mass ) mass = new RooRealVar( "mHcomb", "mHcomb", 125.09 );
-	  RooFormulaVar *depMean = new RooFormulaVar( depName.c_str(), depName.c_str(), "@0+(@1-125)", RooArgSet( *funct, *mass ) );
-	  funct = depMean;
-	}
-	RooArgSet setForProd;
-	setForProd.add( *funct );
-	setForProd.add( mapSet[vArbre.GetAttribute( "systNP" )] );
-	setForProd.add( mapSet[vArbre.GetAttribute( "systNP" )+"_"+vProc] );
-	RooProduct *prod = new RooProduct( outName.c_str(), outName.c_str(), setForProd );
-	m_workspace->import( *prod, Silence(), RecycleConflictNodes() );
-
-	string tmpEdit = "," + tmpName  + "=" + outName;
-	if ( vProc == "" ) for ( map<string,stringstream>::iterator it = editStr.begin(); it != editStr.end(); ++it ) it->second << tmpEdit;
-	else if ( editStr.find(vProc) != editStr.end() ) editStr[vProc] << tmpEdit;
-      }
-    } 
-  }
-  cout << "editing" << endl;
-  m_workspace->Print();
-  exit(0);  
+  for ( auto vArbre : vectNodes ) ChangeFunctions( vArbre, editStr, mapSet );
+  //  exit(0);
 
   //Close the editStr 
+  PrintMapKeys( editStr );
   for ( map<string,stringstream>::iterator it = editStr.begin(); it != editStr.end(); ++it ) {
     it->second << ")";
     m_workspace->factory(it->second.str().c_str());      
@@ -859,7 +891,7 @@ void Category::SignalFromPdf() {
     if ( pdf ) m_mapSet["pdfProc"]->add( *pdf );
 
     tmpName = "yieldSignal_"+vProc;
-    RooAbsReal *yield = m_workspace->function( tmpName.c_str() );
+    RooAbsReal *yield = static_cast<RooAbsReal*>(m_workspace->obj( tmpName.c_str() ));
     if ( yield ) {
       m_mapSet["yieldsToAdd"]->add( *yield );
       m_mapSet["yieldsSpurious"]->add( *yield );

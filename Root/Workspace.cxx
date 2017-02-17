@@ -24,6 +24,8 @@ using namespace RooStats;
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
+#include <exception>
+using std::runtime_error;
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -145,6 +147,7 @@ void Workspace::CreateWS() {
   m_workspace->writeToFile(m_name.c_str(), 1);
 
   m_workspace->Print();
+  m_workspace->obj("yield_common_Inclusive")->Print();
   //  mconfig->GetPdf()->fitTo( *m_workspace->data( obsData->GetName() ), SumW2Error(kFALSE) );
   // RooArgSet dumSet;
   // dumSet.add( *mconfig->GetNuisanceParameters() );
@@ -409,12 +412,8 @@ RooDataSet* Workspace::MakeAsimovData() {
 
   
   cout << "Making asimov" << endl;
-
-  ModelConfig* mc = (ModelConfig*) m_workspace->obj( "mconfig" );
-  if ( !mc ) {
-    cout << "ModelConfig not found" << endl;
-    exit(0);
-  }
+  ModelConfig* mc = static_cast<ModelConfig*>( m_workspace->obj( "mconfig" ));
+  if ( !mc ) throw runtime_error( "Workspace::MakeAsimovData : ModelConfig not found" );
 
 
   int iFrame=0;

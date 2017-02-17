@@ -25,20 +25,20 @@ def CategoryNode( catIndex, modeProps, mode = 0 ) :
     catName=modeProps['catsNames'][catIndex]
     xmlObj = CreateNode( 'category', { 'Name':catName, 'systFileName': modeProps['datacard'] } )
 
-    procs = ['all']
+    procs = ['common']
     if catName!='Inclusive' : procs = processes+subProcesses
     [ xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':AddSlash(modeProps['pdfDir'])+'resonance_yieldList.txt' } ) ) for vProc in procs ]
-    xmlObj.append( CreateNode( 'pdf', {'process':'all', 'inFileName':AddSlash(modeProps['pdfDir']) +'res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
+    xmlObj.append( CreateNode( 'pdf', {'process':'common', 'inFileName':AddSlash(modeProps['pdfDir']) +'res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
 
 #Variables which have to be renamed
     varChanges = {}
     if mode == 0 :  
         varChanges = [
-            { 'outName':'meanCB', 'inName': 'muCBNom_SM_m125000_c'+str(catIndex), 'systNP':'mean' },
-            { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma' },
+            { 'outName':'meanCB', 'inName': 'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean', 'replace': 'muCBNom_SM_m125000_c'+str(catIndex)},
+            { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma', 'replace':'sigmaCBNom_SM_m125000_c'+str(catIndex) },
             { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
             ]
-#        varChanges +=  [ { 'inName' : 'Yield_Signal_'+vProc+'_SM_'+catName, 'outName': 'yieldSignal', 'systNP':'yield' } for vProc in processes+subProcesses ]
+        varChanges +=  [ { 'inName' : 'yield', 'outName': 'yieldSignal', 'systNP':'yield' }]
     [ xmlObj.append( CreateNode( 'changeVar', vVarName ) ) for vVarName in varChanges ]
 
 #Marc's asimov have been generated simulating 10fb of data but with luminosity of 13fb. Need to rescale luminosity to 10

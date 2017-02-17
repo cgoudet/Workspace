@@ -27,6 +27,7 @@
 <!ATTLIST changeVar outVal CDATA #IMPLIED>
 <!ATTLIST changeVar scale CDATA #IMPLIED>
 <!ATTLIST changeVar systNP CDATA #IMPLIED>
+<!ATTLIST changeVar replace CDATA #IMPLIED>
 
 <!ELEMENT data (dataFile)* >
 

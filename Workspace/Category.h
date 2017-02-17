@@ -75,6 +75,8 @@ class Category {
   void GetPdfFromWS( const ChrisLib::Arbre &arbre, std::map<std::string, std::stringstream> &editStr );
   void GetYieldFromWS( const ChrisLib::Arbre &arbre );
   void ChangeVars( const ChrisLib::Arbre &arbre );
+  void ChangeFunctions( const ChrisLib::Arbre &arbre, std::map<std::string, std::stringstream> &editStr, const std::map<std::string,RooArgSet> &mapSet );
+
   std::string m_systFileName;
   std::string m_outName;
   RooCategory* m_category;
