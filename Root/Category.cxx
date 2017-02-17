@@ -61,8 +61,7 @@ Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
   m_dataset = 0;
   m_processes = 0;
 
-  //  m_mapVar["lumi"] = new RooRealVar( "lumi_dum", "lumi_dum", 3.21296+10.0638 );
-  m_mapVar["lumi"] = new RooRealVar( "lumi_dum", "lumi_dum", 10.0 );
+  m_mapVar["lumi"] = new RooRealVar( "lumi", "lumi", 1 );
   m_mapVar["lumi"]->setConstant(1);
   m_mapVar["invMass"] = new RooRealVar ("m_yy","m_yy",126.5, 110.,160.); 
   m_mapVar["invMass"]->setRange( 105, 160);
@@ -70,7 +69,7 @@ Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
   m_mapFormula["mHRen"] = new RooFormulaVar("mHRen","mHRen","(@0-100)/100.", RooArgList(*m_mapVar["mHcomb"])); 
   m_mapVar["mu"] = new RooRealVar( "mu", "mu", 1, -10, 10 );
   m_mapVar["mu_BR_yy"] = new RooRealVar( "mu_BR_yy", "mu_BR_yy", 1 );
-  m_correlatedVar = "mHRen,mu,mu_BR_yy,one,zero,m_yy";
+  m_correlatedVar = "mHRen,mu,mu_BR_yy,one,zero,m_yy,lumi";
 
   vector<string> setsToDefine = { "pdfProc", "pdfToAdd", "yieldsToAdd", "yieldsSpurious", "observables", "parametersOfInterest", "modelParameters" };
   for ( auto vSet : setsToDefine )   m_mapSet[vSet] = new RooArgSet(vSet.c_str());
@@ -721,15 +720,15 @@ void Category::GetYieldFromWS( const Arbre &arbre ) {
     while ( stream >> mass >> cat >> yield && cat!=nCat ) {}
     if ( cat!=nCat ) throw runtime_error( "Category::GetYiedFromWS : category not found in file " + inFileName );
 
-    string yieldName = "yieldPerFb_" + proc;
+    string yieldName = "yieldPerFb";
     RooRealVar *yieldVar = new RooRealVar( yieldName.c_str(), yieldName.c_str(), yield );
 
     RooArgSet yieldLumiSet(*m_mapVar["lumi"] );
     yieldLumiSet.add( *yieldVar);
-    yieldName = "yield_"+proc;
+    yieldName = "yield";
     RooProduct *prodYield = new RooProduct( yieldName.c_str(), yieldName.c_str(), yieldLumiSet );
 
-    m_workspace->import( *prodYield, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), Silence() );
+    m_workspace->import( *prodYield, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
   }
   if ( m_debug ) cout << "Category::GetYieldFromWS end\n";
 }

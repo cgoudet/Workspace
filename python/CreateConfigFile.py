@@ -37,6 +37,7 @@ def CategoryNode( catIndex, modeProps, mode = 0 ) :
             { 'outName':'meanCB', 'inName': 'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean', 'replace': 'muCBNom_SM_m125000_c'+str(catIndex)},
             { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma', 'replace':'sigmaCBNom_SM_m125000_c'+str(catIndex) },
             { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
+            ,{ 'inName' : 'lumi', 'outVal':'10' }
             ]
         varChanges +=  [ { 'inName' : 'yield', 'outName': 'yieldSignal', 'systNP':'yield' }]
     [ xmlObj.append( CreateNode( 'changeVar', vVarName ) ) for vVarName in varChanges ]
