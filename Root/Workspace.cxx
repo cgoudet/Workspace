@@ -146,8 +146,6 @@ void Workspace::CreateWS() {
   m_workspace->importClassCode();
   m_workspace->writeToFile(m_name.c_str(), 1);
 
-  m_workspace->Print();
-  m_workspace->obj("yield_common_Inclusive")->Print();
   //  mconfig->GetPdf()->fitTo( *m_workspace->data( obsData->GetName() ), SumW2Error(kFALSE) );
   // RooArgSet dumSet;
   // dumSet.add( *mconfig->GetNuisanceParameters() );

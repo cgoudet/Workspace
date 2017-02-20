@@ -161,7 +161,7 @@ void Category::ReadNuisanceParameters() {
     double current_err_lo =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
     double current_err_hi =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
 
-    cout << "systFullName : " << fullName << " " << current_value << " " << current_err_lo << " " << current_err_hi << endl;   
+    cout << "systFullName : " << m_name << " " << fullName << " " << current_value << " " << current_err_lo << " " << current_err_hi << endl;   
 
     //Impose all np to be correlated between categories (same name)    
     bool containsCategory= fullName.find(m_name)!=string::npos;
@@ -225,6 +225,7 @@ void Category::ReadNuisanceParameters() {
 
     //This int is the functional form of the constraint
     int current_constraint = iter.second;
+    cout << "current_constraint : " << current_constraint << endl;
     RooRealVar *current_syst=0;
     if ( current_constraint == ASYM_CONSTRAINT ) current_syst = GetCurrentSyst( current_constraint, string(NPName), current_err_hi, current_err_lo );
     else current_syst = GetCurrentSyst(  current_constraint, string(NPName), current_value );
@@ -831,7 +832,6 @@ void Category::SignalFromPdf() {
   //Get alll the Arbres nodes wich refer to  pdf and yield
   map<string, stringstream> editStr; 
   string editedPdfName = "signal";
-  
 
   vector<Arbre> vectNodes;
   vector<string> vectPath = { "", "category" };
@@ -1025,13 +1025,14 @@ RooRealVar *Category::GetCurrentSyst( int constraint, string NPName, double upVa
 //=======================================================
 void Category::ReadConstraintFile() {
   if ( m_debug ) cout << "Category::ReadConstraintFile\n";
+  cout << "systFileName : " << m_catProperties.GetAttribute( "systFileName" ) << endl;
   ifstream current_file(m_catProperties.GetAttribute( "systFileName" ).c_str());
   do 
     {
       string tmpString; 
       getline(current_file, tmpString);
       if(tmpString.size() == 0) continue;
-      if ( tmpString.find( "#" ) != string::npos ) continue;
+      if ( tmpString.find( "#" ) != string::npos || tmpString.find("[")!=string::npos ) continue;
 
       int defConstraint = -1;
       TString tmp(tmpString);
@@ -1046,11 +1047,11 @@ void Category::ReadConstraintFile() {
 	else  defConstraint = GAUSS_CONSTRAINT;
       }
       else {
-	if ( TString(tmpString).Contains("-100 L(" ) ) defConstraint = ASYM_CONSTRAINT;
+	if ( TString(tmpString).Contains("-100" ) ) defConstraint = ASYM_CONSTRAINT;
 	else defConstraint = GAUSS_CONSTRAINT;
 	//	  cout << tmpString << " " << defConstraint << endl;
       }//end else 
-
+      cout << "defConstraint : " << tmpString << " " << defConstraint << endl;
       m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
     } while(!current_file.eof());
   if ( m_debug ) cout << "Category::ReadConstraintFile end\n";

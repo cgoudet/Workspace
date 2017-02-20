@@ -83,6 +83,15 @@ def GetModelsProperties() :
         ,'bkg' : [ 'expPol2']
         }
 
+    modesProps['h013_cat_all']  = {
+        'catsNames' : catNames['h013']
+        ,'datacard' : '/sps/atlas/c/cgoudet/Hgam/FrameWork/Results/h014_ALL/h014_ALL_SystVariation_datacard.txt'
+        ,'dataDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/PseudoData'
+        ,'pdfDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/ModelShapeSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM'
+        ,'yieldDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/'
+        ,'bkg' : [ 'expPol2' if 'ggH' in name else 'exp' for name in catNames['h013'] ]
+        }
+
 
     return modesProps
 #================================================================
