@@ -27,7 +27,9 @@ def CategoryNode( catIndex, modeProps, mode = 0 ) :
 
     procs = ['common']
     if catName!='Inclusive' : procs = processes+subProcesses
-    [ xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':AddSlash(modeProps['pdfDir'])+'resonance_yieldList.txt' } ) ) for vProc in procs ]
+#    [ xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':AddSlash(modeProps['pdfDir'])+'resonance_yieldList.txt' } ) ) for vProc in procs ]
+    xmlObj.append( CreateNode( 'yield', { 'process':'common', 'inFileName':AddSlash(modeProps['pdfDir'])+'resonance_yieldList.txt' } ) )
+#    [ xmlObj.append( CreateNode( 'yield', { 'process':vProc, 'inFileName':modeProps['yieldDir'], 'inVarName':'Yield_Signal_'+vProc+'_SM_'+catName } ) ) for vProc in procs ]
     xmlObj.append( CreateNode( 'pdf', {'process':'common', 'inFileName':AddSlash(modeProps['pdfDir']) +'res_SM_DoubleCB_workspace.root', 'inVarName':'sigPdf_SM_m125000_c'+str( catIndex ), 'invMass' : 'm_yy_m125000_c'+str(catIndex) } ) )
 
 #Variables which have to be renamed
@@ -35,15 +37,15 @@ def CategoryNode( catIndex, modeProps, mode = 0 ) :
     if mode == 0 :  
         varChanges = [
             { 'outName':'meanCB', 'inName': 'muCB_SM_m125000_c'+str(catIndex), 'systNP':'mean', 'replace': 'muCBNom_SM_m125000_c'+str(catIndex)},
-            { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma', 'replace':'sigmaCBNom_SM_m125000_c'+str(catIndex) },
-            { 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
+            { 'outName':'sigmaCB', 'inName':'sigmaCB_SM_m125000_c'+str(catIndex), 'systNP':'sigma', 'replace':'sigmaCBNom_SM_m125000_c'+str(catIndex) }
+            ,{ 'outName':'mHcomb', 'inName':'mResonance', 'outVal':'125.09' }
             ,{ 'inName' : 'lumi', 'outVal':'10' }
             ]
         varChanges +=  [ { 'inName' : 'yield', 'outName': 'yieldSignal', 'systNP':'yield' }]
     [ xmlObj.append( CreateNode( 'changeVar', vVarName ) ) for vVarName in varChanges ]
 
 #Marc's asimov have been generated simulating 10fb of data but with luminosity of 13fb. Need to rescale luminosity to 10
-#        for year in [ '2015', '2016' ] : xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) )
+    [  xmlObj.append( CreateNode( 'changeVar', { 'inName':'lumi_'+year, 'scale':str(10/13.27676) } ) ) for year in [ '2015', '2016' ] ]
 
     dataNode = CreateNode( 'data' )
     if catName == 'Inclusive' :
@@ -85,12 +87,24 @@ def GetModelsProperties() :
 
     modesProps['h013_cat_all']  = {
         'catsNames' : catNames['h013']
-        ,'datacard' : '/sps/atlas/c/cgoudet/Hgam/FrameWork/Results/h014_ALL/h014_ALL_SystVariation_datacard.txt'
+#        ,'datacard' : '/sps/atlas/c/cgoudet/Hgam/FrameWork/Results/h013_ALL/h013_ALL_SystVariation_datacard.txt'
+        ,'datacard' : '/afs/in2p3.fr/home/c/cgoudet/private/Couplings/h013_ALL_SystVariation_datacard.txt'
         ,'dataDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/PseudoData'
         ,'pdfDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/ModelShapeSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM'
         ,'yieldDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/'
         ,'bkg' : [ 'expPol2' if 'ggH' in name else 'exp' for name in catNames['h013'] ]
         }
+
+    modesProps['StatChallenge13']  = {
+        'catsNames' : catNames['h013']
+#        ,'datacard' : '/sps/atlas/c/cgoudet/Hgam/FrameWork/Results/h013_ALL/h013_ALL_SystVariation_datacard.txt'
+        ,'datacard' : '/afs/in2p3.fr/home/c/cgoudet/private/Couplings/h013_ALL_SystVariation_datacard.txt'
+        ,'dataDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/PseudoData'
+        ,'pdfDir' : '/sps/atlas/c/cgoudet/Hgam/HGamCouplings/ICHEP2016/StatisticsChallenge/h013/inputs/ModelShapeSignal/RAW/SigSimple_all_shape_categories_DBCB/Individual/SM'
+        ,'yieldDir' : '/sps/atlas/c/cgoudet/Hgam/Couplages/Inputs/h012/StatisticsChallenge/h013/inputs/workspace_signal_yields_categories.root'
+        ,'bkg' : [ 'expPol2' if 'ggH' in name else 'exp' for name in catNames['h013'] ]
+        }
+
 
 
     return modesProps

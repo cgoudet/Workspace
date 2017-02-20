@@ -55,7 +55,7 @@ using std::copy;
 using std::ostream_iterator;
 using std::distance;
 
-Category::Category() : m_name( "inclusive" ), m_debug(1), m_catProperties()
+Category::Category() : m_name( "inclusive" ), m_debug(0), m_catProperties()
 {
 
   m_dataset = 0;
@@ -135,7 +135,6 @@ void Category::ReadNuisanceParameters() {
   if ( m_debug ) cout << "Category::ReadNuisanceParameter\n";
 
   ReadConstraintFile();
-
   m_mapSet["systematicValues"] = new RooArgSet();
   for( auto iter : m_sDef ) {
     string name = iter.first;
@@ -145,7 +144,7 @@ void Category::ReadNuisanceParameters() {
 
   string systFileName = m_catProperties.GetAttribute( "systFileName" );;
   if ( m_debug ) cout << "systFileName : " << systFileName << endl;
-  m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,"Common_2015");
+  m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,"common");
   m_mapSet["systematicValues"]->readFromFile(systFileName.c_str(),0,m_name.c_str()); // read values corresponding to channelname section only.                     
 
   
@@ -161,7 +160,7 @@ void Category::ReadNuisanceParameters() {
     double current_err_lo =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMin();
     double current_err_hi =  static_cast<RooRealVar*>(m_mapSet["systematicValues"]->find(iter.first.c_str()))->getMax();
 
-    cout << "systFullName : " << m_name << " " << fullName << " " << current_value << " " << current_err_lo << " " << current_err_hi << endl;   
+    if ( m_debug ) cout << "systFullName : " << m_name << " " << fullName << " " << current_value << " " << current_err_lo << " " << current_err_hi << endl;   
 
     //Impose all np to be correlated between categories (same name)    
     bool containsCategory= fullName.find(m_name)!=string::npos;
@@ -225,7 +224,6 @@ void Category::ReadNuisanceParameters() {
 
     //This int is the functional form of the constraint
     int current_constraint = iter.second;
-    cout << "current_constraint : " << current_constraint << endl;
     RooRealVar *current_syst=0;
     if ( current_constraint == ASYM_CONSTRAINT ) current_syst = GetCurrentSyst( current_constraint, string(NPName), current_err_hi, current_err_lo );
     else current_syst = GetCurrentSyst(  current_constraint, string(NPName), current_value );
@@ -299,7 +297,6 @@ RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_val
     TString suffix;
     if (process=="common") suffix = name;
     else suffix = name+"_"+process;// the name of the systematics needs to take into account its process dependance, so add a suffix to it. E.g. JES_ggH
-    cout << "sigmaValues : " << sigma_value_up << " " << sigma_value_down << endl;
     vector<double> vals_up, vals_down; 
     double pdf_mean = 1.; 
     vals_up.push_back(1+(sigma_value_up/100.)); 
@@ -314,12 +311,7 @@ RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_val
     fix.add(*nui);
 
     HistFactory::FlexibleInterpVar *special_value = new HistFactory::FlexibleInterpVar("asymParam_"+suffix,"asymParam_"+suffix,fix,pdf_mean,vals_down,vals_up); // value that will be asymmetric
-    cout << "nominal Value : " << special_value->getVal() << endl;
-    nui->setVal(1);
-    cout << "upValue : " << special_value->getVal() << endl;
-    nui->setVal(-1);
-    cout << "downValue : " << special_value->getVal() << endl;
-    nui->setVal(0);
+
     // special_value->Print();
     // see http://www.usatlas.bnl.gov/~fisyak/star/root/roofit/histfactory/src/FlexibleInterpVar.cxx
     //  special_value->setAllInterpCodes(1);
@@ -335,7 +327,7 @@ RooRealVar* Category::defineSystematic_asymmetric(TString name, double sigma_val
 
 //#################################################
 void Category::CreateBackgroundModel() {
-  cout << "define the background model : " << m_name << endl;
+  if ( m_debug ) cout << "Category::CreateBackgroundModel\n";
 
   vector<Arbre> vectNodes;
   vector<string> vectPath = { "bkg", "category" };
@@ -400,7 +392,7 @@ void Category::CreateBackgroundModel() {
   m_mapSet["modelParameters"]->add(*nbkg);
   m_mapSet["nuisanceParameters"]->add(*nbkg);
   if ( m_dataset && m_dataset->sumEntries() > 3  ) {
-    m_mapPdf["bkg"]->fitTo( *m_dataset, SumW2Error(kFALSE), Verbose(0) );
+    m_mapPdf["bkg"]->fitTo( *m_dataset, SumW2Error(kFALSE) );
     nbkg->setRange( nbkg->getVal()/2., nbkg->getVal()*2);
   }
 }
@@ -478,18 +470,17 @@ void Category::CreateWS() {
   m_workspace->import( *m_dataset );
   m_dataset = static_cast<RooDataSet*>( m_workspace->data( m_dataset->GetName() ) );
 
+  // m_mapSet["yieldsToAdd"]->Print();
+  // m_mapSet["pdfToAdd"]->Print();
+  // exit(0);
   m_mapPdf["modelSB"] =  new RooAddPdf( "modelSB", "modelSB", *m_mapSet["pdfToAdd"], *m_mapSet["yieldsToAdd"] );
   //  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()), Silence() );
-  cout << m_correlatedVar << endl;
   vector<string> parsed;
   ParseVector(m_correlatedVar, parsed, ',' );
-  cout << "parsedSize : " << parsed.size() << endl;
-  copy( parsed.begin(), parsed.end(), std::ostream_iterator<string>(cout,"\n"));
-  cout << endl;
-  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()) );
+
+  m_workspace->import( *m_mapPdf["modelSB"], RecycleConflictNodes(), RenameAllVariablesExcept( m_name.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( m_name.c_str()), Silence() );
   string wsName = string(m_mapPdf["modelSB"]->GetName()) + "_" + m_name;
   m_mapPdf["modelSB"] = m_workspace->pdf( wsName.c_str() );
-  cout << "imported SB" << endl;
 
   RooArgSet prodPdf;
   prodPdf.add( *m_mapPdf["modelSB"] );
@@ -507,9 +498,8 @@ void Category::CreateWS() {
   m_mapPdf["model"] = new RooProdPdf( modelName.c_str(), modelName.c_str(), prodPdf );
   m_workspace->import( *m_mapPdf["model"], RecycleConflictNodes(), Silence() );
   m_mapPdf["model"] = m_workspace->pdf( m_mapPdf["model"]->GetName() );
-  cout << "importing model" << endl;
 
-  cout << "seting sets" << endl;
+
   vector<string> sets = { "nuisanceParameters", "globalObservables", "observables", "parametersOfInterest", "modelParameters" };
   for ( auto set : sets ) DefineSet( set );
 
@@ -609,8 +599,6 @@ void Category::GetData() {
 
 //================
 void Category::DefineSet( string set ) {
-  cout << "set : " << set << endl;
-  cout << m_mapSet[set] << endl;
   if (m_mapSet[set])  m_mapSet[set]->Print();
   RooArgSet dumSet( *m_mapSet[set] );
   if ( m_mapSet.find(set)!=m_mapSet.end() ) delete m_mapSet[set];
@@ -631,7 +619,7 @@ void Category::DefineSet( string set ) {
 //==============================
 RooRealVar *Category::GetNuisanceParameter(TString name, RooArgSet *nuisance_parameters, RooArgSet *global_parameters, RooArgSet *constraints_pdf_list, string &channel_correlated_np, RooArgSet  *allConstraints, double sigmaRightBifurGauss ) //bool useBifurGauss=false) 2
   {
-    cout << "Category::GetNuisanceParameter " << name << endl;
+    if ( m_debug ) cout << "Category::GetNuisanceParameter " << name << endl;
     RooRealVar *nui = static_cast<RooRealVar*>(nuisance_parameters->find(name));
     if (!nui) { // if the np does not exist yet in this channel
       RooRealVar* glob_nui = new RooRealVar("glob_nui_"+name, "glob_nui_"+name, 0, -5, 5);
@@ -710,6 +698,8 @@ void Category::GetYieldFromWS( const Arbre &arbre ) {
   if ( inFileName.find(".root")!=string::npos ) { 
     SelectInputWorkspace( arbre.GetAttribute( "inFileName" ) );
     RooAbsReal *absReal = static_cast<RooAbsReal*>(m_readInputWorkspace->obj( arbre.GetAttribute( "inVarName" ).c_str() ));
+    cout << "yield :  " << arbre.GetAttribute( "inVarName" ) << " " << absReal << endl;
+    absReal->SetName( "yield" );
     if ( absReal ) m_workspace->import( *absReal, RecycleConflictNodes(), RenameAllVariablesExcept( proc.c_str(), m_correlatedVar.c_str() ), RenameAllNodes( proc.c_str() ), Silence() );
   }
   else if ( inFileName.find(".txt")!=string::npos ) { 
@@ -808,9 +798,7 @@ void Category::ChangeFunctions( const Arbre &arbre, map<string, stringstream> &e
       if ( it != mapSet.end() ) setForProd.add(it->second);
       it = mapSet.find( systNP+"_"+vProc );
       if ( it != mapSet.end() ) setForProd.add(it->second);
-      PrintMapKeys( mapSet);
       RooProduct *prod = new RooProduct( outName.c_str(), outName.c_str(), setForProd );
-      prod->Print();
       m_workspace->import( *prod, Silence(), RecycleConflictNodes() );
 
       editLine = "," + tmpName  + "=" + outName;
@@ -877,7 +865,6 @@ void Category::SignalFromPdf() {
   //  exit(0);
 
   //Close the editStr 
-  PrintMapKeys( editStr );
   for ( map<string,stringstream>::iterator it = editStr.begin(); it != editStr.end(); ++it ) {
     it->second << ")";
     m_workspace->factory(it->second.str().c_str());      
@@ -973,7 +960,6 @@ void Category::ReadNuisanceParametersXML() {
 	string setName = "systematic_" + mapAttr["varName"] + "_" + mapSystEffect["process"];
 	if ( !m_mapSet[setName] )  m_mapSet[setName] = new RooArgSet();
 	m_mapSet[setName]->add( *currentSyst );
-	m_mapSet[setName]->Print();
       }
       
     }//end systEffectNode
@@ -1025,7 +1011,6 @@ RooRealVar *Category::GetCurrentSyst( int constraint, string NPName, double upVa
 //=======================================================
 void Category::ReadConstraintFile() {
   if ( m_debug ) cout << "Category::ReadConstraintFile\n";
-  cout << "systFileName : " << m_catProperties.GetAttribute( "systFileName" ) << endl;
   ifstream current_file(m_catProperties.GetAttribute( "systFileName" ).c_str());
   do 
     {
@@ -1051,7 +1036,6 @@ void Category::ReadConstraintFile() {
 	else defConstraint = GAUSS_CONSTRAINT;
 	//	  cout << tmpString << " " << defConstraint << endl;
       }//end else 
-      cout << "defConstraint : " << tmpString << " " << defConstraint << endl;
       m_sDef[string(((TObjString*) tmpAr.First())->GetString())] = defConstraint;
     } while(!current_file.eof());
   if ( m_debug ) cout << "Category::ReadConstraintFile end\n";
